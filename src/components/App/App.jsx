@@ -13,12 +13,14 @@ import Footer from '../Footer/Footer';
 
 import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
 
+/* Pages/Views */
 import AboutPage from '../AboutPage/AboutPage';
 import UserPage from '../UserPage/UserPage';
 import InfoPage from '../InfoPage/InfoPage';
 import LandingPage from '../LandingPage/LandingPage';
 import LoginPage from '../LoginPage/LoginPage';
 import RegisterPage from '../RegisterPage/RegisterPage';
+import MyCollection from '../MyCollection/MyCollection';
 
 import './App.css';
 
@@ -56,6 +58,7 @@ function App() {
             path="/user"
           >
             <UserPage />
+            <MyCollection />
           </ProtectedRoute>
 
           <ProtectedRoute
