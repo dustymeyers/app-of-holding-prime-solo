@@ -8,6 +8,7 @@ CREATE TABLE "characters" (
   "id" SERIAL PRIMARY KEY,
   "user_id" INT REFERENCES "user" NOT NULL,
   "character_name" VARCHAR(80) NOT NULL,
+  "gender" VARCHAR(15),
   "level" INT DEFAULT 1,
   "str_score" INT NOT NULl,
   "dex_score" INT NOT NULL,
@@ -424,10 +425,10 @@ VALUES
     ('Cleric', 'wis', 8, 'Roleplay', 'Divine/Natural'),    	-- 3
     ('Druid', 'wis', 8, 'Roleplay', 'Divine/Natural' ), 	  	-- 4
     ('Fighter', 'none', 10, 'Hack and Slash', 'No Magic'),   	-- 5
-    ('Monk', 'none', 8, 'Hack and Slash', 'No magic'), 	   	-- 6
+    ('Monk', 'none', 8, 'Hack and Slash', 'No Magic'), 	   	-- 6
     ('Paladin', 'cha', 10, 'Hack and Slash', 'Divine/Natural'),   	-- 7
     ('Ranger', 'wis', 10,  'Hack and Slash', 'Divine/Natural'),	   	-- 8
-    ('Rogue', 'none', 8, 'Roleplay', 'No magic'),	   	-- 9
+    ('Rogue', 'none', 8, 'Roleplay', 'No Magic'),	   	-- 9
     ('Sorcerer', 'cha', 6, 'Hack and Slash', 'Arcane'),  	-- 10
     ('Warlock', 'cha', 8, 'Roleplay', 'Arcane'),  	-- 11
     ('Wizard', 'int', 6, 'Roleplay', 'Arcane');	   	-- 12
