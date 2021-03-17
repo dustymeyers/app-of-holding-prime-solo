@@ -15,12 +15,14 @@ import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
 
 /* Pages/Views */
 import AboutPage from '../AboutPage/AboutPage';
+import CharacterCreator from '../CharacterCreator/CharacterCreator'
+import CharacterSheet from '../CharacterSheet/CharacterSheet';
 import UserPage from '../UserPage/UserPage';
 import InfoPage from '../InfoPage/InfoPage';
 import LandingPage from '../LandingPage/LandingPage';
 import LoginPage from '../LoginPage/LoginPage';
-import RegisterPage from '../RegisterPage/RegisterPage';
 import MyCollection from '../MyCollection/MyCollection';
+import RegisterPage from '../RegisterPage/RegisterPage';
 
 import './App.css';
 
@@ -67,6 +69,22 @@ function App() {
             path="/info"
           >
             <InfoPage />
+          </ProtectedRoute>
+
+          <ProtectedRoute
+            // logged in shows CharacterSheet else shows LoginPage
+            exact
+            path="/characterCreator"
+          >
+            <CharacterCreator />
+          </ProtectedRoute>
+
+          <ProtectedRoute
+            // logged in shows CharacterSheet else shows LoginPage
+            exact
+            path="/characterSheet"
+          >
+            <CharacterSheet />
           </ProtectedRoute>
 
           {/* When a value is supplied for the authRedirect prop the user will

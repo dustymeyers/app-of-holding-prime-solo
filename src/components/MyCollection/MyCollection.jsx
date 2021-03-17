@@ -1,3 +1,5 @@
+import { useHistory } from 'react-router-dom';
+
 import { 
   Button,         // replace <button>
   Table,          // replaces <table>
@@ -10,9 +12,10 @@ import {
 } from '@material-ui/core';
 
 function MyCollection() {
+  const history = useHistory();
 
   const handleViewClick = () => {
-
+    history.push('/characterSheet')
   } // end handleViewClick
 
   return(
