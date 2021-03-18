@@ -66,8 +66,27 @@ router.get('/:playStyle/:magicStyle', rejectUnauthenticated, (req, res) => {
   // this will return all of the race features for the chosen race,
   // had to separate from original race query
   const raceFeatures = `
-    
+    SELECT 
+      ARRAY_AGG(ARRAY["features".feature_name, "features".feature_description]) AS race_features
+    FROM "features"
+    JOIN "races_features"
+      ON "features".id = "races_features".feature_id
+    JOIN "races"
+      ON "races_features".race_id = "races".id
+    WHERE "races".id = $1;
   `; 
+
+  const classSkills  =`
+    SELECT "skills".* FROM "skills"
+    JOIN "classes_skills"
+      ON "skills".id = "classes_skills".skill_id
+    JOIN "classes"
+      ON "classes_skills".class_id = "classes".id
+    WHERE "classes".id = $1;
+  `;
+
+  const raceSkills= `
+  `;
 
   // first query to get back classes that fit the description
   pool
@@ -93,7 +112,36 @@ router.get('/:playStyle/:magicStyle', rejectUnauthenticated, (req, res) => {
             .then(classInfoResponse => {
               console.log('Fetching class data related to id:', randomClassId);
 
-              res.send({classInfo: classInfoResponse.rows, raceInfo: raceResponse.rows});
+              pool // fourth query to get back raceFeatures
+                .query(raceFeatures, [randomRaceId])
+                .then(raceFeatureResponse => {
+                  console.log('Fetching race features for race id:', randomRaceId);
+
+                  pool // fifth query
+                    .query(classSkills, [randomClassId])
+                    .then(classSkillsResponse => {
+                      console.log('Fetching class skills data related to id:', randomClassId);
+
+                      res.send({
+                        classInfo: classInfoResponse.rows, 
+                        classSkills: classSkillsResponse.rows,
+                        raceInfo: raceResponse.rows, 
+                        raceFeatures: raceFeatureResponse.rows
+                      });
+                    })
+                    // fifth catch
+                    .catch(classSkillsError => {
+                      console.log(`Error using class id ${randomClassId} to get class skills info`, classSkillsError);
+                      
+                      res.sendStatus(500)
+                    })
+                })
+                // fourth catch
+                .catch(raceFeatureError => {
+                  console.log(`Error using race id ${randomRaceId} to get race features`, raceFeatureError);
+                  
+                  res.sendStatus(500);
+                })
             })
             // third catch
             .catch(classError => {
