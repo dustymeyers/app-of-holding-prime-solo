@@ -17,28 +17,6 @@ router.get('/:playStyle/:magicStyle', rejectUnauthenticated, (req, res) => {
   // The ids of the classes range from 1-9, this will "randomize" a number within that range
   const randomRaceId = Math.floor(Math.random() * 9) + 1;
 
-  /**
-   * This is what our Class Parameter query will look like:
-   * 
-   * SELECT "classes".id FROM "classes"
-   * WHERE "play_style" = 'hackAndSlash' AND "magic_style" = 'noMagic';
-   * 
-   * 
-   * 
-   * 
-   *  DEPRECATED FOR NOW
-   * SELECT 
-   *    "classes".id,
-   *    "classes".class_name
-   * FROM "classes"
-   * JOIN "classes_features"
-   *    ON "classes".id = "classes_features".class_id
-   * JOIN "features"
-   *    ON "classes_features".feature_id = "features".id
-   * WHERE "play_style" = 'hackAndSlash' AND "magic_style" = 'noMagic'
-   * GROUP BY "classes".id; 
-   */
-
   // this will get us back an id number that we can randomize within parameters of user input
   const classIdParameterQuery = `
     SELECT "classes".id FROM "classes"
@@ -76,6 +54,7 @@ router.get('/:playStyle/:magicStyle', rejectUnauthenticated, (req, res) => {
     WHERE "races".id = $1;
   `; 
 
+  // this will get us class skills
   const classSkills  =`
     SELECT "skills".* FROM "skills"
     JOIN "classes_skills"
@@ -85,7 +64,14 @@ router.get('/:playStyle/:magicStyle', rejectUnauthenticated, (req, res) => {
     WHERE "classes".id = $1;
   `;
 
+  // this will get us race skills
   const raceSkills= `
+    SELECT "skills".* FROM "skills"
+    JOIN "races_skills"
+      ON "skills".id = "races_skills".skill_id
+    JOIN "races"
+      ON "races_skills".race_id = "races".id
+    WHERE "races".id = $1;  
   `;
 
   // first query to get back classes that fit the description
@@ -121,19 +107,32 @@ router.get('/:playStyle/:magicStyle', rejectUnauthenticated, (req, res) => {
                     .query(classSkills, [randomClassId])
                     .then(classSkillsResponse => {
                       console.log('Fetching class skills data related to id:', randomClassId);
+                      
+                      pool // sixth query
+                        .query(raceSkills, [randomRaceId])
+                        .then(raceSkillResponse => {
+                          console.log('Fetching race skills for race id:', randomRaceId);
 
-                      res.send({
-                        classInfo: classInfoResponse.rows, 
-                        classSkills: classSkillsResponse.rows,
-                        raceInfo: raceResponse.rows, 
-                        raceFeatures: raceFeatureResponse.rows
-                      });
+                          res.send({
+                            classInfo: classInfoResponse.rows, 
+                            classSkills: classSkillsResponse.rows,
+                            raceInfo: raceResponse.rows, 
+                            raceFeatures: raceFeatureResponse.rows,
+                            raceSkills: raceSkillResponse.rows
+                          });
+                        })
+                        // sixth catch
+                        .catch(raceSkillsError => {
+                          console.log(`Error using race id ${randomRaceId} to get race features`, raceFeatureError);
+
+                          res.sendStatus(500);
+                        })
                     })
                     // fifth catch
                     .catch(classSkillsError => {
                       console.log(`Error using class id ${randomClassId} to get class skills info`, classSkillsError);
                       
-                      res.sendStatus(500)
+                      res.sendStatus(500);
                     })
                 })
                 // fourth catch
