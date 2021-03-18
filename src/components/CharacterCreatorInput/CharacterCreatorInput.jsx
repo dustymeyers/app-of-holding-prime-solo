@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import {
   Button,
   ButtonGroup, 
@@ -11,6 +12,14 @@ import {
 } from '@material-ui/core';
 
 function CharacterCreatorInput() {
+  const [characterNameInput, setCharacterNameInput] = useState('');
+  const [characterGenderInput, setCharacterGenderInput] = useState('');
+
+  const [characterParameters, setCharacterParameters] = useState({
+    playStyle: '',
+    magicStyle: ''
+  });
+
   return(
     <Grid container spacing ={3}>
       <Grid item>
@@ -23,9 +32,11 @@ function CharacterCreatorInput() {
           <FormControl>
             <InputLabel id="play-style-select-label">Play Style</InputLabel>
             <Select
-              labelId="play-style-select-label"
               id="play-style-select"
+              labelId="play-style-select-label"
+              onChange={event => setCharacterParameters({...characterParameters, playStyle: event.target.value})}
               required
+              value={characterParameters.playStyle}
             >
               <MenuItem value="">
                 <em>Choose one</em>
@@ -41,9 +52,11 @@ function CharacterCreatorInput() {
           <FormControl>
             <InputLabel id="magic-style-select-label">Magic Style</InputLabel>
             <Select
-              labelId="magic-style-select-label"
               id="magic-style-select"
+              labelId="magic-style-select-label"
+              onChange={event => setCharacterParameters({...characterParameters, magicStyle: event.target.value})}
               required
+              value={characterParameters.magicStyle}
             >
               <MenuItem value="">
                 <em>Choose one</em>
@@ -60,9 +73,11 @@ function CharacterCreatorInput() {
           <FormControl>
             <InputLabel id="gender-select-label">Gender</InputLabel>
             <Select
-              labelId="gender-select-label"
               id="gender-select"
+              labelId="gender-select-label"
+              onChange={event => setCharacterGenderInput(event.target.value)}
               required
+              value={characterGenderInput}
             >
               <MenuItem value="">
                 <em>Choose one</em>
@@ -80,8 +95,9 @@ function CharacterCreatorInput() {
             <TextField
               helperText="Please add a name for your character."
               label="Character Name"
+              onChange={(event) => setCharacterNameInput(event.target.value)}
               type="text"
-              value="character_name"
+              value={characterNameInput}
               required
             />
           </FormControl>
