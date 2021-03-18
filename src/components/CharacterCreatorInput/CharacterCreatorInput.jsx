@@ -84,7 +84,7 @@ function CharacterCreatorInput() {
               <MenuItem value="">
                 <em>Choose one</em>
               </MenuItem>
-              <MenuItem value="Arcane">Arcane</MenuItem>
+              <MenuItem value="arcane">Arcane</MenuItem>
               <MenuItem value="divineNatural">Divine/Natural</MenuItem>
               <MenuItem value="noMagic">No Magic</MenuItem>          
             </Select>

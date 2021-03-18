@@ -116,8 +116,8 @@ router.get('/generate', rejectUnauthenticated, (req, res) => {
                           res.send({
                             classInfo: classInfoResponse.rows, 
                             classSkills: classSkillsResponse.rows,
-                            raceInfo: raceResponse.rows, 
                             raceFeatures: raceFeatureResponse.rows,
+                            raceInfo: raceResponse.rows, 
                             raceSkills: raceSkillResponse.rows
                           });
                         })
