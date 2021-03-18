@@ -1,4 +1,6 @@
 import { useState } from 'react';
+import { useDispatch } from 'react-redux';
+
 import {
   Button,
   ButtonGroup, 
@@ -12,13 +14,34 @@ import {
 } from '@material-ui/core';
 
 function CharacterCreatorInput() {
+  const dispatch = useDispatch();
+
   const [characterNameInput, setCharacterNameInput] = useState('');
   const [characterGenderInput, setCharacterGenderInput] = useState('');
-
   const [characterParameters, setCharacterParameters] = useState({
     playStyle: '',
     magicStyle: ''
   });
+
+  const generateCharacter = () => {
+    console.log('clicked generateCharacter');
+
+    if (
+        characterParameters.playStyle === '' || 
+        characterParameters.magicStyle === '' ||
+        characterGenderInput === '' ||
+        characterNameInput === ''
+    ) { // TODO ADD SWAL
+      return alert('pick an option before hitting submit')
+    } else {
+      dispatch({
+        type: 'GET_RANDOM_CHARACTER',
+        payload: characterParameters
+      })
+    }
+  } // end generateCharacter
+
+
 
   return(
     <Grid container spacing ={3}>
@@ -107,7 +130,9 @@ function CharacterCreatorInput() {
       <Grid item>
         <ButtonGroup variant="contained">
           <Button color="secondary">Cancel</Button>
-          <Button color="primary">Next</Button>
+          <Button color="primary" onClick={generateCharacter}>
+            Next
+          </Button>
         </ButtonGroup>
       </Grid>
 
