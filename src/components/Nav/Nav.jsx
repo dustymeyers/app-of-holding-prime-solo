@@ -26,9 +26,12 @@ function Nav() {
         <Link className="navLink" to={loginLinkData.path}>
           {loginLinkData.text}
         </Link>
-
+        
         {user.id && (
           <>
+            <Link className="navLink" to="/characterCreator">
+              Character Creator
+            </Link>
             <Link className="navLink" to="/info">
               Info Page
             </Link>
