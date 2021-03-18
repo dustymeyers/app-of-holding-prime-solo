@@ -30,8 +30,8 @@ function CharacterCreatorInput() {
               <MenuItem value="">
                 <em>Choose one</em>
               </MenuItem>
-              <MenuItem value="Hack and Slash">Hack and Slash</MenuItem>
-              <MenuItem value="Roleplay">Roleplay</MenuItem>
+              <MenuItem value="hackAndSlash">Hack and Slash</MenuItem>
+              <MenuItem value="roleplay">Roleplay</MenuItem>
             </Select>
             <FormHelperText>Please choose a play style for your character.</FormHelperText>
           </FormControl>
@@ -49,8 +49,8 @@ function CharacterCreatorInput() {
                 <em>Choose one</em>
               </MenuItem>
               <MenuItem value="Arcane">Arcane</MenuItem>
-              <MenuItem value="Divine/Natural">Divine/Natural</MenuItem>
-              <MenuItem value="No Magic">No Magic</MenuItem>          
+              <MenuItem value="divineNatural">Divine/Natural</MenuItem>
+              <MenuItem value="noMagic">No Magic</MenuItem>          
             </Select>
             <FormHelperText>Please choose a magic style for your character, if you'd like one.</FormHelperText>
           </FormControl>
@@ -67,9 +67,9 @@ function CharacterCreatorInput() {
               <MenuItem value="">
                 <em>Choose one</em>
               </MenuItem>
-              <MenuItem value="Male">Male</MenuItem>
-              <MenuItem value="Female">Female</MenuItem>
-              <MenuItem value="None Binary">None Binary</MenuItem>          
+              <MenuItem value="male">Male</MenuItem>
+              <MenuItem value="female">Female</MenuItem>
+              <MenuItem value="noneBinary">None Binary</MenuItem>          
             </Select>
             <FormHelperText>Please choose a gender for your character.</FormHelperText>
           </FormControl>
@@ -81,6 +81,7 @@ function CharacterCreatorInput() {
               helperText="Please add a name for your character."
               label="Character Name"
               type="text"
+              value="character_name"
               required
             />
           </FormControl>
