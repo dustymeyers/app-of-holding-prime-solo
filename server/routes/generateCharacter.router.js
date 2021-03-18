@@ -9,10 +9,10 @@ const router = express.Router();
 /**
  * GET route template
  */
-router.get('/:playStyle/:magicStyle', rejectUnauthenticated, (req, res) => {
+router.get('/generate', rejectUnauthenticated, (req, res) => {
   // GET route code here
-  const playStyleParameters = req.params.playStyle;
-  const magicStyleParameters = req.params.magicStyle;
+  const playStyleParameters = req.query.playStyle;
+  const magicStyleParameters = req.query.magicStyle;
 
   // The ids of the classes range from 1-9, this will "randomize" a number within that range
   const randomRaceId = Math.floor(Math.random() * 9) + 1;

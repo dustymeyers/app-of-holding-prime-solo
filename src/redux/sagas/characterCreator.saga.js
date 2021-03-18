@@ -4,7 +4,9 @@ import { put, takeLatest } from 'redux-saga/effects';
 function* generateRandomCharacter(action) {
   try {
     // get class info pertaining to user parameters for user review
-    const randomCharacter = yield axios.get(`/api/generateCharacter/${action.payload.playStyle}/${action.payload.magicStyle}`);
+    const randomCharacter = yield axios.get(
+      `/api/characterCreator/generate?playStyle=${action.payload.playStyle}&magicStyle=${action.payload.magicStyle}`
+    );
 
     // save it in redux state for user to review
     yield put({ type: 'SET_GENERATED_CHARACTER', payload: randomCharacter.data})
