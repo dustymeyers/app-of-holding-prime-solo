@@ -13,7 +13,7 @@ import {
   TextField
 } from '@material-ui/core';
 
-function CharacterCreatorInput() {
+function CharacterCreatorInput({ readyForReview, setReadyForReview }) {
   const dispatch = useDispatch();
 
   const [characterNameInput, setCharacterNameInput] = useState('');
