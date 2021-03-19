@@ -1,5 +1,7 @@
+import { combineReducers } from 'redux';
+
 const characterCreatorReducer = (state = {}, action) => {
-  switch (action.type){
+  switch (action.type) {
     case 'SET_GENERATED_CHARACTER':
       return action.payload;
     default:

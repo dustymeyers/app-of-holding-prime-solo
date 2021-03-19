@@ -15,7 +15,8 @@ import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
 
 /* Pages/Views */
 import AboutPage from '../AboutPage/AboutPage';
-import CharacterCreator from '../CharacterCreator/CharacterCreator'
+import CharacterCreatorInput from '../CharacterCreatorInput/CharacterCreatorInput';
+import CharacterCreatorReview from '../CharacterCreatorReview/CharacterCreatorReview';
 import CharacterSheet from '../CharacterSheet/CharacterSheet';
 import UserPage from '../UserPage/UserPage';
 import InfoPage from '../InfoPage/InfoPage';
@@ -76,7 +77,15 @@ function App() {
             exact
             path="/characterCreator"
           >
-            <CharacterCreator />
+            <CharacterCreatorInput />
+          </ProtectedRoute>
+
+          <ProtectedRoute
+            // logged in shows CharacterSheet else shows LoginPage
+            exact
+            path="/characterCreator/review"
+          >
+            <CharacterCreatorReview />
           </ProtectedRoute>
 
           <ProtectedRoute

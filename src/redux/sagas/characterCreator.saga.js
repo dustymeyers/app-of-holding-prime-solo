@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { put, takeLatest } from 'redux-saga/effects';
 
+
 function* generateRandomCharacter(action) {
   try {
     // get class info pertaining to user parameters for user review
@@ -9,7 +10,7 @@ function* generateRandomCharacter(action) {
     );
 
     // save it in redux state for user to review
-    yield put({ type: 'SET_GENERATED_CHARACTER', payload: randomCharacter.data})
+    yield put({ type: 'SET_GENERATED_CHARACTER', payload: randomCharacter.data });
   } catch (error) {
     console.log('Error with character generator:', error);
   }

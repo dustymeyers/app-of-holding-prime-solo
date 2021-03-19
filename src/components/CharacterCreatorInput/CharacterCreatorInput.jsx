@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 
 import {
   Button,
@@ -13,8 +14,9 @@ import {
   TextField
 } from '@material-ui/core';
 
-function CharacterCreatorInput({ readyForReview, setReadyForReview }) {
+function CharacterCreatorInput({}) {
   const dispatch = useDispatch();
+  const history = useHistory();
 
   const [characterNameInput, setCharacterNameInput] = useState('');
   const [characterGenderInput, setCharacterGenderInput] = useState('');
@@ -36,7 +38,8 @@ function CharacterCreatorInput({ readyForReview, setReadyForReview }) {
     } else {
       dispatch({
         type: 'GET_RANDOM_CHARACTER',
-        payload: characterParameters
+        payload: characterParameters,
+        onComplete: history.push('/characterCreator/review')
       })
     }
   } // end generateCharacter
