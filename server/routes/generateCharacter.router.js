@@ -5,6 +5,7 @@ const {
 const userStrategy = require('../strategies/user.strategy');
 const pool = require('../modules/pool');
 const router = express.Router();
+const roll = require('../modules/abilityScore-generator')
 
 /**
  * GET route template
@@ -16,6 +17,14 @@ router.get('/generate', rejectUnauthenticated, (req, res) => {
 
   // The ids of the classes range from 1-9, this will "randomize" a number within that range
   const randomRaceId = Math.floor(Math.random() * 9) + 1;
+
+  // rolls 3 d6 to make our ability scores
+  const str_score = roll.abilityScore();
+  const dex_score = roll.abilityScore();
+  const con_score = roll.abilityScore();
+  const int_score = roll.abilityScore();
+  const wis_score = roll.abilityScore();
+  const cha_score = roll.abilityScore();
 
   // this will get us back an id number that we can randomize within parameters of user input
   const classIdParameterQuery = `
@@ -118,7 +127,13 @@ router.get('/generate', rejectUnauthenticated, (req, res) => {
                             classSkills: classSkillsResponse.rows,
                             raceFeatures: raceFeatureResponse.rows,
                             raceInfo: raceResponse.rows, 
-                            raceSkills: raceSkillResponse.rows
+                            raceSkills: raceSkillResponse.rows,
+                            str_score,
+                            dex_score,
+                            con_score,
+                            int_score,
+                            wis_score,
+                            cha_score
                           });
                         })
                         // sixth catch
