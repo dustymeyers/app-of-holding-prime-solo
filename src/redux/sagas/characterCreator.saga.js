@@ -10,7 +10,14 @@ function* generateRandomCharacter(action) {
     );
 
     // save it in redux state for user to review
-    yield put({ type: 'SET_GENERATED_CHARACTER', payload: randomCharacter.data });
+    yield put({ 
+      type: 'SET_GENERATED_CHARACTER', 
+      payload: {
+        ...randomCharacter.data, 
+        character_name: action.payload.character_name, 
+        gender: action.payload.gender
+      } 
+    });
   } catch (error) {
     console.log('Error with character generator:', error);
   }

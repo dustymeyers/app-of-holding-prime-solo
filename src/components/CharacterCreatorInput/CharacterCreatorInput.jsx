@@ -22,7 +22,9 @@ function CharacterCreatorInput({}) {
   const [characterGenderInput, setCharacterGenderInput] = useState('');
   const [characterParameters, setCharacterParameters] = useState({
     playStyle: '',
-    magicStyle: ''
+    magicStyle: '',
+    character_name: '',
+    gender: ''
   });
 
   const generateCharacter = () => {
@@ -31,20 +33,18 @@ function CharacterCreatorInput({}) {
     if (
         characterParameters.playStyle === '' || 
         characterParameters.magicStyle === '' ||
-        characterGenderInput === '' ||
-        characterNameInput === ''
+        characterParameters.gender === '' ||
+        characterParameters.character_name === ''
     ) { // TODO ADD SWAL
       return alert('pick an option before hitting submit')
     } else {
       dispatch({
         type: 'GET_RANDOM_CHARACTER',
         payload: characterParameters,
-        onComplete: history.push('/characterCreator/review')
+        onComplete: history.push('/characterCreator/review') 
       })
     }
   } // end generateCharacter
-
-
 
   return(
     <Grid container spacing ={3}>
@@ -101,9 +101,9 @@ function CharacterCreatorInput({}) {
             <Select
               id="gender-select"
               labelId="gender-select-label"
-              onChange={event => setCharacterGenderInput(event.target.value)}
+              onChange={event => setCharacterParameters({...characterParameters, gender: event.target.value})}
               required
-              value={characterGenderInput}
+              value={characterParameters.gender}
             >
               <MenuItem value="">
                 <em>Choose one</em>
@@ -121,9 +121,9 @@ function CharacterCreatorInput({}) {
             <TextField
               helperText="Please add a name for your character."
               label="Character Name"
-              onChange={(event) => setCharacterNameInput(event.target.value)}
+              onChange={(event) => setCharacterParameters({...characterParameters, character_name: event.target.value})}
               type="text"
-              value={characterNameInput}
+              value={characterParameters.character_name}
               required
             />
           </FormControl>

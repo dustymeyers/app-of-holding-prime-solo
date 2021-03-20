@@ -123,10 +123,10 @@ router.get('/generate', rejectUnauthenticated, (req, res) => {
                           console.log('Fetching race skills for race id:', randomRaceId);
 
                           res.send({
-                            classInfo: classInfoResponse.rows, 
+                            classInfo: classInfoResponse.rows[0], 
                             classSkills: classSkillsResponse.rows,
-                            raceFeatures: raceFeatureResponse.rows,
-                            raceInfo: raceResponse.rows, 
+                            raceFeatures: raceFeatureResponse.rows[0].race_features,
+                            raceInfo: raceResponse.rows[0], 
                             raceSkills: raceSkillResponse.rows,
                             str_score,
                             dex_score,
