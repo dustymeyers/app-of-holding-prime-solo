@@ -25,9 +25,10 @@ function* generateRandomCharacter(action) {
 
 function* saveGeneratedCharacter(action) {
   try {
+    yield axios.post('/api/characterCreator/', action.payload);
     
   } catch (error) {
-
+    console.log('Error saving generated character:', error);
   }
 }
 

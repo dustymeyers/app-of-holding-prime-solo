@@ -182,7 +182,7 @@ router.get('/generate', rejectUnauthenticated, (req, res) => {
  * POST route template
  */
 router.post('/', rejectUnauthenticated, (req, res) => {
-
+  console.log('posting')
   const charactersInsertValues = [ 
     req.user.id,
     req.body.characterName,
