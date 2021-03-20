@@ -212,7 +212,6 @@ router.post('/', rejectUnauthenticated, (req, res) => {
     VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
     RETURNING "id";
   `;
-
   
   const charactersClassesInsertQuery = `
   INSERT INTO "characters_classes" ("character_id", "class_id")
@@ -239,20 +238,33 @@ router.post('/', rejectUnauthenticated, (req, res) => {
         .then(characterClassesInsertResponse => {
           console.log('characterClassesInsert QUERY SENT');
 
-          res.sendStatus(201);
+          const charactersRacesInsertValues = [
+            characterInsertResponse.rows[0].id,
+            req.body.raceId
+          ];
+
+          pool // 3 of 3 DB Queries - INSERT INTO "characters_races"
+            .query(charactersRacesInsertQuery, charactersRacesInsertValues)
+            .then(characterRacesInsertResponse => {
+              console.log('characterRacesInsert QUERY SENT');
+
+              res.sendStatus(201);
+            }) // third catch
+            .catch(charactersRacesInsertError => {
+              console.log(`Error adding raceId ${req.body.raceId} for character ${req.body.characterName}`, charactersRacesInsertError);
+            });
         }) // second catch
-        .catch(characterClassesInsertError => {
-          console.log(`Error adding classId ${req.body.classId} for character ${req.body.characterName}`, characterClassesInsertError);
+        .catch(charactersClassesInsertError => {
+          console.log(`Error adding classId ${req.body.classId} for character ${req.body.characterName}`, charactersClassesInsertError);
 
           res.sendStatus(500);
-        })
+        });
     }) // first catch
     .catch(characterInsertError => {
       console.log(`Error adding ${req.body.characterName} for userId ${req.user.id}`, characterInsertError);
 
       res.sendStatus(500);
-    })
-
+    });
 });
 
 module.exports = router;
