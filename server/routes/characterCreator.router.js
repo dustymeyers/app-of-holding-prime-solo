@@ -183,7 +183,7 @@ router.get('/generate', rejectUnauthenticated, (req, res) => {
  */
 router.post('/', rejectUnauthenticated, (req, res) => {
 
-  const characterInsertValues = [ 
+  const charactersInsertValues = [ 
     req.user.id,
     req.body.characterName,
     req.body.characterStrength,
@@ -196,7 +196,7 @@ router.post('/', rejectUnauthenticated, (req, res) => {
     req.body.characterGender
   ];
   
-  const characterInsertQuery = `
+  const charactersInsertQuery = `
     INSERT INTO "characters" (
       "user_id", 
       "character_name", 
@@ -213,29 +213,42 @@ router.post('/', rejectUnauthenticated, (req, res) => {
     RETURNING "id";
   `;
 
-  const charactersClassesInsertValues = [
-    
-  ];
-
+  
   const charactersClassesInsertQuery = `
-    INSERT INTO "characters_classes" ("character_id", "class_id")
-    VALUES ($1, $2);
+  INSERT INTO "characters_classes" ("character_id", "class_id")
+  VALUES ($1, $2);
   `;
-
+  
   const charactersRacesInsertQuery = `
-    INSERT INTO "characters_races" ("character_id", "race_id")
-    VALUES ($1, $2);
+  INSERT INTO "characters_races" ("character_id", "race_id")
+  VALUES ($1, $2);
   `;
-
-  pool
-    .query(characterInsertQuery, characterInsertValues)
+  
+  pool // 1 of 3 DB Queries - INSERT INTO "characters"
+    .query(charactersInsertQuery, charactersInsertValues)
     .then(characterInsertResponse => {
       console.log('characterInsertResponse data', characterInsertResponse.rows[0].id);
       
-      res.sendStatus(201);
-    })
+      const charactersClassesInsertValues = [
+        characterInsertResponse.rows[0].id,
+        req.body.classId
+      ];
+
+      pool // 2 of 3 DB Queries - INSERT INTO "characters_classes"
+        .query(charactersClassesInsertQuery, charactersClassesInsertValues)
+        .then(characterClassesInsertResponse => {
+          console.log('characterClassesInsert QUERY SENT');
+
+          res.sendStatus(201);
+        }) // second catch
+        .catch(characterClassesInsertError => {
+          console.log(`Error adding classId ${req.body.classId} for character ${req.body.characterName}`, characterClassesInsertError);
+
+          res.sendStatus(500);
+        })
+    }) // first catch
     .catch(characterInsertError => {
-      console.log(`Error adding ${character_name} for user#${req.user.id}`, characterInsertError);
+      console.log(`Error adding ${req.body.characterName} for userId ${req.user.id}`, characterInsertError);
 
       res.sendStatus(500);
     })
