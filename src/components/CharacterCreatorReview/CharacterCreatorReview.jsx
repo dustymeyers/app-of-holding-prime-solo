@@ -38,17 +38,17 @@ function CharacterCreatorReview() {
     dispatch({
       type: 'SAVE_GENERATED_CHARACTER',
       payload: {
-        character_name: characterName,
-        str_score: characterStrength,
-        dex_score: characterDexterity,
-        con_score: characterConstitution,
-        int_score: characterIntelligence, 
-        wis_score: characterWisdom,
-        cha_score: characterCharisma,
-        max_hit_points: maxHitPoints,
-        gender: characterGender,
-        class_id: classId,
-        race_id: raceId
+        characterName,
+        characterStrength,
+        characterDexterity,
+        characterConstitution,
+        characterIntelligence, 
+        characterWisdom,
+        characterCharisma,
+        maxHitPoints,
+        characterGender,
+        classId,
+        raceId
       }
     })
   }

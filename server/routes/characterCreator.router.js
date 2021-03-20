@@ -182,6 +182,19 @@ router.get('/generate', rejectUnauthenticated, (req, res) => {
  * POST route template
  */
 router.post('/', rejectUnauthenticated, (req, res) => {
+
+  const characterInsertValues = [ 
+    req.user.id,
+    req.body.characterName,
+    req.body.characterStrength,
+    req.body.characterDexterity,
+    req.body.characterConstitution,
+    req.body.characterIntelligence,
+    req.body.characterWisdom,
+    req.body.characterCharisma,
+    req.body.maxHitPoints,
+    req.body.characterGender
+  ];
   
   const characterInsertQuery = `
     INSERT INTO "characters" (
@@ -196,10 +209,37 @@ router.post('/', rejectUnauthenticated, (req, res) => {
       "max_hit_points", 
       "gender" 
     )
-    VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10);
+    VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
+    RETURNING "id";
   `;
 
-  
+  const charactersClassesInsertValues = [
+    
+  ];
+
+  const charactersClassesInsertQuery = `
+    INSERT INTO "characters_classes" ("character_id", "class_id")
+    VALUES ($1, $2);
+  `;
+
+  const charactersRacesInsertQuery = `
+    INSERT INTO "characters_races" ("character_id", "race_id")
+    VALUES ($1, $2);
+  `;
+
+  pool
+    .query(characterInsertQuery, characterInsertValues)
+    .then(characterInsertResponse => {
+      console.log('characterInsertResponse data', characterInsertResponse.rows[0].id);
+      
+      res.sendStatus(201);
+    })
+    .catch(characterInsertError => {
+      console.log(`Error adding ${character_name} for user#${req.user.id}`, characterInsertError);
+
+      res.sendStatus(500);
+    })
+
 });
 
 module.exports = router;
