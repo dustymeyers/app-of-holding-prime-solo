@@ -5,7 +5,7 @@ const characterCreatorReducer = (state = {
   character_name: '',
   classInfo: { class_features: [] },
   classSkills: [],
-  cons_score: 0,
+  con_score: 0,
   dex_score: 0,
   gender: '',
   int_score: 0,
@@ -18,8 +18,9 @@ const characterCreatorReducer = (state = {
   switch (action.type) {
     case 'SET_GENERATED_CHARACTER':
       return action.payload;
+      // TODO - FIX FETCH
     case 'FETCH_GENERATED_CHARACTER':
-      return state;
+      return {...state};
     default:
       return state;
   }

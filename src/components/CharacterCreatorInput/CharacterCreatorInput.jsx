@@ -18,14 +18,16 @@ function CharacterCreatorInput({}) {
   const dispatch = useDispatch();
   const history = useHistory();
 
-  const [characterNameInput, setCharacterNameInput] = useState('');
-  const [characterGenderInput, setCharacterGenderInput] = useState('');
   const [characterParameters, setCharacterParameters] = useState({
     playStyle: '',
     magicStyle: '',
     character_name: '',
     gender: ''
   });
+
+  const cancelCharacterCreator = () => {
+    history.push('/')
+  }
 
   const generateCharacter = () => {
     console.log('clicked generateCharacter');
@@ -132,7 +134,7 @@ function CharacterCreatorInput({}) {
 
       <Grid item>
         <ButtonGroup variant="contained">
-          <Button color="secondary">Cancel</Button>
+          <Button color="secondary" onClick={cancelCharacterCreator}>Cancel</Button>
           <Button color="primary" onClick={generateCharacter}>
             Next
           </Button>

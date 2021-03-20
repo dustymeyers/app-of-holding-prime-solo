@@ -23,8 +23,18 @@ function* generateRandomCharacter(action) {
   }
 } // en generateRandomCharacter
 
+function* saveGeneratedCharacter(action) {
+  try {
+    
+  } catch (error) {
+
+  }
+}
+
 function* characterCreationSaga() {
   yield takeLatest('GET_RANDOM_CHARACTER', generateRandomCharacter);
+
+  yield takeLatest('SAVE_GENERATED_CHARACTER', saveGeneratedCharacter);
 } // end characterCreationSaga
 
 export default characterCreationSaga;

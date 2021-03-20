@@ -181,8 +181,25 @@ router.get('/generate', rejectUnauthenticated, (req, res) => {
 /**
  * POST route template
  */
-router.post('/', (req, res) => {
-  // POST route code here
+router.post('/', rejectUnauthenticated, (req, res) => {
+  
+  const characterInsertQuery = `
+    INSERT INTO "characters" (
+      "user_id", 
+      "character_name", 
+      "str_score", 
+      "dex_score",
+      "con_score",  
+      "int_score", 
+      "wis_score",
+      "cha_score", 
+      "max_hit_points", 
+      "gender" 
+    )
+    VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10);
+  `;
+
+  
 });
 
 module.exports = router;
