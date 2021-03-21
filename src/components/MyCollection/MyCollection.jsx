@@ -1,5 +1,8 @@
+import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
+import { useEffect } from 'react';
 
+// Material-UI Components
 import { 
   Button,         // replace <button>
   Table,          // replaces <table>
@@ -12,7 +15,15 @@ import {
 } from '@material-ui/core';
 
 function MyCollection() {
+  const dispatch = useDispatch();
   const history = useHistory();
+
+  useEffect(() => {
+    dispatch({
+      type: 'FETCH_CHARACTERS',
+      payload: 'FALSE', // query for all characters that are not marked as dead
+    })
+  }, []);
 
   const handleViewClick = () => {
     history.push('/characterSheet')

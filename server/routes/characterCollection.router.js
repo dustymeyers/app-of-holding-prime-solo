@@ -11,6 +11,8 @@ const router = express.Router();
  * Returns full list of user specific characters 
  */
 router.get('/', rejectUnauthenticated, (req, res) => {
+  console.log(`GET ALL CHARACTERS WHERE DEAD = ${req.query.dead}`);
+
   const selectAllCharactersQuery = `
     SELECT 
       "characters".id,
@@ -27,13 +29,13 @@ router.get('/', rejectUnauthenticated, (req, res) => {
       ON "characters".id = "characters_classes".character_id
     JOIN "classes"
       ON "characters_classes".class_id = "classes".id
-    WHERE "characters".user_id = $1
+    WHERE "characters".user_id = $1 AND "characters".dead = $2
     GROUP BY "characters".id, "races".race_name, "classes".class_name
     ORDER BY "characters".id;
   `;
 
   pool
-    .query(selectAllCharactersQuery, [req.user.id])
+    .query(selectAllCharactersQuery, [req.user.id, req.query.dead])
     .then(allCharactersResponse => {
       console.log('selectAllCharacters successfully queried');
 
