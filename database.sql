@@ -173,10 +173,16 @@ CREATE TABLE "races_features" (
   "feature_id" INT REFERENCES "features" NOT NULL
 );
 
+CREATE TABLE "races_languages" (
+  "id" SERIAL PRIMARY KEY,  
+  "race_id" INT REFERENCES "races" NOT NULL,
+  "language_id" INT REFERENCES "languages" NOT NULL
+);
+
 CREATE TABLE "races_skills" (
   "id" SERIAL PRIMARY KEY,
   "race_id" INT REFERENCES "races" NOT NULL,
-  "skill_id" INT REFERENCES "skill" NOT NULL
+  "skill_id" INT REFERENCES "skills" NOT NULL
 );
 
 ------------- INSERTS -------------
@@ -420,18 +426,18 @@ VALUES
 ------------- Classes -------------
 INSERT INTO "classes" ("class_name", "spellcasting_ability", "hit_die", "play_style", "magic_style")
 VALUES 
-    ('Barbarian', 'none', 12, 'hackAndSlash', 'noMagic'),	-- 1
-    ('Bard', 'cha', 8, 'roleplay', 'arcane'), 	    -- 2
-    ('Cleric', 'wis', 8, 'roleplay', 'divineNatural'),    	-- 3
-    ('Druid', 'wis', 8, 'roleplay', 'divineNatural' ), 	  	-- 4
-    ('Fighter', 'none', 10, 'hackAndSlash', 'noMagic'),   	-- 5
-    ('Monk', 'none', 8, 'hackAndSlash', 'noMagic'), 	   	-- 6
-    ('Paladin', 'cha', 10, 'hackAndSlash', 'divineNatural'),   	-- 7
-    ('Ranger', 'wis', 10,  'hackAndSlashh', 'divineNatural'),	   	-- 8
-    ('Rogue', 'none', 8, 'roleplay', 'noMagic'),	   	-- 9
-    ('Sorcerer', 'cha', 6, 'hackAndSlash', 'arcane'),  	-- 10
-    ('Warlock', 'cha', 8, 'roleplay', 'arcane'),  	-- 11
-    ('Wizard', 'int', 6, 'roleplay', 'arcane');	   	-- 12
+    ('Barbarian', 'None', 12, 'hackAndSlash', 'noMagic'),	-- 1
+    ('Bard', 'Charisma', 8, 'roleplay', 'arcane'), 	    -- 2
+    ('Cleric', 'Wisdom', 8, 'roleplay', 'divineNatural'),    	-- 3
+    ('Druid', 'Wisdom', 8, 'roleplay', 'divineNatural' ), 	  	-- 4
+    ('Fighter', 'None', 10, 'hackAndSlash', 'noMagic'),   	-- 5
+    ('Monk', 'None', 8, 'hackAndSlash', 'noMagic'), 	   	-- 6
+    ('Paladin', 'Charisma', 10, 'hackAndSlash', 'divineNatural'),   	-- 7
+    ('Ranger', 'Wisdom', 10,  'hackAndSlashh', 'divineNatural'),	   	-- 8
+    ('Rogue', 'None', 8, 'roleplay', 'noMagic'),	   	-- 9
+    ('Sorcerer', 'Charisma', 6, 'hackAndSlash', 'arcane'),  	-- 10
+    ('Warlock', 'Charisma', 8, 'roleplay', 'arcane'),  	-- 11
+    ('Wizard', 'Intelligence', 6, 'roleplay', 'arcane');	   	-- 12
 
 ------------ Class Features -------------
 INSERT INTO "features" ("feature_name", "feature_description")
@@ -790,6 +796,20 @@ VALUES
     (7, 38), (7, 39), (7, 40), (7, 41),                             -- Halfling
     -- No human features
     (8, 55), (8, 56), (8, 57);                                      -- Tiefling
+
+------------ RACES_LANGUAGES -------------  
+INSERT INTO "races_languages" ( "race_id", "language_id")
+VALUES 
+    (1, 3), (1, 5),                   -- Dragonborn
+    (2, 3), (2, 6),                   -- Dwarf
+    (3, 3), (3, 7), (3, 15),          -- Elf
+    (4, 3), (4, 9),                   -- Gnome
+    (5, 3), (5, 7), (5, 15),   -- Half-Elf
+    (6, 3), (6, 13),           -- Half-Orc
+    (7, 3), (7, 11),                   -- Halfling
+    (8, 3), (8, 6),                   -- human
+    (9, 3), (9, 12);                   -- Tiefling
+
 
 ------------ RACES_SKILLS -------------  
 -- Since acolyte is the only background availble in srd all races gain access to its skills

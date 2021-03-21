@@ -5,17 +5,29 @@ const {
 const userStrategy = require('../strategies/user.strategy');
 const pool = require('../modules/pool');
 const router = express.Router();
+const roll = require('../modules/abilityScore-generator');
 
 /**
- * GET route template
+ * GET /api/characterCreator/generate?playStyle={userPlayStyle}&magicStyle={userMagicStyle}
+ * Receives query from client based on user's chosen play and magic styles
+ * 
+ * randomly generates ability scores and a number for raceId
  */
-router.get('/:playStyle/:magicStyle', rejectUnauthenticated, (req, res) => {
+router.get('/generate', rejectUnauthenticated, (req, res) => {
   // GET route code here
-  const playStyleParameters = req.params.playStyle;
-  const magicStyleParameters = req.params.magicStyle;
+  const playStyleParameters = req.query.playStyle;
+  const magicStyleParameters = req.query.magicStyle;
 
   // The ids of the classes range from 1-9, this will "randomize" a number within that range
   const randomRaceId = Math.floor(Math.random() * 9) + 1;
+
+  // rolls 3 d6 to make each of our ability scores
+  const str_score = roll.abilityScore();
+  const dex_score = roll.abilityScore();
+  const con_score = roll.abilityScore();
+  const int_score = roll.abilityScore();
+  const wis_score = roll.abilityScore();
+  const cha_score = roll.abilityScore();
 
   // this will get us back an id number that we can randomize within parameters of user input
   const classIdParameterQuery = `
@@ -114,11 +126,17 @@ router.get('/:playStyle/:magicStyle', rejectUnauthenticated, (req, res) => {
                           console.log('Fetching race skills for race id:', randomRaceId);
 
                           res.send({
-                            classInfo: classInfoResponse.rows, 
+                            classInfo: classInfoResponse.rows[0], 
                             classSkills: classSkillsResponse.rows,
-                            raceInfo: raceResponse.rows, 
-                            raceFeatures: raceFeatureResponse.rows,
-                            raceSkills: raceSkillResponse.rows
+                            raceFeatures: raceFeatureResponse.rows[0].race_features,
+                            raceInfo: raceResponse.rows[0], 
+                            raceSkills: raceSkillResponse.rows,
+                            str_score,
+                            dex_score,
+                            con_score,
+                            int_score,
+                            wis_score,
+                            cha_score
                           });
                         })
                         // sixth catch
@@ -166,8 +184,90 @@ router.get('/:playStyle/:magicStyle', rejectUnauthenticated, (req, res) => {
 /**
  * POST route template
  */
-router.post('/', (req, res) => {
-  // POST route code here
+router.post('/', rejectUnauthenticated, (req, res) => {
+  console.log('posting')
+  const charactersInsertValues = [ 
+    req.user.id,
+    req.body.characterName,
+    req.body.characterStrength,
+    req.body.characterDexterity,
+    req.body.characterConstitution,
+    req.body.characterIntelligence,
+    req.body.characterWisdom,
+    req.body.characterCharisma,
+    req.body.maxHitPoints,
+    req.body.characterGender
+  ];
+  
+  const charactersInsertQuery = `
+    INSERT INTO "characters" (
+      "user_id", 
+      "character_name", 
+      "str_score", 
+      "dex_score",
+      "con_score",  
+      "int_score", 
+      "wis_score",
+      "cha_score", 
+      "max_hit_points", 
+      "gender" 
+    )
+    VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
+    RETURNING "id";
+  `;
+  
+  const charactersClassesInsertQuery = `
+  INSERT INTO "characters_classes" ("character_id", "class_id")
+  VALUES ($1, $2);
+  `;
+  
+  const charactersRacesInsertQuery = `
+  INSERT INTO "characters_races" ("character_id", "race_id")
+  VALUES ($1, $2);
+  `;
+  
+  pool // 1 of 3 DB Queries - INSERT INTO "characters"
+    .query(charactersInsertQuery, charactersInsertValues)
+    .then(characterInsertResponse => {
+      console.log('characterInsertResponse data', characterInsertResponse.rows[0].id);
+      
+      const charactersClassesInsertValues = [
+        characterInsertResponse.rows[0].id,
+        req.body.classId
+      ];
+
+      pool // 2 of 3 DB Queries - INSERT INTO "characters_classes"
+        .query(charactersClassesInsertQuery, charactersClassesInsertValues)
+        .then(characterClassesInsertResponse => {
+          console.log('characterClassesInsert QUERY SENT');
+
+          const charactersRacesInsertValues = [
+            characterInsertResponse.rows[0].id,
+            req.body.raceId
+          ];
+
+          pool // 3 of 3 DB Queries - INSERT INTO "characters_races"
+            .query(charactersRacesInsertQuery, charactersRacesInsertValues)
+            .then(characterRacesInsertResponse => {
+              console.log('characterRacesInsert QUERY SENT');
+
+              res.sendStatus(201);
+            }) // third catch
+            .catch(charactersRacesInsertError => {
+              console.log(`Error adding raceId ${req.body.raceId} for character ${req.body.characterName}`, charactersRacesInsertError);
+            });
+        }) // second catch
+        .catch(charactersClassesInsertError => {
+          console.log(`Error adding classId ${req.body.classId} for character ${req.body.characterName}`, charactersClassesInsertError);
+
+          res.sendStatus(500);
+        });
+    }) // first catch
+    .catch(characterInsertError => {
+      console.log(`Error adding ${req.body.characterName} for userId ${req.user.id}`, characterInsertError);
+
+      res.sendStatus(500);
+    });
 });
 
 module.exports = router;
