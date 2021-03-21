@@ -25,10 +25,14 @@ function CharacterCreatorInput({}) {
     gender: ''
   });
 
+  // event handler for "Cancel" button
   const cancelCharacterCreator = () => {
     history.push('/')
   }
 
+  // event handler for "Next" button
+  // sends user inputs as character generator parameters
+  // will return generated data on next view
   const generateCharacter = () => {
     console.log('clicked generateCharacter');
 
@@ -110,9 +114,9 @@ function CharacterCreatorInput({}) {
               <MenuItem value="">
                 <em>Choose one</em>
               </MenuItem>
-              <MenuItem value="male">Male</MenuItem>
-              <MenuItem value="female">Female</MenuItem>
-              <MenuItem value="noneBinary">None Binary</MenuItem>          
+              <MenuItem value="Male">Male</MenuItem>
+              <MenuItem value="Female">Female</MenuItem>
+              <MenuItem value="Non-Binary">Non-Binary</MenuItem>          
             </Select>
             <FormHelperText>Please choose a gender for your character.</FormHelperText>
           </FormControl>
@@ -134,7 +138,10 @@ function CharacterCreatorInput({}) {
 
       <Grid item>
         <ButtonGroup variant="contained">
-          <Button color="secondary" onClick={cancelCharacterCreator}>Cancel</Button>
+          <Button color="secondary" onClick={cancelCharacterCreator}>
+            Cancel
+          </Button>
+          
           <Button color="primary" onClick={generateCharacter}>
             Next
           </Button>

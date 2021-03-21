@@ -5,10 +5,13 @@ const {
 const userStrategy = require('../strategies/user.strategy');
 const pool = require('../modules/pool');
 const router = express.Router();
-const roll = require('../modules/abilityScore-generator')
+const roll = require('../modules/abilityScore-generator');
 
 /**
- * GET route template
+ * GET /api/characterCreator/generate?playStyle={userPlayStyle}&magicStyle={userMagicStyle}
+ * Receives query from client based on user's chosen play and magic styles
+ * 
+ * randomly generates ability scores and a number for raceId
  */
 router.get('/generate', rejectUnauthenticated, (req, res) => {
   // GET route code here
@@ -18,7 +21,7 @@ router.get('/generate', rejectUnauthenticated, (req, res) => {
   // The ids of the classes range from 1-9, this will "randomize" a number within that range
   const randomRaceId = Math.floor(Math.random() * 9) + 1;
 
-  // rolls 3 d6 to make our ability scores
+  // rolls 3 d6 to make each of our ability scores
   const str_score = roll.abilityScore();
   const dex_score = roll.abilityScore();
   const con_score = roll.abilityScore();
