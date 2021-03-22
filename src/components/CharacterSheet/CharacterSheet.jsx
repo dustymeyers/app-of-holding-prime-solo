@@ -1,3 +1,7 @@
+import { useDispatch, useSelector } from 'react-redux';
+import { useHistory, useParams } from 'react-router-dom';
+import { useEffect } from 'react';
+
 // Character Sheet Components
 import CharacterSheetEquipment from '../CharacterSheetEquipment/CharacterSheetEquipment';
 import CharacterSheetMain from '../CharacterSheetMain/CharacterSheetMain';
@@ -10,6 +14,17 @@ import {
 } from '@material-ui/core';
 
 function CharacterSheet() {
+  const dispatch = useDispatch();
+  const history = useHistory();
+  const paramsObject = useParams();
+  
+  useEffect(() => {
+    dispatch({
+      type:'FETCH_CHARACTER',
+      payload: paramsObject.id
+    })
+  }, []);
+
 
 
   return(
