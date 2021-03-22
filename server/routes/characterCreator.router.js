@@ -99,6 +99,7 @@ router.get('/generate', rejectUnauthenticated, (req, res) => {
     WHERE "classes_savingThrows".class_id = $1;
   `;
 
+
   // first query to get back classes that fit the description
   pool
     .query(classIdParameterQuery, [ playStyleParameters, magicStyleParameters ])
@@ -254,16 +255,57 @@ router.post('/', rejectUnauthenticated, (req, res) => {
   `;
   
   const charactersClassesInsertQuery = `
-  INSERT INTO "characters_classes" ("character_id", "class_id")
-  VALUES ($1, $2);
+    INSERT INTO "characters_classes" ("character_id", "class_id")
+    VALUES ($1, $2);
   `;
   
   const charactersRacesInsertQuery = `
-  INSERT INTO "characters_races" ("character_id", "race_id")
-  VALUES ($1, $2);
+    INSERT INTO "characters_races" ("character_id", "race_id")
+    VALUES ($1, $2);
   `;
+
+  function insertSerializer(array) {	
+    let pgTemplateNum = 1;
+    let serialInsert = '';
   
-  pool // 1 of 3 DB Queries - INSERT INTO "characters"
+    for (let i = 0; i < array.length; i++) {
+      if (array.length - 1 === i ) {
+        pgTemplateNum ++;
+
+        serialInsert += `($1 , $${pgTemplateNum});`;
+      } else {
+        pgTemplateNum ++;
+
+        serialInsert += `($1 , $${pgTemplateNum}), `;
+      }    
+    } // end for
+    return serialInsert;
+  } // end insertSerializer
+
+  const charactersSkillsInsertQuery = `
+    INSERT INTO "characters_skills" ("character_id", "skill_id")
+    VALUES ${insertSerializer(req.body.skillsArray)}
+  `;  
+  
+  const characterSavingThrowsInsertQuery = `
+    INSERT INTO "characters_savingThrows" ("character_id", "savingThrow_id")
+    VALUES ${insertSerializer(req.body.savingThrowProficiencies)}
+  `;
+
+  const characterLanguagesInsertQuery = `
+    INSERT INTO "characters_languages" ("character_id", "language_id")
+    VALUES ${insertSerializer(req.body.languagesArray)}
+  `;
+
+  function pgSerializer(array, characterId) {
+    let pgInsert = [characterId];
+    for (let i = 0; i < array.length; i++) {
+      pgInsert.push(array[i].id);
+    }
+    return pgInsert;
+  } // end pgSerializer
+  
+  pool // 1 of 6 DB Queries - INSERT INTO "characters"
     .query(charactersInsertQuery, charactersInsertValues)
     .then(characterInsertResponse => {
       console.log('characterInsertResponse data', characterInsertResponse.rows[0].id);
@@ -273,7 +315,7 @@ router.post('/', rejectUnauthenticated, (req, res) => {
         req.body.classId
       ];
 
-      pool // 2 of 3 DB Queries - INSERT INTO "characters_classes"
+      pool // 2 of 6 DB Queries - INSERT INTO "characters_classes"
         .query(charactersClassesInsertQuery, charactersClassesInsertValues)
         .then(characterClassesInsertResponse => {
           console.log('characterClassesInsert QUERY SENT');
@@ -283,15 +325,56 @@ router.post('/', rejectUnauthenticated, (req, res) => {
             req.body.raceId
           ];
 
-          pool // 3 of 3 DB Queries - INSERT INTO "characters_races"
+          pool // 3 of 6 DB Queries - INSERT INTO "characters_races"
             .query(charactersRacesInsertQuery, charactersRacesInsertValues)
             .then(characterRacesInsertResponse => {
-              console.log('characterRacesInsert QUERY SENT');
+              console.log('characterRacesInsert QUERY SENT'); 
+              
+              let pgSkillsArray = pgSerializer(req.body.skillsArray, characterInsertResponse.rows[0].id);
 
-              res.sendStatus(201);
+              pool // 4 of 6 DB Queries - INSERT INTO "characters_skills"
+                .query(charactersSkillsInsertQuery, pgSkillsArray)
+                .then(characterSkillsInsertResponse => {
+                  console.log('characterSkillsInsert QUERY SENT');
+
+                  let pgSavingThrowsArray = pgSerializer(req.body.savingThrowProficiencies, characterInsertResponse.rows[0].id);
+
+                  pool // 5 of 6 DB Queries - INSERT INTO "characters_savingThrows"
+                    .query(characterSavingThrowsInsertQuery, pgSavingThrowsArray)
+                    .then(characterSavingThrowsInsertResponse => {
+                      console.log('characterSavingThrowsInsert QUERY SENT');
+                      
+                      let pgLanguagesArray = pgSerializer(req.body.languagesArray, characterInsertResponse.rows[0].id);
+
+                      pool // 6 of 6 DB Queries - INSERT INTO "characters_languages"
+                        .query(characterLanguagesInsertQuery, pgLanguagesArray)
+                        .then(characterLanguagesInsertResponse => {
+                          console.log('characterLanguagesInsert QUERY SENT');
+                        
+                          res.sendStatus(201);
+                        })
+                        .catch(characterLanguagesInsertError => {
+                          console.log('Error inserting languages', characterLanguagesInsertError);
+
+                          res.sendStatus(500);
+                        })
+                    }) // fifth catch
+                    .catch(characterSavingThrowsInsertError => {
+                      console.log('Error inserting skills', characterSavingThrowsInsertError);
+
+                      res.sendStatus(500);
+                    })
+                }) // fourthCatch
+                .catch(charactersSkillsInsertError => {
+                  console.log('Error inserting skills', charactersSkillsInsertError);
+
+                  res.sendStatus(500);
+                });
             }) // third catch
             .catch(charactersRacesInsertError => {
               console.log(`Error adding raceId ${req.body.raceId} for character ${req.body.characterName}`, charactersRacesInsertError);
+
+              res.sendStatus(500);
             });
         }) // second catch
         .catch(charactersClassesInsertError => {

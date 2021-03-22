@@ -25,6 +25,10 @@ function CharacterCreatorReview() {
   const characterCharisma = randomCharacter.cha_score;
   const classId = randomCharacter.classInfo.id;
   const raceId = randomCharacter.raceInfo.id;
+  const skillsArray = randomCharacter.classSkills.concat(randomCharacter.raceSkills);
+  const languagesArray = randomCharacter.languagesKnown;
+  const savingThrowProficiencies = randomCharacter.savingThrowProficiencies;
+  // array1.concat(array2)
 
   // Base Armor Class is calculated by the dexterity modifier + 10 (unarmored)
   // All ability score modifiers = (ability score - 10) / 2
@@ -49,7 +53,10 @@ function CharacterCreatorReview() {
         maxHitPoints,
         characterGender,
         classId,
-        raceId
+        raceId,
+        skillsArray,
+        languagesArray,
+        savingThrowProficiencies
       }
     });
   }
