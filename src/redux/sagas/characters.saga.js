@@ -1,6 +1,19 @@
 import axios from 'axios';
 import { put, takeLatest } from 'redux-saga/effects';
 
+function* deleteCharacter(action) {
+  try {
+    yield axios.delete(`/api/characterCollection/delete/${action.payload}`);
+
+    yield put({
+      type: 'FETCH_CHARACTERS',
+      payload: 'FALSE'
+    })
+  } catch (error) {
+    console.log('Error deleting user character data', error);
+  }
+} // end deleteCharacter
+
 // Sends axios get for specific user character
 function* fetchCharacter(action) {
   try {
@@ -34,7 +47,9 @@ function* fetchCharacters(action) {
 function* charactersSaga() {
   yield takeLatest('FETCH_CHARACTERS', fetchCharacters);
 
-  yield takeLatest('FETCH_CHARACTER', fetchCharacter)
+  yield takeLatest('FETCH_CHARACTER', fetchCharacter);
+
+  yield takeLatest('DELETE_CHARACTER', deleteCharacter);
 } // end charactersSaga
 
 export default charactersSaga;

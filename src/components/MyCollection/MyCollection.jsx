@@ -30,6 +30,11 @@ function MyCollection() {
 
   const handleDeleteClick = (characterId) => {
     console.log('delete characterId', characterId);
+
+    dispatch({
+      type: 'DELETE_CHARACTER',
+      payload: characterId
+    })
   } // end handleDeleteClick
 
   // routes user to character specific CharacterSheet view
