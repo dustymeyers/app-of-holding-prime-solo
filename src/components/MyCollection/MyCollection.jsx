@@ -34,7 +34,7 @@ function MyCollection() {
 
   const handleViewClick = (characterId) => {
     console.log('view characterId', characterId);
-    // history.push('/characterSheet')
+    history.push(`/characterSheet/${characterId}`)
   } // end handleViewClick
 
   return(
@@ -60,7 +60,7 @@ function MyCollection() {
                 <TableRow key={character.id}>
                   {/* View Button */}
                   <TableCell>
-                    <Button variant="contained" color="primary" onClick={() => handleViewClick(character.id)}>
+                    <Button variant="outlined" color="primary" onClick={() => handleViewClick(character.id)}>
                       View
                     </Button>
                   </TableCell>
@@ -86,7 +86,7 @@ function MyCollection() {
                   </TableCell>
 
                   <TableCell>
-                    <Button variant="contained" color="secondary" onClick={() => handleDeleteClick(character.id)}>
+                    <Button variant="outlined" color="secondary" onClick={() => handleDeleteClick(character.id)}>
                       Delete
                     </Button>
                   </TableCell>
