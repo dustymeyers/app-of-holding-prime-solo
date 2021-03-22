@@ -98,22 +98,28 @@ router.get('/:id', rejectUnauthenticated, (req, res) => {
 
   // DB query, will return specific skill proficiencies for user character's class and race
   const selectAllSkillsQuery = `
-    SELECT "skills".* FROM "classes_skills"
-    RIGHT OUTER JOIN "skills"
-      ON "classes_skills".skill_id = "skills".id
-    LEFT OUTER JOIN "races_skills"
-      ON "skills".id = "races_skills".skill_id
-    WHERE "classes_skills".class_id = $1 OR "races_skills".race_id = $2
-    ORDER BY "skills".id;
+    SELECT "skills".* FROM "skills"
+    JOIN "characters_skills"
+      ON "skills".id = "characters_skills".skill_id
+    WHERE "characters_skills".character_id = $1
+    ORDER BY "skills".id;  
   `;
 
   // DB query, will return specific saving throw proficiencies for user character's class and race
   const selectAllSavingThrowsQuery = `
     SELECT "saving_throws".* FROM "saving_throws"
-    JOIN "classes_savingThrows" 
-      ON "saving_throws".id = "classes_savingThrows"."savingThrow_id"
-    WHERE "classes_savingThrows".class_id = $1
+    JOIN "characters_savingThrows"
+      ON "saving_throws".id = "characters_savingThrows"."savingThrow_id"
+    WHERE "characters_savingThrows".character_id = $1
     ORDER BY "saving_throws".id;
+  `;
+
+  const selectAllLanguagesQuery = `
+    SELECT "languages".* FROM "languages"
+    JOIN "characters_languages"
+      ON "languages".id = "characters_languages".language_id
+    WHERE "characters_languages".character_id = $1
+    ORDER BY "languages".id;
   `;
 
   pool // First query to get back all base character, race, and class information
@@ -128,23 +134,34 @@ router.get('/:id', rejectUnauthenticated, (req, res) => {
         .then(selectAllFeaturesResponse => {
           console.log(`GET /api/characterCollection/${characterId} SUCCESS`);
           
-          pool // Third query to get back all skill proficiencies for class and race
-            .query(selectAllSkillsQuery, [classId, raceId])
+          pool // Third query to get back all skill proficiencies for character
+            .query(selectAllSkillsQuery, [characterId])
             .then(selectAllSkillsResponse => {
 
-              pool // Fourth query to get back all saving throw proficiencies for class
-                .query (selectAllSavingThrowsQuery, [classId])
+              pool // Fourth query to get back all saving throw proficiencies for character
+                .query(selectAllSavingThrowsQuery, [characterId])
                 .then(selectAllSavingThrowsResponse => {
                   
-                  res.send({
-                    baseInformation: characterRaceClassResponse.rows[0],
-                    features: selectAllFeaturesResponse.rows,
-                    skillProficiencies: selectAllSkillsResponse.rows,
-                    savingThrowProficiencies: selectAllSavingThrowsResponse.rows,
-                  });
-                })
+                  pool // Fifth query to get back all languages known to character
+                    .query(selectAllLanguagesQuery, [characterId])
+                    .then(selectAllLanguagesResponse => {
+
+                      res.send({
+                        baseInformation: characterRaceClassResponse.rows[0],
+                        features: selectAllFeaturesResponse.rows,
+                        skillProficiencies: selectAllSkillsResponse.rows,
+                        savingThrowProficiencies: selectAllSavingThrowsResponse.rows,
+                        languagesKnown: selectAllLanguagesResponse.rows
+                      });
+                    }) // fifth catch
+                    .catch(languagesError => {
+                      console.error(`GET /api/characterCollection/${characterId} ERROR`, languagesError);
+
+                      res.sendStatus(500);
+                    })
+                }) // fourth catch
                 .catch(savingThrowsError => {
-                  console.error(`GET /api/characterCollection/${characterId} ERROR`, skillsError);
+                  console.error(`GET /api/characterCollection/${characterId} ERROR`, savingThrowsError);
 
                   res.sendStatus(500);
                 })
