@@ -54,6 +54,7 @@ router.get('/:id', rejectUnauthenticated, (req, res) => {
   const userId = req.user.id;
   const characterId = req.params.id;
 
+  // DB query, will return specific user character info along with respective class and race info
   const selectAllCharacterRaceClassQuery = `
     SELECT 
       "classes".id as "class_id",
@@ -82,6 +83,7 @@ router.get('/:id', rejectUnauthenticated, (req, res) => {
     WHERE "characters".user_id = $1 AND "characters".id = $2;
   `;
 
+  // DB query, will return specific features for user character's class and race
   const selectAllFeaturesQuery = `
     SELECT 
       "features".feature_name, 
@@ -92,6 +94,26 @@ router.get('/:id', rejectUnauthenticated, (req, res) => {
       ON "features".id = "races_features".feature_id
     WHERE "classes_features".class_id = $1 OR "races_features".race_id = $2
     ORDER BY "features".id;
+  `;
+
+  // DB query, will return specific skill proficiencies for user character's class and race
+  const selectAllSkillsQuery = `
+    SELECT "skills".* FROM "classes_skills"
+    RIGHT OUTER JOIN "skills"
+      ON "classes_skills".skill_id = "skills".id
+    LEFT OUTER JOIN "races_skills"
+      ON "skills".id = "races_skills".skill_id
+    WHERE "classes_skills".class_id = $1 OR "races_skills".race_id = $2
+    ORDER BY "skills".id;
+  `;
+
+  // DB query, will return specific saving throw proficiencies for user character's class and race
+  const selectAllSavingThrowsQuery = `
+    SELECT "saving_throws".* FROM "saving_throws"
+    JOIN "classes_savingThrows" 
+      ON "saving_throws".id = "classes_savingThrows"."savingThrow_id"
+    WHERE "classes_savingThrows".class_id = $1
+    ORDER BY "saving_throws".id;
   `;
 
   pool // First query to get back all base character, race, and class information
@@ -106,10 +128,32 @@ router.get('/:id', rejectUnauthenticated, (req, res) => {
         .then(selectAllFeaturesResponse => {
           console.log(`GET /api/characterCollection/${characterId} SUCCESS`);
           
-          res.send({
-            baseInformation: characterRaceClassResponse.rows[0],
-            features: selectAllFeaturesResponse.rows
-          });
+          pool // Third query to get back all skill proficiencies for class and race
+            .query(selectAllSkillsQuery, [classId, raceId])
+            .then(selectAllSkillsResponse => {
+
+              pool // Fourth query to get back all saving throw proficiencies for class
+                .query (selectAllSavingThrowsQuery, [classId])
+                .then(selectAllSavingThrowsResponse => {
+                  
+                  res.send({
+                    baseInformation: characterRaceClassResponse.rows[0],
+                    features: selectAllFeaturesResponse.rows,
+                    skillProficiencies: selectAllSkillsResponse.rows,
+                    savingThrowProficiencies: selectAllSavingThrowsResponse.rows,
+                  });
+                })
+                .catch(savingThrowsError => {
+                  console.error(`GET /api/characterCollection/${characterId} ERROR`, skillsError);
+
+                  res.sendStatus(500);
+                })
+            }) // third catch
+            .catch(skillsError => {
+              console.error(`GET /api/characterCollection/${characterId} ERROR`, skillsError);
+
+              res.sendStatus(500);
+            });
         }) // second catch
         .catch(featuresError => {
           console.error(`GET /api/characterCollection/${characterId} ERROR`, featuresError);
