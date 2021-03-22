@@ -48,6 +48,54 @@ router.get('/', rejectUnauthenticated, (req, res) => {
     });
 });
 
+router.get('/:id', rejectUnauthenticated, (req, res) => {
+  console.log('GET character with id:', req.params.id);
+
+  const userId = req.user.id;
+  const characterId = req.params.id;
+
+  const selectAllCharacterRaceClass = `
+    SELECT 
+      "classes".id as "class_id",
+      "classes".class_name,
+      "classes".hit_die,
+      "classes".spellcasting_ability,
+      "characters".*,
+      "races".id as "race_id",
+      "races".race_name,
+      "races".str_bonus,
+      "races".dex_bonus,
+      "races".con_bonus,
+      "races".int_bonus,
+      "races".wis_bonus,
+      "races".cha_bonus,
+      "races".speed
+    FROM "classes"
+    JOIN "characters_classes"
+      ON "classes".id = "characters_classes".class_id
+    JOIN "characters"
+      ON "characters_classes".character_id = "characters".id
+    JOIN "characters_races"
+      ON "characters".id = "characters_races".character_id
+    JOIN "races"
+      ON "characters_races".race_id = "races".id
+    WHERE "characters".user_id = $1 AND "characters".id = $2;
+    `;
+
+    pool
+      .query(selectAllCharacterRaceClass, [ userId, characterId ])
+      .then(characterRaceClassResponse => {
+        console.log(`GET /api/characterCollection/${characterId} SUCCESS`);
+
+        res.send(characterRaceClassResponse.rows);
+      }) // first catch
+      .catch(error => {
+        console.error(`GET /api/characterCollection/${characterId} ERROR`);
+
+        res.sendStatus(500);
+      });
+});
+
 /**
  * POST route template
  */

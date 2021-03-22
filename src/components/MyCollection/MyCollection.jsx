@@ -32,9 +32,10 @@ function MyCollection() {
     console.log('delete characterId', characterId);
   } // end handleDeleteClick
 
+  // routes user to character specific CharacterSheet view
   const handleViewClick = (characterId) => {
     console.log('view characterId', characterId);
-    history.push(`/characterSheet/${characterId}`)
+    history.push(`/characterSheet/${characterId}`);
   } // end handleViewClick
 
   return(
