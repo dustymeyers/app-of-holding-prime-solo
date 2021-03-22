@@ -87,8 +87,16 @@ router.get('/generate', rejectUnauthenticated, (req, res) => {
   // this will get us languages the character knows based on race
   const languages = `
     SELECT "languages".* FROM "languages"
-    NATURAL LEFT OUTER JOIN "races_languages"
+    JOIN "races_languages"
+      ON "languages".id = "races_languages".language_id
     WHERE "races_languages".race_id = $1;
+  `;
+
+  const savingThrows = `
+    SELECT "saving_throws".* FROM "saving_throws"
+    JOIN "classes_savingThrows" 
+      ON "saving_throws".id = "classes_savingThrows"."savingThrow_id"
+    WHERE "classes_savingThrows".class_id = $1;
   `;
 
   // first query to get back classes that fit the description
@@ -135,30 +143,42 @@ router.get('/generate', rejectUnauthenticated, (req, res) => {
                             .then(languageResponse => {
                               console.log('Fetched race languages for race id:', randomRaceId);
 
-                              res.send({
-                                classInfo: classInfoResponse.rows[0], 
-                                classSkills: classSkillsResponse.rows,
-                                raceFeatures: raceFeatureResponse.rows[0].race_features,
-                                raceInfo: raceResponse.rows[0], 
-                                raceSkills: raceSkillResponse.rows,
-                                languagesKnown: languageResponse.rows,
-                                str_score,
-                                dex_score,
-                                con_score,
-                                int_score,
-                                wis_score,
-                                cha_score
-                              });
+                              pool // eighth query
+                                .query(savingThrows, [randomClassId])
+                                .then(savingThrowsResponse => {
+                                  console.log('Fetched class saving throw data related to id:', randomClassId);
+
+                                  res.send({
+                                    classInfo: classInfoResponse.rows[0], 
+                                    classSkills: classSkillsResponse.rows,
+                                    raceFeatures: raceFeatureResponse.rows[0].race_features,
+                                    raceInfo: raceResponse.rows[0], 
+                                    raceSkills: raceSkillResponse.rows,
+                                    languagesKnown: languageResponse.rows,
+                                    savingThrowProficiencies: savingThrowsResponse.rows,
+                                    str_score,
+                                    dex_score,
+                                    con_score,
+                                    int_score,
+                                    wis_score,
+                                    cha_score
+                                  });
+                                }) // eighth catch
+                                .catch(savingThrowsError => {
+                                  console.log(`Error using class id ${randomClassId} to get class skills info`, savingThrowsError);
+                      
+                                  res.sendStatus(500);
+                                });
                             }) // seventh catch
                             .catch(languagesError => {
                               console.log(`Error using race id ${randomRaceId} to get race features`, languagesError);
 
                               res.sendStatus(500);
-                            })
+                            });
                         })
                         // sixth catch
                         .catch(raceSkillsError => {
-                          console.log(`Error using race id ${randomRaceId} to get race features`, raceFeatureError);
+                          console.log(`Error using race id ${randomRaceId} to get race features`, raceSkillsError);
 
                           res.sendStatus(500);
                         })
