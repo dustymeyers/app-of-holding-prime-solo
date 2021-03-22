@@ -77,13 +77,18 @@ router.get('/generate', rejectUnauthenticated, (req, res) => {
   `;
 
   // this will get us race skills
-  const raceSkills= `
+  const raceSkills = `
     SELECT "skills".* FROM "skills"
     JOIN "races_skills"
       ON "skills".id = "races_skills".skill_id
-    JOIN "races"
-      ON "races_skills".race_id = "races".id
-    WHERE "races".id = $1;  
+    WHERE "races_skills".race_id = $1;  
+  `;
+
+  // this will get us languages the character knows based on race
+  const languages = `
+    SELECT "languages".* FROM "languages"
+    NATURAL LEFT OUTER JOIN "races_languages"
+    WHERE "races_languages".race_id = $1;
   `;
 
   // first query to get back classes that fit the description
@@ -103,41 +108,53 @@ router.get('/generate', rejectUnauthenticated, (req, res) => {
       pool // second query to get back random race info
         .query(raceInfoQuery, [randomRaceId])
         .then(raceResponse => {
-          console.log('Fetching race data related to id:', randomRaceId);          
+          console.log('Fetched race data related to id:', randomRaceId);          
 
           pool // third query to get back class information now that class has been chosen
             .query(classInfoQuery, [randomClassId])
             .then(classInfoResponse => {
-              console.log('Fetching class data related to id:', randomClassId);
+              console.log('Fetched class data related to id:', randomClassId);
 
               pool // fourth query to get back raceFeatures
                 .query(raceFeatures, [randomRaceId])
                 .then(raceFeatureResponse => {
-                  console.log('Fetching race features for race id:', randomRaceId);
+                  console.log('Fetched race features for race id:', randomRaceId);
 
                   pool // fifth query
                     .query(classSkills, [randomClassId])
                     .then(classSkillsResponse => {
-                      console.log('Fetching class skills data related to id:', randomClassId);
+                      console.log('Fetched class skills data related to id:', randomClassId);
                       
                       pool // sixth query
                         .query(raceSkills, [randomRaceId])
                         .then(raceSkillResponse => {
-                          console.log('Fetching race skills for race id:', randomRaceId);
+                          console.log('Fetched race skills for race id:', randomRaceId);
+                          
+                          pool // seventh query
+                            .query(languages, [randomRaceId])
+                            .then(languageResponse => {
+                              console.log('Fetched race languages for race id:', randomRaceId);
 
-                          res.send({
-                            classInfo: classInfoResponse.rows[0], 
-                            classSkills: classSkillsResponse.rows,
-                            raceFeatures: raceFeatureResponse.rows[0].race_features,
-                            raceInfo: raceResponse.rows[0], 
-                            raceSkills: raceSkillResponse.rows,
-                            str_score,
-                            dex_score,
-                            con_score,
-                            int_score,
-                            wis_score,
-                            cha_score
-                          });
+                              res.send({
+                                classInfo: classInfoResponse.rows[0], 
+                                classSkills: classSkillsResponse.rows,
+                                raceFeatures: raceFeatureResponse.rows[0].race_features,
+                                raceInfo: raceResponse.rows[0], 
+                                raceSkills: raceSkillResponse.rows,
+                                languagesKnown: languageResponse.rows,
+                                str_score,
+                                dex_score,
+                                con_score,
+                                int_score,
+                                wis_score,
+                                cha_score
+                              });
+                            }) // seventh catch
+                            .catch(languagesError => {
+                              console.log(`Error using race id ${randomRaceId} to get race features`, languagesError);
+
+                              res.sendStatus(500);
+                            })
                         })
                         // sixth catch
                         .catch(raceSkillsError => {
