@@ -18,7 +18,6 @@ function CharacterSheet() {
   const history = useHistory();
   const paramsObject = useParams();
   const character = useSelector(store => store.characters.characterDetails);
-  console.log('character object:', character);
   
   useEffect(() => {
     dispatch({
@@ -34,7 +33,7 @@ function CharacterSheet() {
       <Grid container component={Paper}>
         <Grid item>
           <h2>This is where the CharacterSheet will go.</h2>
-          <CharacterSheetMain />
+          <CharacterSheetMain character={character} />
           <CharacterSheetEquipment />
           <CharacterSheetSpells />
         </Grid>

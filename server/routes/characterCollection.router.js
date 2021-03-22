@@ -7,7 +7,7 @@ const pool = require('../modules/pool');
 const router = express.Router();
 
 /**
- * GET route template 
+ * GET 
  * Returns full list of user specific characters 
  */
 router.get('/', rejectUnauthenticated, (req, res) => {
@@ -48,6 +48,10 @@ router.get('/', rejectUnauthenticated, (req, res) => {
     });
 });
 
+/**
+ * GET 
+ * Returns single user specific character
+ */
 router.get('/:id', rejectUnauthenticated, (req, res) => {
   console.log('GET character with id:', req.params.id);
 
@@ -186,10 +190,32 @@ router.get('/:id', rejectUnauthenticated, (req, res) => {
 });
 
 /**
- * POST route template
+ * DELETE 
+ * Deletes single user specificcharacter
  */
-router.post('/', (req, res) => {
-  // POST route code here
+router.delete('/delete/:id', rejectUnauthenticated, (req, res) => {
+  const characterId = req.params.id;
+  const userId = req.user.id;
+
+  console.log('Attempting to delete character at id:', characterId);
+
+  const deleteCharacterQuery = `
+    DELETE FROM "characters"
+    WHERE "id" = $1 AND "user_id" = $2;
+  `;
+
+  pool
+    .query(deleteCharacterQuery, [characterId, userId])
+    .then(dbResponse => {
+      console.log('Deleted character at:', characterId);
+
+      res.sendStatus(200);
+    })
+    .catch(error => {
+      console.log(`Error deleting character with id: ${characterId}.`, error);
+
+      res.sendStatus(500);
+    });
 });
 
 module.exports = router;

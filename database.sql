@@ -100,53 +100,49 @@ CREATE TABLE "user" (
 
 -- Joining tables
 
+-- Joining tables
+
 CREATE TABLE "characters_classes" (
   "id" SERIAL PRIMARY KEY,  
-  "character_id" INT REFERENCES "characters" NOT NULL,
+  "character_id" INT REFERENCES "characters" ON DELETE CASCADE NOT NULL, 
   "class_id" INT REFERENCES "classes" NOT NULL
 );
 
 CREATE TABLE "characters_equipment" (
   "id" SERIAL PRIMARY KEY,  
-  "character_id" INT REFERENCES "characters" NOT NULL,
+  "character_id" INT REFERENCES "characters" ON DELETE CASCADE NOT NULL,
   "equipment_id" INT REFERENCES "skills" NOT NULL,
   "qty" INT NOT NULL DEFAULT 1
 );
 
 CREATE TABLE "characters_languages" (
   "id" SERIAL PRIMARY KEY,  
-  "character_id" INT REFERENCES "characters" NOT NULL,
-  "language_id" INT REFERENCES "language" NOT NULL
+  "character_id" INT REFERENCES "characters" ON DELETE CASCADE NOT NULL,
+  "language_id" INT REFERENCES "languages" NOT NULL
 );
 
 CREATE TABLE "characters_races" (
   "id" SERIAL PRIMARY KEY,
-  "character_id" INT REFERENCES "characters" NOT NULL,
-  "race_id" INT REFERENCES "race" NOT NULL
+  "character_id" INT REFERENCES "characters" ON DELETE CASCADE NOT NULL,
+  "race_id" INT REFERENCES "races" NOT NULL
 );
 
 CREATE TABLE "characters_skills" (
   "id" SERIAL PRIMARY KEY,  
-  "character_id" INT REFERENCES "characters" NOT NULL,
+  "character_id" INT REFERENCES "characters" ON DELETE CASCADE NOT NULL,
   "skill_id" INT REFERENCES "skills" NOT NULL
 );
 
 CREATE TABLE "characters_spells" (
   "id" SERIAL PRIMARY KEY,
-  "character_id" INT REFERENCES "characters" NOT NULL,
-  "spell_id" INT REFERENCES "spell" NOT NULL
+  "character_id" INT REFERENCES "characters" ON DELETE CASCADE NOT NULL,
+  "spell_id" INT REFERENCES "spells" NOT NULL
 );
 
 CREATE TABLE "characters_savingThrows" (
   "id" SERIAL PRIMARY KEY,  
-  "character_id" INT REFERENCES "characters" NOT NULL,
+  "character_id" INT REFERENCES "characters" ON DELETE CASCADE NOT NULL,
   "savingThrow_id" INT REFERENCES "saving_throws" NOT NULL
-);
-
-CREATE TABLE "characters_users" (
-  "id" SERIAL PRIMARY KEY,  
-  "character_id" INT REFERENCES "characters" NOT NULL,
-  "user_id" INT REFERENCES "user" NOT NULL
 );
 
 CREATE TABLE "classes_features" (
