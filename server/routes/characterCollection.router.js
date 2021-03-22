@@ -54,7 +54,7 @@ router.get('/:id', rejectUnauthenticated, (req, res) => {
   const userId = req.user.id;
   const characterId = req.params.id;
 
-  const selectAllCharacterRaceClass = `
+  const selectAllCharacterRaceClassQuery = `
     SELECT 
       "classes".id as "class_id",
       "classes".class_name,
@@ -80,20 +80,48 @@ router.get('/:id', rejectUnauthenticated, (req, res) => {
     JOIN "races"
       ON "characters_races".race_id = "races".id
     WHERE "characters".user_id = $1 AND "characters".id = $2;
-    `;
+  `;
 
-    pool
-      .query(selectAllCharacterRaceClass, [ userId, characterId ])
-      .then(characterRaceClassResponse => {
-        console.log(`GET /api/characterCollection/${characterId} SUCCESS`);
+  const selectAllFeaturesQuery = `
+    SELECT 
+      "features".feature_name, 
+      "features".feature_description FROM "classes_features"
+    RIGHT OUTER JOIN "features"
+      ON "classes_features".feature_id = "features".id
+    LEFT OUTER JOIN "races_features"
+      ON "features".id = "races_features".feature_id
+    WHERE "classes_features".class_id = $1 OR "races_features".race_id = $2
+    ORDER BY "features".id;
+  `;
 
-        res.send(characterRaceClassResponse.rows);
-      }) // first catch
-      .catch(error => {
-        console.error(`GET /api/characterCollection/${characterId} ERROR`);
+  pool // First query to get back all base character, race, and class information
+    .query(selectAllCharacterRaceClassQuery, [userId, characterId])
+    .then(characterRaceClassResponse => {
+      const classId = characterRaceClassResponse.rows[0].class_id;
+      const raceId = characterRaceClassResponse.rows[0].race_id;
+      console.log(`FETCHING class ${classId} and raceId ${raceId}`);
+      
+      pool // Second query to get back all features for class and race
+        .query(selectAllFeaturesQuery, [classId, raceId])
+        .then(selectAllFeaturesResponse => {
+          console.log(`GET /api/characterCollection/${characterId} SUCCESS`);
+          
+          res.send({
+            baseInformation: characterRaceClassResponse.rows[0],
+            features: selectAllFeaturesResponse.rows
+          });
+        }) // second catch
+        .catch(featuresError => {
+          console.error(`GET /api/characterCollection/${characterId} ERROR`, featuresError);
 
-        res.sendStatus(500);
-      });
+          res.sendStatus(500);
+        })
+    }) // first catch
+    .catch(error => {
+      console.error(`GET /api/characterCollection/${characterId} ERROR`, error);
+
+      res.sendStatus(500);
+    });
 });
 
 /**
