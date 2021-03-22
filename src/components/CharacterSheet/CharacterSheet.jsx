@@ -17,6 +17,8 @@ function CharacterSheet() {
   const dispatch = useDispatch();
   const history = useHistory();
   const paramsObject = useParams();
+  const character = useSelector(store => store.characters.characterDetails);
+  console.log('character object:', character);
   
   useEffect(() => {
     dispatch({

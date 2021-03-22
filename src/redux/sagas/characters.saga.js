@@ -4,8 +4,14 @@ import { put, takeLatest } from 'redux-saga/effects';
 // Sends axios get for specific user character
 function* fetchCharacter(action) {
   try {
-    // const character = yield axios.get(`/api/characterCollection/${action.payload}`)
-    console.log('fetch character with id:', action.payload)
+    console.log('fetch character with id:', action.payload);
+
+    const character = yield axios.get(`/api/characterCollection/${action.payload}`);
+
+    yield put({
+      type: 'SET_CHARACTER_DETAILS',
+      payload: character.data
+    })
   } catch (error) {
     console.log('Error fetching user character data', error);
   }

@@ -17,7 +17,7 @@ import {
 function MyCollection() {
   const dispatch = useDispatch();
   const history = useHistory();
-  const livingCharactersList = useSelector(store => store.charactersList);
+  const livingCharactersList = useSelector(store => store.characters.charactersList);
 
   console.log('livingCharactersList', livingCharactersList);
 
