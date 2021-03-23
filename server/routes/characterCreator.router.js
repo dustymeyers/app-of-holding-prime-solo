@@ -234,7 +234,8 @@ router.post('/', rejectUnauthenticated, (req, res) => {
     req.body.characterWisdom,
     req.body.characterCharisma,
     req.body.maxHitPoints,
-    req.body.characterGender
+    req.body.characterGender,
+    req.body.baseArmorClass
   ];
   
   const charactersInsertQuery = `
@@ -248,9 +249,10 @@ router.post('/', rejectUnauthenticated, (req, res) => {
       "wis_score",
       "cha_score", 
       "max_hit_points", 
-      "gender" 
+      "gender",
+      "armor_class" 
     )
-    VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
+    VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
     RETURNING "id";
   `;
   

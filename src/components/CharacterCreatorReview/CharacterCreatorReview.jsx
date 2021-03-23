@@ -32,10 +32,10 @@ function CharacterCreatorReview() {
 
   // Base Armor Class is calculated by the dexterity modifier + 10 (unarmored)
   // All ability score modifiers = (ability score - 10) / 2
-  const baseArmorClass = Math.floor((characterDexterity - 10 ) / 2) + 10;
+  const baseArmorClass = Math.floor((characterDexterity + randomCharacter.raceInfo.dex_bonus - 10 ) / 2) + 10;
 
   // Maximum Hit Points for level one  is calculated by the constitution modifier + max roll for that class's hit die
-  const maxHitPoints = randomCharacter.classInfo.hit_die + Math.floor((randomCharacter.con_score - 10 ) / 2);
+  const maxHitPoints = randomCharacter.classInfo.hit_die + Math.floor((characterConstitution + randomCharacter.raceInfo.con_bonus - 10 ) / 2);
 
   console.log('classId', classId);
   const saveCharacter = () => {
@@ -56,8 +56,10 @@ function CharacterCreatorReview() {
         raceId,
         skillsArray,
         languagesArray,
-        savingThrowProficiencies
-      }
+        savingThrowProficiencies,
+        baseArmorClass
+      },
+      onComplete: history.push('/')
     });
   }
 

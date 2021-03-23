@@ -3,7 +3,7 @@ import { combineReducers } from 'redux';
 // stores info for single character
 const characterDetails = (state = {
   baseInformation: {},
-  features: {},
+  features: [],
   skillProficiencies: [],
   savingThrowProficiencies: [],
   languagesKnown: []
