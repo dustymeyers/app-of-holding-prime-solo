@@ -16,6 +16,7 @@ function CharacterSheetMain({ skillsAndSavingThrows}) {
   console.log('in CharacterSheetMain, character is:', character);
   console.log('skills and saving throws', skillsAndSavingThrows);
   const character = useSelector(store => store.characters.characterDetails);
+  const editCharacter = useSelector(store => store.editCharacter);
   const dispatch = useDispatch();
   const paramsObject = useParams();
 
@@ -34,16 +35,21 @@ function CharacterSheetMain({ skillsAndSavingThrows}) {
       type: 'FETCH_CHARACTER_SHEET_COMPONENTS'
     });
     dispatch({
-      type:'FETCH_CHARACTER',
+      type: 'FETCH_CHARACTER',
       payload: paramsObject.id
     });
+
+    dispatch({
+      type: 'FETCH_CHARACTER_TO_EDIT',
+      payload: paramsObject.id
+    })
     // setEditCharacter(character.baseInformation);
   }, []);
   
  
-  if (character.baseInformation.max_hit_points) {
+  if (editCharacter.id) {
     console.log('its really really true')
-    characterState = character.baseInformation;
+    characterState = editCharacter;
   } else {
     characterState = {
       armor_class: 0,
@@ -53,10 +59,11 @@ function CharacterSheetMain({ skillsAndSavingThrows}) {
     }
   }
 
-  const [editCharacter, setEditCharacter] = useState(characterState);
-  const [editMax, setEditMax] = useState(character.baseInformation.max_hit_points);
+  // const [editCharacter, setEditCharacter] = useState(characterState);
+  const [edit, setEdit] = useState(characterState)
+
   
-  console.log('editMax is', editMax);
+  
 
   const abilityScoreModifier = (abilityScore) => {
     return Math.floor((abilityScore - 10) / 2);
@@ -96,10 +103,10 @@ function CharacterSheetMain({ skillsAndSavingThrows}) {
       <Grid item>
         <form>
           <TextField
-            value={editMax}
+            value={edit.max_hit_points}
             label="Max Hit Points"
             /*value={editCharacter.current_hit_points}*/
-            onChange={event => setEditMax(event.target.value)}
+            onChange={event => setEdit({...edit, max_hit_points: event.target.value})}
 
           ></TextField>
           {/* <TextField
