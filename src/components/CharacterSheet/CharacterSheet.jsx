@@ -21,6 +21,9 @@ function CharacterSheet() {
   
   useEffect(() => {
     dispatch({
+      type: 'FETCH_CHARACTER_SHEET_COMPONENTS'
+    })
+    dispatch({
       type:'FETCH_CHARACTER',
       payload: paramsObject.id
     })

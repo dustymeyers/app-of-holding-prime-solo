@@ -11,6 +11,7 @@ const passport = require('./strategies/user.strategy');
 const userRouter = require('./routes/user.router');
 const characterCreatorRouter = require('./routes/characterCreator.router');
 const characterCollectionRouter = require('./routes/characterCollection.router');
+const characterSheetComponentsRouter = require('./routes/characterSheetComponents.router');
 
 // Body parser middleware
 app.use(bodyParser.json());
@@ -27,6 +28,7 @@ app.use(passport.session());
 app.use('/api/user', userRouter);
 app.use('/api/characterCreator', characterCreatorRouter);
 app.use('/api/characterCollection', characterCollectionRouter);
+app.use('/api/characterSheet', characterSheetComponentsRouter);
 
 // Serve static files
 app.use(express.static('build'));

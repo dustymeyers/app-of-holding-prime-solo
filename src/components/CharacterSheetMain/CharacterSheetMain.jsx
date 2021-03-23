@@ -79,6 +79,9 @@ function CharacterSheetMain({character}) {
 
       <Grid item>
         <h2>Skill Proficiencies</h2>
+        <ul>
+          <li></li>
+        </ul>
         <p>{JSON.stringify(character.skillProficiencies)}</p>
       </Grid>
 

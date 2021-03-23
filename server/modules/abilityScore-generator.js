@@ -17,14 +17,16 @@ const chosenAbilityScoreRoll = arr => {
     if (val >= num) {
       return acc;
     };
-    
+        
     ind = index;
     num = val;
+
     return { ind, num };
   }, {
     num: Infinity,
     ind: -1
   });
+
   const { ind } = smallestCreds;
 
   if (ind === -1) {
@@ -49,7 +51,7 @@ function abilityScore() {
 
   chosenAbilityScoreRoll(naturalAbilityScoreRoll);
   console.log('this is what we get', naturalAbilityScoreRoll);
-  
+
   return addDice(naturalAbilityScoreRoll);
 } // end abilityScore
 
