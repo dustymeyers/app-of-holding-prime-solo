@@ -4,7 +4,7 @@ import { put, takeLatest } from 'redux-saga/effects';
 
 function* fetchCharacterSheetComponents() {
   try {
-    const skillsAndSavingThrowsList = yield axios.get('/api/characterSheet');
+    const skillsAndSavingThrowsList = yield axios.get('/api/characterSheet/main');
 
     yield put({
       type: 'SET_SKILLS_AND_SAVING_THROWS_LISTS',

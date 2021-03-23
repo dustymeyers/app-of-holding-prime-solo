@@ -23,6 +23,7 @@ router.get('/main', (req, res) => {
         .query(savingThrowsListQuery)
         .then(savingThrowsResponse => {
           const savingThrowsList = savingThrowsResponse.rows;
+          
           res.send({skillsList, savingThrowsList});
         })
         .catch(savingThrowsError => {
