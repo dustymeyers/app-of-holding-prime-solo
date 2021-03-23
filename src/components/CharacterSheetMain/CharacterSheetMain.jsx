@@ -1,9 +1,23 @@
-import {
-  Grid,
-} from '@material-ui/core';
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useHistory, useParams } from 'react-router-dom';
 
-function CharacterSheetMain({character}) {
+// Material-UI Components
+import {
+  Button,
+  ButtonGroup,
+  FormControl,
+  Grid,
+  TextField
+} from '@material-ui/core';
+import { AccessAlarm, EditIcon, ThreeDRotation } from '@material-ui/icons';
+
+function CharacterSheetMain({ skillsAndSavingThrows}) {
   console.log('in CharacterSheetMain, character is:', character);
+  console.log('skills and saving throws', skillsAndSavingThrows);
+  const character = useSelector(store => store.characters.characterDetails);
+  const dispatch = useDispatch();
+  const paramsObject = useParams();
 
   const baseStrength = character.baseInformation.str_score;
   const baseDexterity = character.baseInformation.dex_score;
@@ -12,6 +26,37 @@ function CharacterSheetMain({character}) {
   const baseWisdom = character.baseInformation.wis_score;
   const baseCharisma = character.baseInformation.cha_score;
   const proficiencyBonus = Math.ceil((character.baseInformation.level)/4) + 1;
+
+  let characterState;
+
+  useEffect(() => {
+    dispatch({
+      type: 'FETCH_CHARACTER_SHEET_COMPONENTS'
+    });
+    dispatch({
+      type:'FETCH_CHARACTER',
+      payload: paramsObject.id
+    });
+    // setEditCharacter(character.baseInformation);
+  }, []);
+  
+ 
+  if (character.baseInformation.max_hit_points) {
+    console.log('its really really true')
+    characterState = character.baseInformation;
+  } else {
+    characterState = {
+      armor_class: 0,
+      current_hit_points: 0,
+      max_hit_points: 0,
+      temporary_hit_points: 0
+    }
+  }
+
+  const [editCharacter, setEditCharacter] = useState(characterState);
+  const [editMax, setEditMax] = useState(character.baseInformation.max_hit_points);
+  
+  console.log('editMax is', editMax);
 
   const abilityScoreModifier = (abilityScore) => {
     return Math.floor((abilityScore - 10) / 2);
@@ -49,6 +94,24 @@ function CharacterSheetMain({character}) {
       </Grid>
 
       <Grid item>
+        <form>
+          <TextField
+            value={editMax}
+            label="Max Hit Points"
+            /*value={editCharacter.current_hit_points}*/
+            onChange={event => setEditMax(event.target.value)}
+
+          ></TextField>
+          {/* <TextField
+            value={editCharacter}
+          ></TextField> */}
+          <TextField
+            /*value={editCharacter.current_hit_points}*/
+          ></TextField>
+        </form>
+      </Grid>
+
+      <Grid item>
         <h2>Hit Die: 1d{character.baseInformation.hit_die}</h2>
         <h3>Hit Dice Available: {character.baseInformation.hit_dice_available}</h3>
         <h3>Maximum Number of Hit Dice: {character.baseInformation.level}</h3>
@@ -59,9 +122,7 @@ function CharacterSheetMain({character}) {
         <h3>Passive Perception: <strong>TODO</strong></h3>
       </Grid>
 
-      <Grid item>
-        <h2>Skills:</h2>
-      </Grid>
+
 
       <Grid item>
         <h2>Features: </h2>
@@ -80,7 +141,19 @@ function CharacterSheetMain({character}) {
       <Grid item>
         <h2>Skill Proficiencies</h2>
         <ul>
-          <li></li>
+          {skillsAndSavingThrows.skillsList.map(skill => {
+            // console.log('skill.id', skill.id);
+            for (let proficiency of character.skillProficiencies){
+              // console.log('proficiency.id', proficiency.id);
+              if (proficiency.id === skill.id) {
+                // console.log('id is equal')
+                return <li key={skill.id}>{skill.skill_name} Proficient</li>;
+              } else {
+                // console.log('id not equal')
+                return <li key={skill.id}>{skill.skill_name}</li>;
+              }
+            }
+          })}
         </ul>
         <p>{JSON.stringify(character.skillProficiencies)}</p>
       </Grid>

@@ -12,6 +12,7 @@ const userRouter = require('./routes/user.router');
 const characterCreatorRouter = require('./routes/characterCreator.router');
 const characterCollectionRouter = require('./routes/characterCollection.router');
 const characterSheetComponentsRouter = require('./routes/characterSheetComponents.router');
+const editCharacterRouter = require('./routes/editCharacter.router');
 
 // Body parser middleware
 app.use(bodyParser.json());
@@ -29,6 +30,7 @@ app.use('/api/user', userRouter);
 app.use('/api/characterCreator', characterCreatorRouter);
 app.use('/api/characterCollection', characterCollectionRouter);
 app.use('/api/characterSheet', characterSheetComponentsRouter);
+app.use('/api/editCharacter', editCharacterRouter);
 
 // Serve static files
 app.use(express.static('build'));
