@@ -13,10 +13,10 @@ import {
 import { AccessAlarm, EditIcon, ThreeDRotation } from '@material-ui/icons';
 
 function CharacterSheetMain({ skillsAndSavingThrows}) {
-  console.log('in CharacterSheetMain, character is:', character);
   console.log('skills and saving throws', skillsAndSavingThrows);
+
   const character = useSelector(store => store.characters.characterDetails);
-  const editCharacter = useSelector(store => store.editCharacter);
+  // const editCharacter = useSelector(store => store.editCharacter);
   const dispatch = useDispatch();
   const paramsObject = useParams();
 
@@ -28,7 +28,13 @@ function CharacterSheetMain({ skillsAndSavingThrows}) {
   const baseCharisma = character.baseInformation.cha_score;
   const proficiencyBonus = Math.ceil((character.baseInformation.level)/4) + 1;
 
-  let characterState;
+  const [editMode, setEditMode] = useState({
+    editBasicInfo: false,
+    editHealth: false
+  });
+
+
+  // let characterState;
 
   useEffect(() => {
     dispatch({
@@ -39,49 +45,151 @@ function CharacterSheetMain({ skillsAndSavingThrows}) {
       payload: paramsObject.id
     });
 
-    dispatch({
-      type: 'FETCH_CHARACTER_TO_EDIT',
-      payload: paramsObject.id
-    })
+    // dispatch({
+    //   type: 'FETCH_CHARACTER_TO_EDIT',
+    //   payload: paramsObject.id
+    // })
     // setEditCharacter(character.baseInformation);
   }, []);
-  
- 
-  if (editCharacter.id) {
-    console.log('its really really true')
-    characterState = editCharacter;
-  } else {
-    characterState = {
-      armor_class: 0,
-      current_hit_points: 0,
-      max_hit_points: 0,
-      temporary_hit_points: 0
-    }
-  }
-
-  // const [editCharacter, setEditCharacter] = useState(characterState);
-  const [edit, setEdit] = useState(characterState)
-
-  
-  
 
   const abilityScoreModifier = (abilityScore) => {
     return Math.floor((abilityScore - 10) / 2);
   }
 
+  const cancelEdit = () => {
+    console.log('clicked cancel');
+    setEditMode(false);
+  }
+
+  const saveEdit = () => {
+    console.log('clicked save');
+    setEditMode(false);
+  }
+
+  const handleEdit = (key) => {
+    setEditMode({ key: true});
+  }
+
+  console.log(editMode)
+
   return(
     <Grid container>
-      <Grid item>
-        <h2>Character</h2>
-        <p>Name: {character.baseInformation.character_name}</p>
-        <p>Class and Level: Level {character.baseInformation.level} {character.baseInformation.class_name}</p>
-        <p>Background: {character.baseInformation.background}</p>
-        <p>Race: {character.baseInformation.race_name}</p>
-        <p>Gender: {character.baseInformation.gender}</p>
-        <p>Alignment: {character.baseInformation.alignment}</p>
-        <p>Experience Points: {character.baseInformation.experience_points}</p>
-        <p>{JSON.stringify(character.baseInformation)}</p>
-      </Grid>
+
+      {!editMode.editBasicInfo ?
+        <Grid item>
+          <h2>Character</h2>
+          <p>Name: {character.baseInformation.character_name}</p>
+          <p>Class and Level: Level {character.baseInformation.level} {character.baseInformation.class_name}</p>
+          <p>Background: {character.baseInformation.background}</p>
+          <p>Race: {character.baseInformation.race_name}</p>
+          <p>Gender: {character.baseInformation.gender}</p>
+          <p>Alignment: {character.baseInformation.alignment}</p>
+          <p>Experience Points: {character.baseInformation.experience_points}</p>
+          <p>{JSON.stringify(character.baseInformation)}</p>
+          <Button variant="outlined" onClick={() => setEditMode({...editMode, editBasicInfo: true})}>Edit</Button>
+        </Grid>
+        :
+        <Grid item>
+          <TextField 
+            label="Character Name"
+            onChange={event => dispatch({
+              type: 'UPDATE_CHARACTER',
+              payload: {
+                baseInformation: {
+                  ...character.baseInformation,
+                  character_name: event.target.value
+                }
+              }
+            })}
+            type="text"
+            value={character.baseInformation.character_name}
+          />
+
+          <TextField 
+            label="Level"
+            min="1"
+            max="20"
+            onChange={event => dispatch({
+              type: 'UPDATE_CHARACTER',
+              payload: {
+                baseInformation: {
+                  ...character.baseInformation,
+                  level: event.target.value
+                }
+              }
+            })}
+            type="number"
+            value={character.baseInformation.level}
+          />
+
+          <TextField 
+            label="Gender"
+            onChange={event => dispatch({
+              type: 'UPDATE_CHARACTER',
+              payload: {
+                baseInformation: {
+                  ...character.baseInformation,
+                  gender: event.target.value
+                }
+              }
+            })}
+            type="text"
+            value={character.baseInformation.gender}
+          />
+
+          <TextField 
+            label="Alignment"
+            onChange={event => dispatch({
+              type: 'UPDATE_CHARACTER',
+              payload: {
+                baseInformation: {
+                  ...character.baseInformation,
+                  alignment: event.target.value
+                }
+              }
+            })}
+            type="text"
+            value={character.baseInformation.alignment}
+          />
+
+          <TextField
+            label="Experience Points"
+            onChange={event => dispatch({
+              type: 'UPDATE_CHARACTER',
+              payload: {
+                baseInformation: {
+                  ...character.baseInformation,
+                  experience_points: event.target.value
+                }
+              }
+            })}
+            type="number"
+            value={character.baseInformation.experience_points}
+          />
+
+          <ButtonGroup variant="outlined">
+            <Button 
+              color="secondary" 
+              onClick={() => {
+                cancelEdit();
+                setEditMode({...editMode, editBasicInfo: false});
+              }}
+            >
+              Cancel
+            </Button>
+            <Button 
+              color="primary" 
+              onClick={() => {
+              saveEdit();
+              setEditMode({...editMode, editBasicInfo: false});
+              }}
+            >
+              Save
+            </Button>
+          </ButtonGroup>
+        </Grid>
+      }
+
 
       <Grid item>
         <h2>Ability Scores:</h2>
@@ -92,31 +200,102 @@ function CharacterSheetMain({ skillsAndSavingThrows}) {
         <p>Wisdom: {baseWisdom + character.baseInformation.wis_bonus}, Modifier: {abilityScoreModifier(baseWisdom)}</p>
         <p>Charisma: {baseCharisma + character.baseInformation.cha_bonus}, Modifier: {abilityScoreModifier(baseCharisma)}</p>
       </Grid>
+      {!editMode.editHealth ? 
+        // Text View !editMode.editHealth = true
+        <Grid item>
+          <h2>AC: {character.baseInformation.armor_class}</h2>
+          <h3>Current Health Points: {character.baseInformation.current_hit_points}</h3>
+          <h3>Max Health Points: {character.baseInformation.max_hit_points}</h3>
+          <h3>Temporary Health Points: {character.baseInformation.temporary_hit_points}</h3>
+          <Button variant="outlined" onClick={() => setEditMode({...editMode, editHealth: true})}>Edit</Button>
+        </Grid> 
+        : // Edit View !editMode.editHealth = false
+        <Grid item>
+          <form>
 
-      <Grid item>
-        <h2>AC: {character.baseInformation.armor_class}</h2>
-        <h3>Current Health Points: {character.baseInformation.current_hit_points}</h3>
-        <h3>Max Health Points: {character.baseInformation.max_hit_points}</h3>
-        <h3>Temporary Health Points: {character.baseInformation.temporary_hit_points}</h3>
-      </Grid>
+            <TextField 
+              label="Armor Class"
+              onChange={event => dispatch({
+                type: 'UPDATE_CHARACTER',
+                payload: {
+                  baseInformation: {
+                    ...character.baseInformation,
+                    armor_class: event.target.value
+                  }
+                }
+              })}
+              type="number"
+              value={character.baseInformation.armor_class}
+              />
 
-      <Grid item>
-        <form>
-          <TextField
-            value={edit.max_hit_points}
-            label="Max Hit Points"
-            /*value={editCharacter.current_hit_points}*/
-            onChange={event => setEdit({...edit, max_hit_points: event.target.value})}
+            <TextField 
+              label="Current Health Points"
+              onChange={event => dispatch({
+                type: 'UPDATE_CHARACTER',
+                payload: {
+                  baseInformation: {
+                    ...character.baseInformation,
+                    current_hit_points: event.target.value
+                  }
+                }
+              })}
+              type="number"
+              value={character.baseInformation.current_hit_points}
+              />
 
-          ></TextField>
-          {/* <TextField
-            value={editCharacter}
-          ></TextField> */}
-          <TextField
-            /*value={editCharacter.current_hit_points}*/
-          ></TextField>
-        </form>
-      </Grid>
+            <TextField
+              label="Max Health Points"
+              onChange={event => dispatch({
+                type: 'UPDATE_CHARACTER',
+                payload: {
+                  baseInformation: {
+                    ...character.baseInformation,
+                    max_hit_points: event.target.value
+                  }
+                }
+              })}
+              type="number"
+              value={character.baseInformation.max_hit_points}
+              />
+
+            <TextField 
+              label="Temporary Health Points"
+              onChange={event => dispatch({
+                type: 'UPDATE_CHARACTER',
+                payload: {
+                  baseInformation: {
+                    ...character.baseInformation,
+                    temporary_hit_points: event.target.value
+                  }
+                }
+              })}
+              type="number"
+              value={character.baseInformation.temporary_hit_points}
+              />
+
+            <ButtonGroup variant="outlined">
+              <Button 
+                color="secondary" 
+                onClick={() => {
+                  cancelEdit();
+                  setEditMode({...editMode, editHealth: false});
+                }}
+              >
+                Cancel
+              </Button>
+              <Button 
+                color="primary" 
+                onClick={() => {
+                saveEdit();
+                setEditMode({...editMode, editHealth: false});
+                }}
+              >
+                Save
+              </Button>
+            </ButtonGroup>
+          </form>
+        </Grid>
+      }
 
       <Grid item>
         <h2>Hit Die: 1d{character.baseInformation.hit_die}</h2>

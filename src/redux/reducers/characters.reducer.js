@@ -2,7 +2,17 @@ import { combineReducers } from 'redux';
 
 // stores info for single character
 const characterDetails = (state = {
-  baseInformation: {},
+  baseInformation: {
+    alignment: '',
+    armor_class: 0,
+    character_name: '',
+    current_hit_points: 0,
+    gender: '',
+    level: 1,
+    max_hit_points: 0,
+    temporary_hit_points: 0,
+    experience_points: 0
+  },
   features: [],
   skillProficiencies: [],
   savingThrowProficiencies: [],
@@ -11,6 +21,11 @@ const characterDetails = (state = {
   switch (action.type) {
     case 'SET_CHARACTER_DETAILS':
       return action.payload;
+    case 'UPDATE_CHARACTER':
+      return {
+        ...state, 
+        ...action.payload
+      };
     default:
       return state;
   }
@@ -20,7 +35,7 @@ const characterDetails = (state = {
 const charactersList = (state = [], action) => {
   switch (action.type) {
     case 'SET_CHARACTER_LIST':
-      return action.payload;
+      return action.payload;    
     default:
       return state;
   }
