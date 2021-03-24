@@ -29,6 +29,7 @@ function CharacterSheetMain({ skillsAndSavingThrows}) {
   const proficiencyBonus = Math.ceil((character.baseInformation.level)/4) + 1;
 
   const [editMode, setEditMode] = useState({
+    editAbilityScores: false,
     editBasicInfo: false,
     editHealth: false
   });
@@ -189,17 +190,139 @@ function CharacterSheetMain({ skillsAndSavingThrows}) {
           </ButtonGroup>
         </Grid>
       }
+      {!editMode.editAbilityScores ?
+        <Grid item>
+          <h2>Ability Scores:</h2>
+          <p>Strength: {baseStrength + character.baseInformation.str_bonus}, Modifier: {abilityScoreModifier(baseStrength)}</p>
+          <p>Dexterity: {baseDexterity + character.baseInformation.dex_bonus}, Modifier: {abilityScoreModifier(baseDexterity)}</p>
+          <p>Constitution: {baseConstitution + character.baseInformation.con_bonus}, Modifier: {abilityScoreModifier(baseConstitution)}</p>
+          <p>Intelligence: {baseIntelligence + character.baseInformation.int_bonus}, Modifier: {abilityScoreModifier(baseIntelligence)}</p>
+          <p>Wisdom: {baseWisdom + character.baseInformation.wis_bonus}, Modifier: {abilityScoreModifier(baseWisdom)}</p>
+          <p>Charisma: {baseCharisma + character.baseInformation.cha_bonus}, Modifier: {abilityScoreModifier(baseCharisma)}</p>
+          <Button variant="outlined" onClick={() => setEditMode({...editMode, editAbilityScores: true})}>Edit</Button>
+        </Grid> :
+        <Grid item>
+          <TextField 
+            label="Strength"
+            min="3"
+            onChange={event => dispatch({
+              type: 'UPDATE_CHARACTER',
+              payload: {
+                baseInformation: {
+                  ...character.baseInformation,
+                  str_score: event.target.value
+                }
+              }
+            })}
+            type="number"
+            value={baseStrength}
+          />
+
+          <TextField 
+            label="Dexterity"
+            min="3"
+            onChange={event => dispatch({
+              type: 'UPDATE_CHARACTER',
+              payload: {
+                baseInformation: {
+                  ...character.baseInformation,
+                  dex_score: event.target.value
+                }
+              }
+            })}
+            type="number"
+            value={baseDexterity}
+          />
+
+          <TextField 
+            label="Constitution"
+            min="3"
+            onChange={event => dispatch({
+              type: 'UPDATE_CHARACTER',
+              payload: {
+                baseInformation: {
+                  ...character.baseInformation,
+                  con_score: event.target.value
+                }
+              }
+            })}
+            type="number"
+            value={baseConstitution}
+          />
+
+          <TextField 
+            label="Intelligence"
+            min="3"
+            onChange={event => dispatch({
+              type: 'UPDATE_CHARACTER',
+              payload: {
+                baseInformation: {
+                  ...character.baseInformation,
+                  int_score: event.target.value
+                }
+              }
+            })}
+            type="number"
+            value={baseIntelligence}
+          />
+
+          <TextField 
+            label="Wisdom"
+            min="3"
+            onChange={event => dispatch({
+              type: 'UPDATE_CHARACTER',
+              payload: {
+                baseInformation: {
+                  ...character.baseInformation,
+                  wis_score: event.target.value
+                }
+              }
+            })}
+            type="number"
+            value={baseWisdom}
+          />  
+
+          <TextField 
+            label="Charisma"
+            min="3"
+            onChange={event => dispatch({
+              type: 'UPDATE_CHARACTER',
+              payload: {
+                baseInformation: {
+                  ...character.baseInformation,
+                  cha_score: event.target.value
+                }
+              }
+            })}
+            type="number"
+            value={baseCharisma}
+          />
+
+          <ButtonGroup variant="outlined">
+            <Button 
+              color="secondary" 
+              onClick={() => {
+                cancelEdit();
+                setEditMode({...editMode, editAbilityScores: false});
+              }}
+            >
+              Cancel
+            </Button>
+            <Button 
+              color="primary" 
+              onClick={() => {
+              saveEdit();
+              setEditMode({...editMode, editAbilityScores: false});
+              }}
+            >
+              Save
+            </Button>
+          </ButtonGroup>
+        </Grid>
+      }
 
 
-      <Grid item>
-        <h2>Ability Scores:</h2>
-        <p>Strength: {baseStrength + character.baseInformation.str_bonus}, Modifier: {abilityScoreModifier(baseStrength)}</p>
-        <p>Dexterity: {baseDexterity + character.baseInformation.dex_bonus}, Modifier: {abilityScoreModifier(baseDexterity)}</p>
-        <p>Constitution: {baseConstitution + character.baseInformation.con_bonus}, Modifier: {abilityScoreModifier(baseConstitution)}</p>
-        <p>Intelligence: {baseIntelligence + character.baseInformation.int_bonus}, Modifier: {abilityScoreModifier(baseIntelligence)}</p>
-        <p>Wisdom: {baseWisdom + character.baseInformation.wis_bonus}, Modifier: {abilityScoreModifier(baseWisdom)}</p>
-        <p>Charisma: {baseCharisma + character.baseInformation.cha_bonus}, Modifier: {abilityScoreModifier(baseCharisma)}</p>
-      </Grid>
+      {/* renders character health and armor class with edit button */}
       {!editMode.editHealth ? 
         // Text View !editMode.editHealth = true
         <Grid item>
@@ -212,7 +335,6 @@ function CharacterSheetMain({ skillsAndSavingThrows}) {
         : // Edit View !editMode.editHealth = false
         <Grid item>
           <form>
-
             <TextField 
               label="Armor Class"
               onChange={event => dispatch({
@@ -226,7 +348,7 @@ function CharacterSheetMain({ skillsAndSavingThrows}) {
               })}
               type="number"
               value={character.baseInformation.armor_class}
-              />
+            />
 
             <TextField 
               label="Current Health Points"
@@ -241,7 +363,7 @@ function CharacterSheetMain({ skillsAndSavingThrows}) {
               })}
               type="number"
               value={character.baseInformation.current_hit_points}
-              />
+            />
 
             <TextField
               label="Max Health Points"
@@ -256,7 +378,7 @@ function CharacterSheetMain({ skillsAndSavingThrows}) {
               })}
               type="number"
               value={character.baseInformation.max_hit_points}
-              />
+            />
 
             <TextField 
               label="Temporary Health Points"
@@ -271,7 +393,7 @@ function CharacterSheetMain({ skillsAndSavingThrows}) {
               })}
               type="number"
               value={character.baseInformation.temporary_hit_points}
-              />
+            />
 
             <ButtonGroup variant="outlined">
               <Button 
@@ -326,6 +448,7 @@ function CharacterSheetMain({ skillsAndSavingThrows}) {
 
       <Grid item>
         <h2>Skill Proficiencies</h2>
+        
         <ul>
           {skillsAndSavingThrows.skillsList.map(skill => {
             // console.log('skill.id', skill.id);

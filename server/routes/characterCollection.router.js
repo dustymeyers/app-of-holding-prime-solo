@@ -191,7 +191,7 @@ router.get('/:id', rejectUnauthenticated, (req, res) => {
 
 /**
  * DELETE 
- * Deletes single user specificcharacter
+ * Deletes single user specific character
  */
 router.delete('/delete/:id', rejectUnauthenticated, (req, res) => {
   const characterId = req.params.id;
@@ -217,5 +217,76 @@ router.delete('/delete/:id', rejectUnauthenticated, (req, res) => {
       res.sendStatus(500);
     });
 });
+
+/**
+ * PUT
+ * Updates information from character sheet stored on characters table
+ */
+router.put('/edit/:id', rejectUnauthenticated, (req, res) => {
+
+  const editPgTemplate = [
+    req.body.baseInformation.character_name,
+    req.body.baseInformation.level,
+    req.body.baseInformation.str_score,
+    req.body.baseInformation.dex_score,
+    req.body.baseInformation.con_score,
+    req.body.baseInformation.int_score,
+    req.body.baseInformation.wis_score,
+    req.body.baseInformation.cha_score,
+    req.body.baseInformation.hit_dice_available,
+    req.body.baseInformation.current_hit_points,
+    req.body.baseInformation.max_hit_points,
+    req.body.baseInformation.temporary_hit_points,
+    req.body.baseInformation.cp_total,
+    req.body.baseInformation.sp_total,
+    req.body.baseInformation.ep_total,
+    req.body.baseInformation.gp_total,
+    req.body.baseInformation.pp_total,
+    req.body.baseInformation.experience_points,
+    req.body.baseInformation.alignment,
+    req.body.baseInformation.gender,
+    req.user.id,
+    req.params.id
+  ];
+
+  const editCharacterQuery = `
+    UPDATE "characters"
+    SET
+      "character_name" = $1,
+      "level" = $2,
+      "str_score" = $3,
+      "dex_score" = $4,
+      "con_score" = $5,
+      "int_score" = $6,
+      "wis_score" = $7,
+      "cha_score" = $8,
+      "hit_dice_available" = $9,
+      "current_hit_points" = $10,
+      "max_hit_points" = $11,
+      "temporary_hit_points" = $12,
+      "cp_total" = $13,
+      "sp_total" = $14,
+      "ep_total" = $15,
+      "gp_total" = $16,
+      "pp_total" = $17,
+      "experience_points" = $18,
+      "alignment" = $19,
+      "gender" = $20
+    WHERE "user_id" = $21 AND "id" = $22;
+  `;
+
+  pool
+    .query(editCharacterQuery, editPgTemplate)
+    .then(dbRes => {
+      console.log(`Character id ${req.params.id} updated`);
+
+      res.sendStatus(204);
+    })
+    .catch(error => {
+      console.log(`Error updating character id ${req.params.id}`);
+
+      res.sendStatus(500);
+    })
+})
 
 module.exports = router;
