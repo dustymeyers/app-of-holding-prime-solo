@@ -290,4 +290,56 @@ router.put('/edit/:id', rejectUnauthenticated, (req, res) => {
     })
 })
 
+/**
+ * POST
+ * Adds equipment to character sheet
+ */
+router.post('/equipment/:characterId', rejectUnauthenticated, (req, res) => {
+  function insertSerializer(array) {	
+    let pgTemplateNum = 1;
+    let serialInsert = '';
+  
+    for (let i = 0; i < array.length; i++) {
+      if (array.length - 1 === i ) {
+        pgTemplateNum ++;
+
+        serialInsert += `($1 , $${pgTemplateNum});`;
+      } else {
+        pgTemplateNum ++;
+
+        serialInsert += `($1 , $${pgTemplateNum}), `;
+      }    
+    } // end for
+    return serialInsert;
+  } // end insertSerializer
+
+  function pgSerializer(array, characterId) {
+    let pgInsert = [characterId];
+    for (let i = 0; i < array.length; i++) {
+      pgInsert.push(array[i].id);
+    }
+    return pgInsert;
+  } 
+
+  const pgEquipmentArray = pgSerializer(req.body, req.params.characterId);
+
+  const insertEquipmentQuery = `
+    INSERT INTO "characters_equipment" ("character_id", "equipment_id")
+    VALUES ${insertSerializer(req.body)}
+  `;
+
+  pool 
+    .query(insertEquipmentQuery, pgEquipmentArray)
+    .then(dbRes => {
+      console.log('Added equipment successfully!');
+
+      res.sendStatus(200);
+    })
+    .catch(error => {
+      console.log('Error adding equipment to character sheet', error);
+
+      res.sendStatus(500);
+    })
+})
+
 module.exports = router;

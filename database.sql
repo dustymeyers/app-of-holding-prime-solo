@@ -111,7 +111,7 @@ CREATE TABLE "characters_classes" (
 CREATE TABLE "characters_equipment" (
   "id" SERIAL PRIMARY KEY,  
   "character_id" INT REFERENCES "characters" ON DELETE CASCADE NOT NULL,
-  "equipment_id" INT REFERENCES "skills" NOT NULL,
+  "equipment_id" INT REFERENCES "equipment" NOT NULL,
   "qty" INT NOT NULL DEFAULT 1
 );
 

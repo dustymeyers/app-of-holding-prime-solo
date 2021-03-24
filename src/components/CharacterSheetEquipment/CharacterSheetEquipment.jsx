@@ -33,6 +33,7 @@ function CharacterSheetEquipment() {
   const character = useSelector(store => store.characters.characterDetails);
   const equipmentList = useSelector(store => store.characterSheetComponents.equipmentList);
   const dispatch = useDispatch();
+   const paramsObject = useParams();
 
   const [open, setOpen] = useState({
     addItem: false,
@@ -45,9 +46,6 @@ function CharacterSheetEquipment() {
   const totalGold = character.baseInformation.gp_total;
   const totalPlatinum = character.baseInformation.pp_total;
 
-  const addItem = (equipmentId) => {
-    console.log('adding item with id:', equipmentId);
-  }
 
   const closeAddItem = () => {
     setOpen({...open, addItem: false});
@@ -86,20 +84,25 @@ function CharacterSheetEquipment() {
             </TableHead>   
           
             <TableBody>
+
               <TableRow>
                 <TableCell>1</TableCell>
+
                 <TableCell>
                   Fake Item
+                  
                   <IconButton onClick={() => setOpen({...open, itemInfo: true})}>
                     <InfoIcon color="action" />
                   </IconButton>
                 </TableCell>
+
                 <TableCell>
                   <IconButton onClick={() => console.log('delete clicked')}>
                     <DeleteIcon color="secondary" />
                   </IconButton>
                 </TableCell>
               </TableRow>
+
             </TableBody>
           </Table>
         </TableContainer>
@@ -119,6 +122,8 @@ function CharacterSheetEquipment() {
         <IconButton onClick={() => setOpen({...open, addItem: true})} >
           <LibraryAddIcon fontSize="large" color="action" /> 
         </IconButton>
+
+        {/* Dialog for full equipment library, allows users to add equipment to their character sheet */}
         <Dialog
           open={open.addItem}
           onClose={closeAddItem}
@@ -129,7 +134,12 @@ function CharacterSheetEquipment() {
               {equipmentList.map(equipment => {
                 return (
                   <ListItem key={equipment.id}>
-                    <IconButton onClick={() => addItem(equipment.id)}>
+                    <IconButton onClick={() => {
+                      dispatch({
+                        type: 'SET_ITEMS_TO_ADD',
+                        payload: equipment.id
+                      })
+                    }}>
                       <AddIcon color="action" />
                     </IconButton>
 
@@ -144,6 +154,7 @@ function CharacterSheetEquipment() {
             </List>
           </DialogContent>
           <DialogActions>
+
             <Button color="secondary" onClick={closeAddItem}>Cancel</Button>
           </DialogActions>
         </Dialog>
