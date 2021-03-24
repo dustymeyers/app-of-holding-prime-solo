@@ -12,6 +12,8 @@ import {
   DialogContentText,
   FormControl,
   Grid,
+  List,
+  ListItem,
   Paper,
   Table,          // replaces <table>
   TableBody,      // replaces <tbody>
@@ -30,7 +32,10 @@ function CharacterSheetEquipment() {
   const character = useSelector(store => store.characters.characterDetails);
   const dispatch = useDispatch();
 
-  const [openAddItem, setOpenAddItem] = useState(false);
+  const [open, setOpen] = useState({
+    addItem: false,
+    itemInfo: false,
+  });
 
   const totalCopper = character.baseInformation.cp_total;
   const totalSilver = character.baseInformation.sp_total;
@@ -39,9 +44,12 @@ function CharacterSheetEquipment() {
   const totalPlatinum = character.baseInformation.pp_total;
 
   const closeAddItem = () => {
-    setOpenAddItem(false);
+    setOpen({...open, addItem: false});
   }
   
+  const closeItemInfo = () => {
+    setOpen({...open, itemInfo: false});
+  }
 
   return(
     <Grid container>
@@ -72,29 +80,47 @@ function CharacterSheetEquipment() {
                 <TableCell>1</TableCell>
                 <TableCell>
                   Fake Item
-                  <IconButton>
-                    <InfoIcon color="action" onClick={() => console.log('info clicked')}/>
+                  <IconButton onClick={() => setOpen({...open, itemInfo: true})}>
+                    <InfoIcon color="action" />
                   </IconButton>
                 </TableCell>
                 <TableCell>
-                  <IconButton>
-                    <DeleteIcon color="secondary" onClick={() => console.log('delete clicked')} />
+                  <IconButton onClick={() => console.log('delete clicked')}>
+                    <DeleteIcon color="secondary" />
                   </IconButton>
                 </TableCell>
               </TableRow>
             </TableBody>
           </Table>
         </TableContainer>
+        
+        <Dialog
+          open={open.itemInfo}
+          onClose={closeItemInfo}
+          scroll="paper"
+        >
+          <DialogContent>
+            <h2>Fake Item</h2>
+            <p>It does a lot of damage to you, costs 5 gp.</p>
+          </DialogContent>
+        </Dialog>
 
         {/* Add equipment, opens dialog box that allows user to search through available equipment */}
-        <IconButton>
-          <LibraryAddIcon fontSize="large" color="action" onClick={() => setOpenAddItem(true)} /> 
+        <IconButton onClick={() => setOpen({...open, addItem: true})} >
+          <LibraryAddIcon fontSize="large" color="action" /> 
         </IconButton>
         <Dialog
-          open={openAddItem}
+          open={open.addItem}
           onClose={closeAddItem}
           scroll="paper"
         >
+          <DialogContent>
+            <List>
+              <ListItem>equipment 1</ListItem>
+              <ListItem>equipment 2</ListItem>
+              <ListItem>equipment 3</ListItem>
+            </List>
+          </DialogContent>
           <DialogActions>
             <Button color="secondary" onClick={closeAddItem}>Cancel</Button>
           </DialogActions>

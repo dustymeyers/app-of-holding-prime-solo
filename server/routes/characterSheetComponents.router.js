@@ -9,7 +9,7 @@ const router = express.Router();
 /**
  * GET character sheet skills and saving throws lists
  */
-router.get('/main', (req, res) => {
+router.get('/main', rejectUnauthenticated, (req, res) => {
   // GET route code here
   const skillsListQuery = 'SELECT * FROM "skills";';
   const savingThrowsListQuery = 'SELECT * FROM "saving_throws";';
@@ -38,6 +38,22 @@ router.get('/main', (req, res) => {
       res.sendStatus(500);
     });
 });
+/**
+ * GET all equipment for add equipment component.
+ */
+router.get('/equipment', rejectUnauthenticated, (req, res) => {
+  const allEquipmentQuery = 'SELECT * FROM "equipment"';
 
+  pool
+    .query(allEquipmentQuery)
+    .then(equipmentListResponse => {
+      res.send(equipmentListResponse.rows);
+    })
+    .catch(error => {
+      console.log('Error getting all equipment list');
+
+      res.sendStatus(500);
+    });
+}); 
 
 module.exports = router;

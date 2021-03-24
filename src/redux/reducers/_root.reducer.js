@@ -4,7 +4,7 @@ import user from './user.reducer';
 import characterCreatorReducer from './characterCreator.reducer';
 import characters from './characters.reducer';
 import characterSheetComponents from './characterSheet.reducer';
-import editCharacter from './editCharacter.reducer'
+
 
 // rootReducer is the primary reducer for our entire project
 // It bundles up all of the other reducers so our project can use them.
@@ -17,8 +17,7 @@ const rootReducer = combineReducers({
   user, // will have an id and username if someone is logged in
   characterCreatorReducer, // contains randomly generated character for CharacterCreator
   characters, // contains full list of user characters for MyCollection
-  characterSheetComponents,
-  editCharacter
+  characterSheetComponents
 });
 
 export default rootReducer;

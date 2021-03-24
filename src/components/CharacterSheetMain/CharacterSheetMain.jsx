@@ -8,6 +8,8 @@ import {
   ButtonGroup,
   FormControl,
   Grid,
+  List,
+  ListItem,
   TextField
 } from '@material-ui/core';
 import { AccessAlarm, EditIcon, ThreeDRotation } from '@material-ui/icons';
@@ -438,56 +440,61 @@ function CharacterSheetMain({ skillsAndSavingThrows}) {
 
       <Grid item>
         <h2>Features: </h2>
-        <ul>
+        <List>
           {character.features.map((feature, index) => {
             return(
-              <li key={index}>
+              <ListItem key={index}>
                 <strong>{feature.feature_name}</strong>: {feature.feature_description}
-              </li>
+              </ListItem>
             );
           })}
-        </ul>
+        </List>
         <p>{JSON.stringify(character.features)}</p>
       </Grid>
 
       <Grid item>
         <h2>Skill Proficiencies</h2>
         
-        <ul>
+        <List>
           {skillsAndSavingThrows.skillsList.map(skill => {
-            let skillElement = <li key={skill.id}>{skill.skill_name}</li>;
+            let skillElement = <ListItem key={skill.id}>{skill.skill_name}</ListItem>;
             // console.log('skill.id', skill.id);
             for (let proficiency of character.skillProficiencies){
               // console.log('proficiency.id', proficiency.id);
               if (proficiency.id === skill.id) {
                 // console.log('id is equal')
-                return skillElement = <li key={skill.id}>{skill.skill_name} Proficient</li>;
+                return skillElement = <ListItem key={skill.id}>{skill.skill_name} Proficient</ListItem>;
               }   
             }
             return skillElement;
           })}
-        </ul>
+        </List>
         <p>{JSON.stringify(character.skillProficiencies)}</p>
       </Grid>
 
       <Grid item>
         <h2>Saving Throw Proficiencies</h2>
-        <ul>
+        <List>
           {skillsAndSavingThrows.savingThrowsList.map(savingThrow => {
-            let savingThrowElement = <li key={savingThrow.id}>{savingThrow.saving_throw_name}</li>;
+            let savingThrowElement = <ListItem key={savingThrow.id}>{savingThrow.saving_throw_name}</ListItem>;
             for (let proficiency of character.savingThrowProficiencies) {
               if (proficiency.id === savingThrow.id) {
-                savingThrowElement = <li key={savingThrow.id}>{savingThrow.saving_throw_name} Proficient</li>;
+                savingThrowElement = <ListItem key={savingThrow.id}>{savingThrow.saving_throw_name} Proficient</ListItem>;
               }
             }
             return savingThrowElement;
             })}
-        </ul>
+        </List>
         <p>{JSON.stringify(character.savingThrowProficiencies)}</p>
       </Grid>
 
       <Grid item>
         <h2>Languages Known</h2>
+        <List>
+          {character.languagesKnown.map(language => {
+            return <ListItem key={language.id}>{language.language_name}</ListItem>
+          })}
+        </List>
         <p>{JSON.stringify(character.languagesKnown)}</p>
       </Grid>
     </Grid>
