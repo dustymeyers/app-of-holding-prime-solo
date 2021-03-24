@@ -64,6 +64,10 @@ function CharacterSheetMain({ skillsAndSavingThrows}) {
 
   const saveEdit = () => {
     console.log('clicked save');
+    dispatch({
+      type: 'UPDATE_CHARACTER',
+      payload: character
+    });
     setEditMode(false);
   }
 

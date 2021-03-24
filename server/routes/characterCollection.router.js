@@ -223,6 +223,7 @@ router.delete('/delete/:id', rejectUnauthenticated, (req, res) => {
  * Updates information from character sheet stored on characters table
  */
 router.put('/edit/:id', rejectUnauthenticated, (req, res) => {
+  console.log(`PUT /characterCollection/edit/${req.params.id}`)
 
   const editPgTemplate = [
     req.body.baseInformation.character_name,

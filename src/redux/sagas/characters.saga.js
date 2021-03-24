@@ -44,12 +44,29 @@ function* fetchCharacters(action) {
   }
 } // end fetchCharacters
 
+function* updateCharacter(action) {
+  try {
+    console.log('updating character with:', action.payload.baseInformation)
+    yield axios.put(`/api/characterCollection/edit/${action.payload.baseInformation.id}`, action.payload);
+
+    yield put({
+      type: 'FETCH_CHARACTER',
+      payload: action.payload.baseInformation.id
+    })
+
+  } catch (error) {
+    console.log('Error updating user character', error);
+  }
+}
+
 function* charactersSaga() {
   yield takeLatest('FETCH_CHARACTERS', fetchCharacters);
 
   yield takeLatest('FETCH_CHARACTER', fetchCharacter);
 
   yield takeLatest('DELETE_CHARACTER', deleteCharacter);
+
+  yield takeLatest('UPDATE_CHARACTER', updateCharacter);
 } // end charactersSaga
 
 export default charactersSaga;
