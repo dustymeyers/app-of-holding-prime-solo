@@ -41,6 +41,7 @@ function CharacterSheet() {
           <CharacterSheetEquipment />
           <CharacterSheetSpells />
         </Grid>
+        
       </Grid>
     </>
   );
