@@ -455,17 +455,16 @@ function CharacterSheetMain({ skillsAndSavingThrows}) {
         
         <ul>
           {skillsAndSavingThrows.skillsList.map(skill => {
+            let skillElement = <li key={skill.id}>{skill.skill_name}</li>;
             // console.log('skill.id', skill.id);
             for (let proficiency of character.skillProficiencies){
               // console.log('proficiency.id', proficiency.id);
               if (proficiency.id === skill.id) {
                 // console.log('id is equal')
-                return <li key={skill.id}>{skill.skill_name} Proficient</li>;
-              } else {
-                // console.log('id not equal')
-                return <li key={skill.id}>{skill.skill_name}</li>;
-              }
+                return skillElement = <li key={skill.id}>{skill.skill_name} Proficient</li>;
+              }   
             }
+            return skillElement;
           })}
         </ul>
         <p>{JSON.stringify(character.skillProficiencies)}</p>
@@ -473,6 +472,17 @@ function CharacterSheetMain({ skillsAndSavingThrows}) {
 
       <Grid item>
         <h2>Saving Throw Proficiencies</h2>
+        <ul>
+          {skillsAndSavingThrows.savingThrowsList.map(savingThrow => {
+            let savingThrowElement = <li key={savingThrow.id}>{savingThrow.saving_throw_name}</li>;
+            for (let proficiency of character.savingThrowProficiencies) {
+              if (proficiency.id === savingThrow.id) {
+                savingThrowElement = <li key={savingThrow.id}>{savingThrow.saving_throw_name} Proficient</li>;
+              }
+            }
+            return savingThrowElement;
+            })}
+        </ul>
         <p>{JSON.stringify(character.savingThrowProficiencies)}</p>
       </Grid>
 
