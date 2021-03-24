@@ -14,11 +14,10 @@ import {
 } from '@material-ui/core';
 import { AccessAlarm, EditIcon, ThreeDRotation } from '@material-ui/icons';
 
-function CharacterSheetMain({ skillsAndSavingThrows}) {
+function CharacterSheetMain({ }) {
   console.log('skills and saving throws', skillsAndSavingThrows);
-
   const character = useSelector(store => store.characters.characterDetails);
-  // const editCharacter = useSelector(store => store.editCharacter);
+  const skillsAndSavingThrows = useSelector(store => store.characterSheetComponents.skillsAndSavingThrowsList);
   const dispatch = useDispatch();
   const paramsObject = useParams();
 
@@ -39,21 +38,15 @@ function CharacterSheetMain({ skillsAndSavingThrows}) {
 
   // let characterState;
 
-  useEffect(() => {
-    dispatch({
-      type: 'FETCH_CHARACTER_SHEET_COMPONENTS'
-    });
-    dispatch({
-      type: 'FETCH_CHARACTER',
-      payload: paramsObject.id
-    });
-
-    // dispatch({
-    //   type: 'FETCH_CHARACTER_TO_EDIT',
-    //   payload: paramsObject.id
-    // })
-    // setEditCharacter(character.baseInformation);
-  }, []);
+  // useEffect(() => {
+  //   dispatch({
+  //     type: 'FETCH_CHARACTER_SHEET_COMPONENTS'
+  //   });
+  //   dispatch({
+  //     type: 'FETCH_CHARACTER',
+  //     payload: paramsObject.id
+  //   });
+  // }, []);
 
   const abilityScoreModifier = (abilityScore) => {
     return Math.floor((abilityScore - 10) / 2);

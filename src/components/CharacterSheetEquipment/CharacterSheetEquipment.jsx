@@ -23,6 +23,7 @@ import {
   TableRow, 
   TextField
 } from '@material-ui/core';
+import AddIcon from '@material-ui/icons/Add';
 import DeleteIcon from '@material-ui/icons/Delete';
 import InfoIcon from '@material-ui/icons/Info';
 import IconButton from '@material-ui/core/IconButton';
@@ -30,6 +31,7 @@ import LibraryAddIcon from '@material-ui/icons/LibraryAdd';
 
 function CharacterSheetEquipment() {
   const character = useSelector(store => store.characters.characterDetails);
+  const equipmentList = useSelector(store => store.characterSheetComponents.equipmentList);
   const dispatch = useDispatch();
 
   const [open, setOpen] = useState({
@@ -43,12 +45,20 @@ function CharacterSheetEquipment() {
   const totalGold = character.baseInformation.gp_total;
   const totalPlatinum = character.baseInformation.pp_total;
 
+  const addItem = (equipmentId) => {
+    console.log('adding item with id:', equipmentId);
+  }
+
   const closeAddItem = () => {
     setOpen({...open, addItem: false});
   }
   
   const closeItemInfo = () => {
     setOpen({...open, itemInfo: false});
+  }
+
+  const itemInformation = (equipmentApiIndex) => {
+    console.log('getting info for item with id:', equipmentApiIndex);
   }
 
   return(
@@ -116,9 +126,21 @@ function CharacterSheetEquipment() {
         >
           <DialogContent>
             <List>
-              <ListItem>equipment 1</ListItem>
-              <ListItem>equipment 2</ListItem>
-              <ListItem>equipment 3</ListItem>
+              {equipmentList.map(equipment => {
+                return (
+                  <ListItem key={equipment.id}>
+                    <IconButton onClick={() => addItem(equipment.id)}>
+                      <AddIcon color="action" />
+                    </IconButton>
+
+                    {equipment.equipment_name}
+
+                    <IconButton onClick={() => itemInformation(equipment.api_index)}>
+                      <InfoIcon color="action" />
+                    </IconButton>
+                  </ListItem>
+                );
+              })}
             </List>
           </DialogContent>
           <DialogActions>

@@ -17,18 +17,21 @@ function CharacterSheet() {
   const dispatch = useDispatch();
   const history = useHistory();
   const paramsObject = useParams();
-  const character = useSelector(store => store.characters.characterDetails);
-  const skillsAndSavingThrows = useSelector(store => store.characterSheetComponents);
+  // const character = useSelector(store => store.characters.characterDetails);
+  // const skillsAndSavingThrows = useSelector(store => store.characterSheetComponents);
   
-  // useEffect(() => {
-  //   dispatch({
-  //     type: 'FETCH_CHARACTER_SHEET_COMPONENTS'
-  //   })
-  //   dispatch({
-  //     type:'FETCH_CHARACTER',
-  //     payload: paramsObject.id
-  //   })
-  // }, []);
+  useEffect(() => {
+    dispatch({
+      type: 'FETCH_CHARACTER_SHEET_COMPONENTS'
+    });
+    dispatch({
+      type: 'FETCH_CHARACTER',
+      payload: paramsObject.id
+    });
+    dispatch({
+      type: 'FETCH_ALL_EQUIPMENT'
+    });
+  }, []);
 
 
 
@@ -37,7 +40,7 @@ function CharacterSheet() {
       <Grid container component={Paper}>
         <Grid item>
           <h2>This is where the CharacterSheet will go.</h2>
-          <CharacterSheetMain /*character={character}*/ skillsAndSavingThrows={skillsAndSavingThrows} />
+          <CharacterSheetMain/>
           <CharacterSheetEquipment />
           <CharacterSheetSpells />
         </Grid>
