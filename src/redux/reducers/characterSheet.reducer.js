@@ -1,9 +1,27 @@
 import { combineReducers } from 'redux';
 
-const equipmentInformation = (state = {}, action) => {
+const equipmentInformation = (state = {
+  cost: {
+    quantity: 0,
+    unit: ''
+  },
+  desc: [],
+  equipment_category: {},
+  name: '',
+}, action) => {
   switch (action.type) {
     case 'SET_EQUIPMENT_INFORMATION':
       return action.payload;
+    case 'CLEAR_EQUIPMENT_INFO':
+      return {
+        cost: {
+          quantity: 0,
+          unit: ''
+        },
+        desc: [],
+        equipment_category: {},
+        name: '',
+      };
     default:
       return state;
   }

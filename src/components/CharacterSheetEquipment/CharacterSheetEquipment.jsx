@@ -69,6 +69,7 @@ function CharacterSheetEquipment() {
   }
   
   const closeItemInfo = () => {
+    dispatch({ type: 'CLEAR_EQUIPMENT_INFO'})
     setOpen({...open, itemInfo: false});
   }
 
@@ -143,9 +144,22 @@ function CharacterSheetEquipment() {
           onClose={closeItemInfo}
           scroll="paper"
         >
+          <DialogTitle>{equipmentInfo.name}</DialogTitle>
           <DialogContent>
-            <DialogTitle>Fake Item</DialogTitle>
-            <DialogContentText>It does a lot of damage to you, costs 5 gp.</DialogContentText>
+            {equipmentInfo.armor_category ? <DialogContentText>Armor Category: {equipmentInfo.armor_category}</DialogContentText> : <></>}
+            {equipmentInfo.armor_class ? <DialogContentText>Armor Class: {equipmentInfo.armor_class.base}</DialogContentText> : <></>}
+            {equipmentInfo.weapon_category ? <DialogContentText>Weapon Category: {equipmentInfo.weapon_category}</DialogContentText> : <></>}
+            {equipmentInfo.weapon_range ? <DialogContentText>Range: {equipmentInfo.weapon_range}</DialogContentText> : <></>}
+            {equipmentInfo.damage ? <DialogContentText>Damage: {equipmentInfo.damage.damage_dice} {equipmentInfo.damage.damage_type.name}</DialogContentText> : <></>}
+            {equipmentInfo.desc ? 
+              <DialogContentText>
+                {equipmentInfo.desc.map(description => description)}
+              </DialogContentText> :
+              <></>
+            }
+            {equipmentInfo.special ? <DialogContentText>{equipmentInfo.special.map(description => description)}</DialogContentText> : <></>}
+            <DialogContentText>Cost: {equipmentInfo.cost.quantity} {equipmentInfo.cost.unit} </DialogContentText>
+            <DialogContentText>Weight: {equipmentInfo.weight} lbs</DialogContentText>
           </DialogContent>
         </Dialog>
 
