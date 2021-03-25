@@ -24,7 +24,8 @@ import {
   TableContainer, // acts as a <div> for the table
   TableHead,      // replaces <thead>
   TableRow, 
-  TextField
+  TextField,
+  Typography
 } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import DeleteIcon from '@material-ui/icons/Delete';
@@ -43,6 +44,9 @@ function CharacterSheetEquipment() {
   const paramsObject = useParams();
   const [qtyToEdit, setQtyToEdit] = useState(0);
   const [itemId, setItemId] = useState(0);
+  const [editMode, setEditMode] = useState({
+    editCoinPurse: false
+  })
   const [open, setOpen] = useState({
     addItem: false,
     itemInfo: false,
@@ -113,13 +117,101 @@ function CharacterSheetEquipment() {
   return(
     <Grid container>
       {/* Currency tracker */}
-      <Grid item>
-        CP: {totalCopper}
-        SP: {totalSilver}
-        EP: {totalElectrum}
-        GP: {totalGold}
-        PP: {totalPlatinum}
-      </Grid>
+      {!editMode.editCoinPurse ? 
+        <Grid item>
+          <Paper>
+            <Typography>CP: {totalCopper}</Typography>
+            <Typography>SP: {totalSilver}</Typography>
+            <Typography>EP: {totalElectrum}</Typography>
+            <Typography>GP: {totalGold}</Typography>
+            <Typography>PP: {totalPlatinum}</Typography>
+            <IconButton>
+              <EditIcon onClick={() => setEditMode({...editMode, editCoinPurse: true})} />
+            </IconButton>
+          </Paper>
+        </Grid> :
+        <Grid item>
+          <TextField 
+            label="Copper Pieces"
+            onChange={event => dispatch({
+              type: 'UPDATE_CHARACTER',
+              payload: {
+                baseInformation: {
+                  ...character.baseInformation,
+                  cp_total: event.target.value
+                }
+              }
+            })}
+            value={totalCopper} 
+          />
+
+          <TextField 
+            label="Silver Pieces" 
+            onChange={event => dispatch({
+              type: 'UPDATE_CHARACTER',
+              payload: {
+                baseInformation: {
+                  ...character.baseInformation,
+                  sp_total: event.target.value
+                }
+              }
+            })}
+            value={totalSilver} 
+          />
+
+          <TextField 
+            label="Electrum Pieces" 
+            onChange={event => dispatch({
+              type: 'UPDATE_CHARACTER',
+              payload: {
+                baseInformation: {
+                  ...character.baseInformation,
+                  ep_total: event.target.value
+                }
+              }
+            })}
+            value={totalElectrum} 
+          />
+
+          <TextField 
+            label="Gold Pieces" 
+            onChange={event => dispatch({
+              type: 'UPDATE_CHARACTER',
+              payload: {
+                baseInformation: {
+                  ...character.baseInformation,
+                  gp_total: event.target.value
+                }
+              }
+            })}
+            value={totalGold} 
+          />
+
+          <TextField 
+            label="Platinum Pieces" 
+            onChange={event => dispatch({
+              type: 'UPDATE_CHARACTER',
+              payload: {
+                baseInformation: {
+                  ...character.baseInformation,
+                  pp_total: event.target.value
+                }
+              }
+            })}
+            value={totalPlatinum} 
+          />
+
+          <ButtonGroup>
+            <Button onClick={() => setEditMode({...editMode, editCoinPurse: false})}>Cancel</Button>
+            <Button
+              color="secondary"
+              onClick={() => {
+                setEditMode({...editMode, editCoinPurse: false})
+              }}
+            >Save</Button>
+          </ButtonGroup>
+        </Grid>
+      }
 
       {/* Character's Equipment library */}
       <Grid item>
