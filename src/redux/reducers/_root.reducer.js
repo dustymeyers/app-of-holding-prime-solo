@@ -5,6 +5,7 @@ import characterCreatorReducer from './characterCreator.reducer';
 import characters from './characters.reducer';
 import characterSheetComponents from './characterSheet.reducer';
 import equipment from './equipment.reducer';
+import spells from './spells.reducer';
 
 
 // rootReducer is the primary reducer for our entire project
@@ -19,7 +20,8 @@ const rootReducer = combineReducers({
   characterCreatorReducer, // contains randomly generated character for CharacterCreator
   characters, // contains full list of user characters for MyCollection
   characterSheetComponents,
-  equipment
+  equipment,
+  spells
 });
 
 export default rootReducer;

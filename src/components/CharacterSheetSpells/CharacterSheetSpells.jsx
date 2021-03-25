@@ -36,6 +36,7 @@ import LibraryAddIcon from '@material-ui/icons/LibraryAdd';
 function CharacterSheetSpells() {
   const character = useSelector(store => store.characters.characterDetails);
   const spellsList = useSelector(store => store.characterSheetComponents.spellsList);
+  const spellsToAddList = useSelector(store => store.spells.spellsToAddList);
   const dispatch = useDispatch();
   const paramsObject = useParams();
 
@@ -58,7 +59,14 @@ function CharacterSheetSpells() {
   }
 
   const saveSpells = () => {
-    console.log('in saveSpells')
+    dispatch({
+      type: 'SAVE_SPELLS',
+      payload: {
+        characterId: paramsObject.id,
+        spells: spellsToAddList
+      }
+    });
+    setOpen({...open, addSpells: false});
   }
 
   const spellInformation = (spellApiIndex) => {
