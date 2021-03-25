@@ -32,8 +32,9 @@ import LibraryAddIcon from '@material-ui/icons/LibraryAdd';
 function CharacterSheetEquipment() {
   const character = useSelector(store => store.characters.characterDetails);
   const equipmentList = useSelector(store => store.characterSheetComponents.equipmentList);
+  const equipmentToAddList = useSelector(store => store.equipment.equipmentToAddList);
   const dispatch = useDispatch();
-   const paramsObject = useParams();
+  const paramsObject = useParams();
 
   const [open, setOpen] = useState({
     addItem: false,
@@ -46,6 +47,16 @@ function CharacterSheetEquipment() {
   const totalGold = character.baseInformation.gp_total;
   const totalPlatinum = character.baseInformation.pp_total;
 
+  const addItems = () => {
+    dispatch({
+      type: 'SAVE_ITEMS',
+      payload: {
+        characterId: paramsObject.id,
+        items: equipmentToAddList
+      }
+    })
+    setOpen({...open, addItem: false});
+  }
 
   const closeAddItem = () => {
     setOpen({...open, addItem: false});
@@ -137,7 +148,7 @@ function CharacterSheetEquipment() {
                     <IconButton onClick={() => {
                       dispatch({
                         type: 'SET_ITEMS_TO_ADD',
-                        payload: equipment.id
+                        payload: { id: equipment.id }
                       })
                     }}>
                       <AddIcon color="action" />
@@ -154,7 +165,7 @@ function CharacterSheetEquipment() {
             </List>
           </DialogContent>
           <DialogActions>
-
+            <Button color="primary" onClick={addItems}>Save Items</Button>
             <Button color="secondary" onClick={closeAddItem}>Cancel</Button>
           </DialogActions>
         </Dialog>

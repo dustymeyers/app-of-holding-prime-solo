@@ -295,6 +295,8 @@ router.put('/edit/:id', rejectUnauthenticated, (req, res) => {
  * Adds equipment to character sheet
  */
 router.post('/equipment/:characterId', rejectUnauthenticated, (req, res) => {
+  console.log(`POST /api/characterCollection/equipment/${req.params.characterId} adding:`, req.body);
+  
   function insertSerializer(array) {	
     let pgTemplateNum = 1;
     let serialInsert = '';

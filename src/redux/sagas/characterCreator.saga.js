@@ -26,6 +26,10 @@ function* saveGeneratedCharacter(action) {
   try {
     yield axios.post('/api/characterCreator/', action.payload);
     
+    yield put({
+      type: 'FETCH_CHARACTERS',
+      payload: 'FALSE'
+    })
   } catch (error) {
     console.log('Error saving generated character:', error);
   }
