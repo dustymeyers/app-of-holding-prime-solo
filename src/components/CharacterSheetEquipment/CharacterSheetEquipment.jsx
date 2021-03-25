@@ -10,6 +10,7 @@ import {
   DialogActions,
   DialogContent,
   DialogContentText,
+  DialogTitle,
   FormControl,
   Grid,
   List,
@@ -133,8 +134,8 @@ function CharacterSheetEquipment() {
           scroll="paper"
         >
           <DialogContent>
-            <h2>Fake Item</h2>
-            <p>It does a lot of damage to you, costs 5 gp.</p>
+            <DialogTitle>Fake Item</DialogTitle>
+            <DialogContentText>It does a lot of damage to you, costs 5 gp.</DialogContentText>
           </DialogContent>
         </Dialog>
 

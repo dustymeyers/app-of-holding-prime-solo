@@ -5,6 +5,7 @@ const {
 const userStrategy = require('../strategies/user.strategy');
 const pool = require('../modules/pool');
 const router = express.Router();
+const axios = require('axios');
 
 /**
  * GET character sheet skills and saving throws lists
@@ -38,6 +39,7 @@ router.get('/main', rejectUnauthenticated, (req, res) => {
       res.sendStatus(500);
     });
 });
+
 /**
  * GET all equipment for add equipment component.
  */
@@ -55,5 +57,23 @@ router.get('/equipment', rejectUnauthenticated, (req, res) => {
       res.sendStatus(500);
     });
 }); 
+
+router.get('/equipment/information', rejectUnauthenticated, (req, res) => {
+  const equipmentSearch = req.query.api_index;
+  console.log('searching api for:', equipmentSearch)
+
+  axios
+    .get(`https://www.dnd5eapi.co/api/equipment/${equipmentSearch}`)
+    .then(apiResponse => {
+      console.log('apiResponse', apiResponse.data);
+      
+      res.send(apiResponse.data);
+    })
+    .catch(error => {
+      console.log(`Error getting information about ${equipmentSearch} from www.dnd5eapi.com`, error);
+
+      res.sendStatus(500);
+    })
+})
 
 module.exports = router;
