@@ -3,7 +3,7 @@ import { combineReducers } from 'redux';
 const characterEquipmentList = (state = [], action) => {
   switch (action.type) {
     case 'SET_CHARACTER_EQUIPMENT_LIST':
-      return [...state, action.payload];
+      return action.payload;
     default:
       return state;
   }

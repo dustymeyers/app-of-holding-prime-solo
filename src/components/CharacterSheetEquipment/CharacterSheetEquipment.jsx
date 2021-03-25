@@ -33,6 +33,7 @@ function CharacterSheetEquipment() {
   const character = useSelector(store => store.characters.characterDetails);
   const equipmentList = useSelector(store => store.characterSheetComponents.equipmentList);
   const equipmentToAddList = useSelector(store => store.equipment.equipmentToAddList);
+  const characterEquipment = useSelector(store=> store.equipment.characterEquipmentList);
   const dispatch = useDispatch();
   const paramsObject = useParams();
 
@@ -69,6 +70,11 @@ function CharacterSheetEquipment() {
 
   const itemInformation = (equipmentApiIndex) => {
     console.log('getting info for item with id:', equipmentApiIndex);
+    setOpen({...open, itemInfo: true});
+  }
+
+  const removeItem = (equipmentId) => {
+    console.log('remove item', equipmentId);
   }
 
   return(
@@ -96,24 +102,26 @@ function CharacterSheetEquipment() {
             </TableHead>   
           
             <TableBody>
+              {characterEquipment.map(item => {
+                return(
+                  <TableRow key={item.id}>
+                    <TableCell>{item.qty}</TableCell>
+                    <TableCell>
+                      {item.equipment_name}
 
-              <TableRow>
-                <TableCell>1</TableCell>
+                      <IconButton onClick={() => itemInformation(item.api_index)}>
+                        <InfoIcon color="action" />
+                      </IconButton>
+                    </TableCell>
 
-                <TableCell>
-                  Fake Item
-                  
-                  <IconButton onClick={() => setOpen({...open, itemInfo: true})}>
-                    <InfoIcon color="action" />
-                  </IconButton>
-                </TableCell>
-
-                <TableCell>
-                  <IconButton onClick={() => console.log('delete clicked')}>
-                    <DeleteIcon color="secondary" />
-                  </IconButton>
-                </TableCell>
-              </TableRow>
+                    <TableCell>
+                      <IconButton onClick={() => removeItem(item.id)}>
+                        <DeleteIcon color="secondary" />
+                      </IconButton>
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
 
             </TableBody>
           </Table>
