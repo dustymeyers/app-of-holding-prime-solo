@@ -45,8 +45,17 @@ const skillsAndSavingThrowsList = (state = { skillsList: [], savingThrowsList: [
   }
 } // end skillsAndSavingThrowsList
 
+// full spellsList from servers
+const spellsList = (state = [], action) => {
+  switch (action.type) {
+    default:
+      return state;
+  }
+}
+
 export default combineReducers({
   skillsAndSavingThrowsList,
   equipmentList,
-  equipmentInformation
+  equipmentInformation,
+  spellsList
 });

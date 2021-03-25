@@ -217,6 +217,11 @@ function CharacterSheetEquipment() {
         </Grid>
       }
 
+      {/* Add equipment, opens dialog box that allows user to search through available equipment */}
+      <IconButton onClick={() => setOpen({...open, addItem: true})} >
+        <LibraryAddIcon fontSize="large" color="action" /> 
+      </IconButton>
+
       {/* Character's Equipment library */}
       <Grid item>
         <TableContainer component={Paper}>
@@ -309,10 +314,7 @@ function CharacterSheetEquipment() {
           </DialogContent>
         </Dialog>
 
-        {/* Add equipment, opens dialog box that allows user to search through available equipment */}
-        <IconButton onClick={() => setOpen({...open, addItem: true})} >
-          <LibraryAddIcon fontSize="large" color="action" /> 
-        </IconButton>
+        
 
         {/* Dialog for full equipment library, allows users to add equipment to their character sheet */}
         <Dialog
@@ -320,7 +322,7 @@ function CharacterSheetEquipment() {
           onClose={closeAddItem}
           scroll="paper"
         >
-            <DialogTitle>Add items:</DialogTitle>
+          <DialogTitle>Add items:</DialogTitle>
           <DialogContent >
             <DialogContentText>Add items to your character sheet by pressing the plus button and then clicking save.</DialogContentText>
             <List>

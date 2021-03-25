@@ -527,22 +527,8 @@ VALUES
     ('Spellcasting', 'An event in your past, or in the life of a parent or ancestor, left an indelible mark on you, infusing you with arcane magic. This font of magic, whatever its origin, fuels your spells.'),	-- 20 Sorcerer
     ('Draconic Bloodline Sorcerous Origin', 'Your innate magic comes from draconic magic that was mingled with your blood or that of your ancestors. Most often, sorcerers with this origin trace their descent back to a mighty sorcerer of ancient times who made a bargain with a dragon or who might even have claimed a dragon parent. Some of these bloodlines are well established in the world, but most are obscure. Any given sorcerer could be the first of a new bloodline, as a result of a pact or some other exceptional circumstance.'),	-- 21 Sorcerer
     ('Dragon Ancestor', 'At 1st level, you choose one type of dragon as your ancestor. The damage type associated with each dragon is used by features you gain later.
-
-    **Table- Draconic Ancestry**
-
-    | Dragon | Damage Type |
-    |--------|-------------|
-    | Black  | Acid        |
-    | Blue   | Lightning   |
-    | Brass  | Fire        |
-    | Bronze | Lightning   |
-    | Copper | Acid        |
-    | Gold   | Fire        |
-    | Green  | Poison      |
-    | Red    | Fire        |
-    | Silver | Cold        |
-    | White  | Cold        |
-    |        |             |
+ 
+    Black (Acid), Blue (Lightning), Brass (Fire), Bronze (Lightning), Copper (Acid), Gold (Fire), Green (Poison), Red (Fire), Silver (Cold), and White (Cold).
 
     You can speak, read, and write Draconic. Additionally, whenever you make a Charisma check when interacting with dragons, your proficiency bonus is doubled if it applies to the check.'),	-- 22 Sorcerer
     ('Draconic Resilience', 'As magic flows through your body, it causes physical traits of your dragon ancestors to emerge. At 1st level, your hit point maximum increases by 1 and increases by 1 again whenever you gain a level in this class.
@@ -550,17 +536,8 @@ VALUES
     Additionally, parts of your skin are covered by a thin sheen of dragon-like scales. When you aren''t wearing armor, your AC equals 13 + your Dexterity modifier.'),	-- 23 Sorcerer
     ('The Fiend Patron', 'You have made a pact with a fiend from the lower planes of existence, a being whose aims are evil, even if you strive against those aims. Such beings desire the corruption or destruction of all things, ultimately including you. Fiends powerful enough to forge a pact include demon lords such as Demogorgon, Orcus, Fraz''Urb-luu, and Baphomet; archdevils such as Asmodeus, Dispater, Mephistopheles, and Belial; pit fiends and balors that are especially mighty; and ultroloths and other lords of the yugoloths.'),	-- 24 Warlock
     ('Expanded Spell List', 'The Fiend lets you choose from an expanded list of spells when you learn a warlock spell. The following spells are added to the warlock spell list for you.
-
-    **Table- Fiend Expanded Spells**
-
-    | Spell Level | Spells                            |
-    |-------------|-----------------------------------|
-    | 1st         | burning hands, command            |
-    | 2nd         | blindness/deafness, scorching ray |
-    | 3rd         | fireball, stinking cloud          |
-    | 4th         | fire shield, wall of fire         |
-    | 5th         | flame strike, hallow              |
-    |             |                                   |'),	-- 25 Warlock
+    
+      1st Level Spells: burning hands, command. 2nd Level Spells: blindness/deafness, scorching ray. 3rd Level Spells: fireball, stinking cloud. 4th Level Spells: fire shield, wall of fire. 5th Level Spells: flame strike, hallow. '),	-- 25 Warlock
     ('Dark One''s Blessing', 'Starting at 1st level, when you reduce a hostile creature to 0 hit points, you gain temporary hit points equal to your Charisma modifier + your warlock level (minimum of 1).'),	-- 26 Warlock
     ('Spellcasting', 'As a student of arcane magic, you have a spellbook containing spells that show the first glimmerings of your true power.'),	-- 27 Wizard
     ('Arcane Recovery', 'You have learned to regain some of your magical energy by studying your spellbook. Once per day when you finish a short rest, you can choose expended spell slots to recover. The spell slots can have a combined level that is equal to or less than half your wizard level (rounded up), and none of the slots can be 6th level or higher.

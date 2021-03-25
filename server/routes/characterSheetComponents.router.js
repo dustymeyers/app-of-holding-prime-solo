@@ -58,6 +58,26 @@ router.get('/equipment', rejectUnauthenticated, (req, res) => {
     });
 }); 
 
+/**
+ * GET all spells for add spells component.
+ */
+router.get('/spells', rejectUnauthenticated, (req, res) => {
+  const allSpellsQuery = 'SELECT * FROM "spells";'
+
+  pool
+    .query(allSpellsQuery)
+    .then(spellsListResponse => {
+      res.send(spellsListResponse.rows);
+    }) 
+    .catch(error => {
+      console.log('Error getting all spells list');
+
+      res.sendStatus(500);
+    });
+});
+
+
+// third party api GET
 router.get('/equipment/information', rejectUnauthenticated, (req, res) => {
   const equipmentSearch = req.query.api_index;
   console.log('searching api for:', equipmentSearch)
@@ -74,6 +94,6 @@ router.get('/equipment/information', rejectUnauthenticated, (req, res) => {
 
       res.sendStatus(500);
     })
-})
+});
 
 module.exports = router;
