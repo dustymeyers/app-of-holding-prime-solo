@@ -15,6 +15,8 @@ import {
   Grid,
   List,
   ListItem,
+  ListItemIcon,
+  ListItemText,
   Paper,
   Table,          // replaces <table>
   TableBody,      // replaces <tbody>
@@ -33,6 +35,7 @@ import LibraryAddIcon from '@material-ui/icons/LibraryAdd';
 function CharacterSheetEquipment() {
   const character = useSelector(store => store.characters.characterDetails);
   const equipmentList = useSelector(store => store.characterSheetComponents.equipmentList);
+  const equipmentInfo = useSelector(store => store.characterSheetComponents.equipmentInformation);
   const equipmentToAddList = useSelector(store => store.equipment.equipmentToAddList);
   const characterEquipment = useSelector(store=> store.equipment.characterEquipmentList);
   const dispatch = useDispatch();
@@ -100,8 +103,9 @@ function CharacterSheetEquipment() {
 
             <TableHead>
               <TableRow>
-                <TableCell>QTY</TableCell>
+                <TableCell align="right">QTY</TableCell>
                 <TableCell>Item Name</TableCell>
+                <TableCell></TableCell>
                 <TableCell>{/* Remove button column */}</TableCell>
               </TableRow>
             </TableHead>   
@@ -110,10 +114,11 @@ function CharacterSheetEquipment() {
               {characterEquipment.map(item => {
                 return(
                   <TableRow key={item.id}>
-                    <TableCell>{item.qty}</TableCell>
-                    <TableCell>
+                    <TableCell align="right">{item.qty}</TableCell>
+                    <TableCell align="justify">
                       {item.equipment_name}
-
+                    </TableCell>
+                    <TableCell>
                       <IconButton onClick={() => itemInformation(item.api_index)}>
                         <InfoIcon color="action" />
                       </IconButton>
@@ -132,6 +137,7 @@ function CharacterSheetEquipment() {
           </Table>
         </TableContainer>
         
+        {/* Dialog for item information, triggers when info button is clicked */}
         <Dialog
           open={open.itemInfo}
           onClose={closeItemInfo}
@@ -154,31 +160,39 @@ function CharacterSheetEquipment() {
           onClose={closeAddItem}
           scroll="paper"
         >
-          <DialogContent>
+            <DialogTitle>Add items:</DialogTitle>
+          <DialogContent >
+            <DialogContentText>Add items to your character sheet by pressing the plus button and then clicking save.</DialogContentText>
             <List>
               {equipmentList.map(equipment => {
                 return (
                   <ListItem key={equipment.id}>
-                    <IconButton onClick={() => {
-                      dispatch({
-                        type: 'SET_ITEMS_TO_ADD',
-                        payload: { id: equipment.id }
-                      })
-                    }}>
-                      <AddIcon color="action" />
-                    </IconButton>
+                    <ListItemIcon>
+                      <IconButton onClick={() => {
+                        dispatch({
+                          type: 'SET_ITEMS_TO_ADD',
+                          payload: { id: equipment.id }
+                        })
+                      }}>
+                        <AddIcon color="action" />
+                      </IconButton>
+                    </ListItemIcon>
+                    
+                    <ListItemText>
+                      {equipment.equipment_name}
+                    </ListItemText>
 
-                    {equipment.equipment_name}
-
-                    <IconButton onClick={() => itemInformation(equipment.api_index)}>
-                      <InfoIcon color="action" />
-                    </IconButton>
+                    <ListItemIcon>
+                      <IconButton onClick={() => itemInformation(equipment.api_index)}>
+                        <InfoIcon color="action" />
+                      </IconButton>
+                    </ListItemIcon>
                   </ListItem>
                 );
               })}
             </List>
           </DialogContent>
-          
+
           <DialogActions>
             <Button color="primary" onClick={addItems}>Save Items</Button>
             <Button color="secondary" onClick={closeAddItem}>Cancel</Button>
