@@ -48,6 +48,8 @@ const skillsAndSavingThrowsList = (state = { skillsList: [], savingThrowsList: [
 // full spellsList from servers
 const spellsList = (state = [], action) => {
   switch (action.type) {
+    case 'SET_SPELLS_LIST':
+      return action.payload
     default:
       return state;
   }

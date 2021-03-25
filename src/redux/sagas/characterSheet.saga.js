@@ -15,6 +15,19 @@ function* fetchAllEquipment() {
   }
 }
 
+function* fetchAllSpells() {
+  try {
+    const spellsList = yield axios.get('/api/characterSheet/spells');
+
+    yield put({
+      type: 'SET_SPELLS_LIST',
+      payload: spellsList.data
+    })
+  } catch (error) {
+    console.log('Error fetching entire spells list', error);
+  }
+}
+
 function* fetchCharacterSheetComponents() {
   try {
     const skillsAndSavingThrowsList = yield axios.get('/api/characterSheet/main');
@@ -47,7 +60,9 @@ function* characterSheetSaga() {
 
   yield takeLatest('FETCH_ALL_EQUIPMENT', fetchAllEquipment);
 
-  yield takeLatest('FETCH_EQUIPMENT_INFO', fetchEquipmentInfo)
+  yield takeLatest('FETCH_EQUIPMENT_INFO', fetchEquipmentInfo);
+
+  yield takeLatest('FETCH_ALL_SPELLS', fetchAllSpells);
 } // end characterSheetSaga
 
 export default characterSheetSaga;

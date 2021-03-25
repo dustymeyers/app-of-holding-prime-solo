@@ -27,7 +27,9 @@ import {
   TextField,
   Typography
 } from '@material-ui/core';
+import AddIcon from '@material-ui/icons/Add';
 import IconButton from '@material-ui/core/IconButton';
+import InfoIcon from '@material-ui/icons/Info';
 import LibraryAddIcon from '@material-ui/icons/LibraryAdd';
 
 
@@ -37,9 +39,11 @@ function CharacterSheetSpells() {
   const dispatch = useDispatch();
   const paramsObject = useParams();
 
+  console.log(spellsList)
+
   const [open, setOpen] = useState({
     addSpells: false,
-    itemInfo: false,
+    spellInfo: false,
     editQty: false,
   });
 
@@ -48,8 +52,22 @@ function CharacterSheetSpells() {
     setOpen({...open, addSpells: false});
   }
 
+  const closeSpellInfo = () => {
+    dispatch({ type: 'CLEAR_SPELLS_INFO'});
+    setOpen({...open, spellInfo: false});
+  }
+
   const saveSpells = () => {
     console.log('in saveSpells')
+  }
+
+  const spellInformation = (spellApiIndex) => {
+    console.log('getting info for item with id:', spellApiIndex);
+    dispatch({ 
+      type: 'FETCH_SPELL_INFO',
+      payload: spellApiIndex
+    });
+    setOpen({...open, spellInfo: true});
   }
 
   return(
@@ -68,14 +86,14 @@ function CharacterSheetSpells() {
           <DialogContent >
             <DialogContentText>Add spells to your character sheet by pressing the plus button and then clicking save.</DialogContentText>
             <List>
-              {spellsList.map(equipment => {
+              {spellsList.map(spell => {
                 return (
-                  <ListItem key={equipment.id}>
+                  <ListItem key={spell.id}>
                     <ListItemIcon>
                       <IconButton onClick={() => {
                         dispatch({
                           type: 'SET_SPELLS_TO_ADD',
-                          payload: { id: equipment.id }
+                          payload: { id: spell.id }
                         })
                       }}>
                         <AddIcon color="action" />
@@ -83,11 +101,11 @@ function CharacterSheetSpells() {
                     </ListItemIcon>
                     
                     <ListItemText>
-                      {equipment.equipment_name}
+                      {spell.spell_name}
                     </ListItemText>
 
                     <ListItemIcon>
-                      <IconButton onClick={() => itemInformation(equipment.api_index)}>
+                      <IconButton onClick={() => spellInformation(spell.api_index)}>
                         <InfoIcon color="action" />
                       </IconButton>
                     </ListItemIcon>
@@ -101,6 +119,18 @@ function CharacterSheetSpells() {
             <Button color="primary" onClick={saveSpells}>Save spells</Button>
             <Button color="secondary" onClick={closeAddSpells}>Cancel</Button>
           </DialogActions>
+        </Dialog>
+
+        {/* Dialog for item information, triggers when info button is clicked */}
+        <Dialog
+          open={open.spellInfo}
+          onClose={closeSpellInfo}
+          scroll="paper"
+        >
+          <DialogTitle>Spell name goes here</DialogTitle>
+          <DialogContent>
+            <DialogContentText>This is where spell Info goes</DialogContentText>
+          </DialogContent>
         </Dialog>
 
 
