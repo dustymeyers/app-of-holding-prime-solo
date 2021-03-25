@@ -11,7 +11,8 @@ import {
   List,
   ListItem,
   ListItemText,
-  TextField
+  TextField,
+  Typography
 } from '@material-ui/core';
 import { AccessAlarm, EditIcon, ThreeDRotation } from '@material-ui/icons';
 

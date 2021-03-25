@@ -206,6 +206,10 @@ function CharacterSheetEquipment() {
             <Button
               color="secondary"
               onClick={() => {
+                dispatch({
+                  type: 'SAVE_CHARACTER_UPDATES',
+                  payload: character
+                });
                 setEditMode({...editMode, editCoinPurse: false})
               }}
             >Save</Button>
