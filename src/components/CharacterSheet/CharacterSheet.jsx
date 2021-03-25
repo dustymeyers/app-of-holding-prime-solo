@@ -41,11 +41,15 @@ function CharacterSheet() {
       payload: paramsObject.id
     });
     dispatch({
+      type: 'FETCH_CHARACTER_SPELLS',
+      payload: paramsObject.id
+    })
+    dispatch({
       type: 'FETCH_ALL_EQUIPMENT'
     });
     dispatch({
       type: 'FETCH_ALL_SPELLS'
-    })
+    });
   }, []);
 
 

@@ -31,16 +31,16 @@ import AddIcon from '@material-ui/icons/Add';
 import IconButton from '@material-ui/core/IconButton';
 import InfoIcon from '@material-ui/icons/Info';
 import LibraryAddIcon from '@material-ui/icons/LibraryAdd';
-
+import DeleteIcon from '@material-ui/icons/Delete';
 
 function CharacterSheetSpells() {
   const character = useSelector(store => store.characters.characterDetails);
+  const characterSpellsList = useSelector(store => store.spells.characterSpellsList);
   const spellsList = useSelector(store => store.characterSheetComponents.spellsList);
   const spellsToAddList = useSelector(store => store.spells.spellsToAddList);
   const dispatch = useDispatch();
   const paramsObject = useParams();
-
-  console.log(spellsList)
+  console.log(characterSpellsList)
 
   const [open, setOpen] = useState({
     addSpells: false,
@@ -56,6 +56,17 @@ function CharacterSheetSpells() {
   const closeSpellInfo = () => {
     dispatch({ type: 'CLEAR_SPELLS_INFO'});
     setOpen({...open, spellInfo: false});
+  }
+
+  const removeSpell = (spellId) => {
+    console.log('remove spell', spellId);
+    dispatch({
+      type: 'REMOVE_SPELL',
+      payload: {
+        spellId,
+        characterId: paramsObject.id
+      }
+    });
   }
 
   const saveSpells = () => {
@@ -79,11 +90,61 @@ function CharacterSheetSpells() {
   }
 
   return(
-    <>
+    <Grid container>
       {/* Add equipment, opens dialog box that allows user to search through available equipment */}
       <IconButton onClick={() => setOpen({...open, addSpells: true})} >
         <LibraryAddIcon fontSize="large" color="action" /> 
       </IconButton>
+
+      <Grid item>
+        <h2>Cantrips:</h2>
+        <List>
+          {characterSpellsList.map(spell => {
+              if (spell.spellcasting_level === 0) {
+                return(    
+                  <ListItem>
+                    <ListItemIcon>
+                      <IconButton onClick={() => spellInformation(spell.api_index)}>
+                        <InfoIcon color="action" />
+                      </IconButton>
+                    </ListItemIcon>
+
+                    <ListItemText>{spell.spell_name}</ListItemText>
+
+                    <IconButton onClick={() => removeSpell(spell.id)}>
+                      <DeleteIcon color="secondary" />
+                    </IconButton>
+                  </ListItem>
+                )
+              }
+            })}
+        </List>
+      </Grid>
+
+      <Grid item>
+        <h2>Level 1 Spells:</h2>
+        <List>
+          {characterSpellsList.map(spell => {
+              if (spell.spellcasting_level === 1) {
+                return(    
+                  <ListItem>
+                    <ListItemIcon>
+                      <IconButton onClick={() => spellInformation(spell.api_index)}>
+                        <InfoIcon color="action" />
+                      </IconButton>
+                    </ListItemIcon>
+
+                    <ListItemText>{spell.spell_name}</ListItemText>
+
+                    <IconButton onClick={() => removeSpell(spell.id)}>
+                      <DeleteIcon color="secondary" />
+                    </IconButton>
+                  </ListItem>
+                )
+              }
+            })}
+        </List>
+      </Grid>
 
       <Dialog
           open={open.addSpells}
@@ -142,7 +203,7 @@ function CharacterSheetSpells() {
         </Dialog>
 
 
-    </>
+    </Grid>
   );
 }// end CharacterSheetSpells
 

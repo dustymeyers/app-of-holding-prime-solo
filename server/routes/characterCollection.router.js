@@ -426,7 +426,28 @@ router.get('/spells/:characterId', rejectUnauthenticated, (req, res) => {
 
       res.sendStatus(500);
     });
-})
+});
+
+/**
+ * DELETE 
+ * Remove equipment from character sheet
+ */
+router.delete('/spell/remove/:id', rejectUnauthenticated, (req, res) => {
+  console.log('in delete equipment', req.body);
+  const deleteEquipmentQuery = `
+    DELETE FROM "characters_spells"
+    WHERE "character_id" = $1 AND "spell_id" = $2;	
+  `;
+
+  pool
+    .query(deleteEquipmentQuery, [req.query.characterId, req.params.id])
+    .then(dbRes => res.sendStatus(200))
+    .catch(error => {
+      console.log('Error deleting equipment', error);
+
+      res.sendStatus(500);
+    })
+});
 
 /**
  * PUT
@@ -453,6 +474,10 @@ router.put('/equipment/updateQty', rejectUnauthenticated, (req, res) =>{
 
 })
 
+/**
+ * DELETE 
+ * Remove equipment from character sheet
+ */
 router.delete('/equipment/remove/:id', rejectUnauthenticated, (req, res) => {
   console.log('in delete equipment', req.body);
   const deleteEquipmentQuery = `
@@ -468,5 +493,5 @@ router.delete('/equipment/remove/:id', rejectUnauthenticated, (req, res) => {
 
       res.sendStatus(500);
     })
-})
+});
 module.exports = router;
