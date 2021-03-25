@@ -28,10 +28,26 @@ function* fetchCharacterSheetComponents() {
   }
 } // end fetchCharacterSheetComponents
 
+function* fetchEquipmentInfo(action) {
+  try {
+    const equipmentInfo = yield axios.get(`/api/characterSheet/equipment/information?api_index=${action.payload}`);
+
+    yield put({
+      type: 'SET_EQUIPMENT_INFORMATION',
+      payload: equipmentInfo.data
+    })
+
+  } catch (error) {
+    console.log('Error fetching equipment information from https://www.dnd5eapi.co', error)
+  }
+}
+
 function* characterSheetSaga() {
   yield takeLatest('FETCH_CHARACTER_SHEET_COMPONENTS', fetchCharacterSheetComponents);
 
-  yield takeLatest('FETCH_ALL_EQUIPMENT', fetchAllEquipment)
+  yield takeLatest('FETCH_ALL_EQUIPMENT', fetchAllEquipment);
+
+  yield takeLatest('FETCH_EQUIPMENT_INFO', fetchEquipmentInfo)
 } // end characterSheetSaga
 
 export default characterSheetSaga;

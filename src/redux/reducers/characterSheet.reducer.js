@@ -1,5 +1,14 @@
 import { combineReducers } from 'redux';
 
+const equipmentInformation = (state = {}, action) => {
+  switch (action.type) {
+    case 'SET_EQUIPMENT_INFORMATION':
+      return action.payload;
+    default:
+      return state;
+  }
+} // end equipmentInformation
+
 const equipmentList = (state = [], action) => {
   switch (action.type) {
     case 'SET_EQUIPMENT_LIST':
@@ -21,4 +30,5 @@ const skillsAndSavingThrowsList = (state = { skillsList: [], savingThrowsList: [
 export default combineReducers({
   skillsAndSavingThrowsList,
   equipmentList,
+  equipmentInformation
 });

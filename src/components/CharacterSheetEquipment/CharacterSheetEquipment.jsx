@@ -71,6 +71,10 @@ function CharacterSheetEquipment() {
 
   const itemInformation = (equipmentApiIndex) => {
     console.log('getting info for item with id:', equipmentApiIndex);
+    dispatch({ 
+      type: 'FETCH_EQUIPMENT_INFO',
+      payload: equipmentApiIndex
+    });
     setOpen({...open, itemInfo: true});
   }
 
@@ -174,6 +178,7 @@ function CharacterSheetEquipment() {
               })}
             </List>
           </DialogContent>
+          
           <DialogActions>
             <Button color="primary" onClick={addItems}>Save Items</Button>
             <Button color="secondary" onClick={closeAddItem}>Cancel</Button>

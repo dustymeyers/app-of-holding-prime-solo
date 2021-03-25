@@ -21,6 +21,11 @@ function* saveItems(action) {
 
     yield axios.post(`/api/characterCollection/equipment/${action.payload.characterId}`, action.payload.items);
 
+    yield put({
+      type: 'FETCH_CHARACTER_EQUIPMENT',
+      payload: action.payload.characterId
+    })
+
     console.log('item added');
     yield put({
       type: 'CLEAR_ITEMS_TO_ADD'
