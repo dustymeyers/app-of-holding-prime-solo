@@ -98,10 +98,12 @@ function CharacterSheetEquipment() {
     dispatch({
       type: 'UPDATE_EQUIPMENT_QTY',
       payload: {
+        characterId: paramsObject.id,
         equipment_id: itemId,
         qty: qtyToEdit
-      }
+      }      
     })
+    setOpen({...open, editQty: false});
   }
 
 

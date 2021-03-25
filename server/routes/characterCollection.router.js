@@ -381,8 +381,7 @@ router.put('/equipment/updateQty', rejectUnauthenticated, (req, res) =>{
     .query(updateQtyQuery, [req.body.qty, req.body.characterId, req.body.equipment_id])
     .then(dbRes => {
       console.log('QTY UPDATED FOR ITEM NUMBER', req.body.equipment_id);
-      console.log('dbRes', dbRes)
-      
+
       res.sendStatus(200);
     })
     .catch(error => {

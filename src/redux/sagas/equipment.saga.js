@@ -36,10 +36,25 @@ function* saveItems(action) {
   }
 } // end saveItems
 
+function* updateEquipmentQty(action) {
+  try {
+    yield axios.put('/api/characterCollection/equipment/updateQty', action.payload);
+
+    yield put({
+      type: 'FETCH_CHARACTER_EQUIPMENT',
+      payload: action.payload.characterId
+    });
+  } catch (error) {
+
+  }
+}
+
 function* equipmentSaga() {
   yield takeLatest('SAVE_ITEMS', saveItems);
 
   yield takeLatest('FETCH_CHARACTER_EQUIPMENT', fetchCharacterEquipment);
+
+  yield takeLatest('UPDATE_EQUIPMENT_QTY', updateEquipmentQty)
 } // end equipmentSaga
 
 export default equipmentSaga;
