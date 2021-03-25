@@ -344,4 +344,30 @@ router.post('/equipment/:characterId', rejectUnauthenticated, (req, res) => {
     })
 })
 
+/**
+ * GET
+ * Get all character specific equipment
+ */
+router.get('/equipment/:characterId', rejectUnauthenticated, (req, res) => {
+  console.log(`GET /api/characterCollection/equipment/${req.params.characterId} for user`, req.user.id);
+  const characterEquipmentQuery = `
+  SELECT "equipment".*, "characters_equipment".qty FROM "equipment"
+  JOIN "characters_equipment"
+    ON "equipment".id = "characters_equipment".equipment_id
+  JOIN "characters"
+    ON "characters".id = "characters_equipment".character_id
+  WHERE "characters".id = $1 and "characters".user_id = $2;
+  `;
+
+  pool
+    .query(characterEquipmentQuery, [req.params.characterId, req.user.id])
+    .then(characterEquipmentResponse => {
+      res.send(characterEquipmentResponse.rows);
+    })
+    .catch(error => {
+      console.log('Error getting character equipment', error);
+
+      res.sendStatus(500);
+    })
+})
 module.exports = router;
