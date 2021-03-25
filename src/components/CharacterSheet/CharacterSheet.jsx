@@ -29,6 +29,10 @@ function CharacterSheet() {
       payload: paramsObject.id
     });
     dispatch({
+      type: 'FETCH_CHARACTER_EQUIPMENT',
+      payload: paramsObject.id
+    });
+    dispatch({
       type: 'FETCH_ALL_EQUIPMENT'
     });
   }, []);

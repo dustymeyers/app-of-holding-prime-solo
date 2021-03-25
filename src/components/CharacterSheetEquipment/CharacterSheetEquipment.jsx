@@ -59,6 +59,7 @@ function CharacterSheetEquipment() {
   }
 
   const closeAddItem = () => {
+    dispatch({ type: 'CLEAR_ITEMS_TO_ADD' })
     setOpen({...open, addItem: false});
   }
   
