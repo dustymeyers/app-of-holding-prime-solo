@@ -14,6 +14,20 @@ function* fetchCharacterEquipment(action) {
   }
 }
 
+function* removeEquipment(action) {
+  try {
+    console.log('in removeEquipment', action.payload);
+    yield axios.delete(`/api/characterCollection/equipment/remove/${action.payload.equipmentId}?characterId=${action.payload.characterId}`)
+
+    yield put({
+      type: 'FETCH_CHARACTER_EQUIPMENT',
+      payload: action.payload.characterId
+    })
+  } catch (error) {
+    console.log('error removing item', error)
+  }
+}
+
 function* saveItems(action) {
   try {
     console.log('adding item for character', action.payload.characterId);
@@ -53,6 +67,8 @@ function* equipmentSaga() {
   yield takeLatest('SAVE_ITEMS', saveItems);
 
   yield takeLatest('FETCH_CHARACTER_EQUIPMENT', fetchCharacterEquipment);
+
+  yield takeLatest('REMOVE_EQUIPMENT', removeEquipment)
 
   yield takeLatest('UPDATE_EQUIPMENT_QTY', updateEquipmentQty)
 } // end equipmentSaga

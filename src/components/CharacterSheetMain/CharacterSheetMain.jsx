@@ -10,6 +10,7 @@ import {
   Grid,
   List,
   ListItem,
+  ListItemText,
   TextField
 } from '@material-ui/core';
 import { AccessAlarm, EditIcon, ThreeDRotation } from '@material-ui/icons';
@@ -85,7 +86,6 @@ function CharacterSheetMain({ }) {
           <p>Gender: {character.baseInformation.gender}</p>
           <p>Alignment: {character.baseInformation.alignment}</p>
           <p>Experience Points: {character.baseInformation.experience_points}</p>
-          <p>{JSON.stringify(character.baseInformation)}</p>
           <Button variant="outlined" onClick={() => setEditMode({...editMode, editBasicInfo: true})}>Edit</Button>
         </Grid>
         :
@@ -437,12 +437,13 @@ function CharacterSheetMain({ }) {
           {character.features.map((feature, index) => {
             return(
               <ListItem key={index}>
-                <strong>{feature.feature_name}</strong>: {feature.feature_description}
+                <ListItemText>
+                  <strong>{feature.feature_name}</strong>: {feature.feature_description}
+                </ListItemText>
               </ListItem>
             );
           })}
         </List>
-        <p>{JSON.stringify(character.features)}</p>
       </Grid>
 
       <Grid item>
@@ -462,7 +463,6 @@ function CharacterSheetMain({ }) {
             return skillElement;
           })}
         </List>
-        <p>{JSON.stringify(character.skillProficiencies)}</p>
       </Grid>
 
       <Grid item>
@@ -478,7 +478,6 @@ function CharacterSheetMain({ }) {
             return savingThrowElement;
             })}
         </List>
-        <p>{JSON.stringify(character.savingThrowProficiencies)}</p>
       </Grid>
 
       <Grid item>
@@ -488,7 +487,6 @@ function CharacterSheetMain({ }) {
             return <ListItem key={language.id}>{language.language_name}</ListItem>
           })}
         </List>
-        <p>{JSON.stringify(character.languagesKnown)}</p>
       </Grid>
     </Grid>
   );

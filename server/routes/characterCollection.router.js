@@ -391,4 +391,21 @@ router.put('/equipment/updateQty', rejectUnauthenticated, (req, res) =>{
     })
 
 })
+
+router.delete('/equipment/remove/:id', rejectUnauthenticated, (req, res) => {
+  console.log('in delete equipment', req.body);
+  const deleteEquipmentQuery = `
+    DELETE FROM "characters_equipment"
+    WHERE "character_id" = $1 AND "equipment_id" = $2;	
+  `;
+
+  pool
+    .query(deleteEquipmentQuery, [req.query.characterId, req.params.id])
+    .then(dbRes => res.sendStatus(200))
+    .catch(error => {
+      console.log('Error deleting equipment', error);
+
+      res.sendStatus(500);
+    })
+})
 module.exports = router;

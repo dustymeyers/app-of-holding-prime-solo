@@ -89,7 +89,10 @@ function CharacterSheetEquipment() {
     console.log('remove item', equipmentId);
     dispatch({
       type: 'REMOVE_EQUIPMENT',
-      payload: equipmentId
+      payload: {
+        equipmentId,
+        characterId: paramsObject.id
+      }
     })
   }
 
