@@ -350,6 +350,7 @@ router.post('/equipment/:characterId', rejectUnauthenticated, (req, res) => {
  */
 router.get('/equipment/:characterId', rejectUnauthenticated, (req, res) => {
   console.log(`GET /api/characterCollection/equipment/${req.params.characterId} for user`, req.user.id);
+  
   const characterEquipmentQuery = `
     SELECT "equipment".*, "characters_equipment".qty FROM "equipment"
     JOIN "characters_equipment"
@@ -406,6 +407,25 @@ router.post('/spells/:characterId', rejectUnauthenticated, (req,res) => {
 router.get('/spells/:characterId', rejectUnauthenticated, (req, res) => {
   console.log(`GET /api/characterCollection/spells/${req.params.characterId} for user`, req.user.id);
 
+  const characterSpellsQuery = `
+    SELECT "spells".* FROM "spells"
+    JOIN "characters_spells"
+      ON "spells".id = "characters_spells".spell_id
+    JOIN "characters"
+      ON "characters_spells".character_id = "characters".id
+    WHERE "characters".id = $1 AND "characters".user_id = $2;
+  `;
+
+  pool
+    .query(characterSpellsQuery, [req.params.characterId, req.user.id])
+    .then(characterSpellsResponse => {
+      res.send(characterSpellsResponse.rows);
+    })
+    .catch(error => {
+      console.log('Error getting character spells', error);
+
+      res.sendStatus(500);
+    });
 })
 
 /**
