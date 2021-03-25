@@ -28,6 +28,7 @@ import {
 } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import DeleteIcon from '@material-ui/icons/Delete';
+import EditIcon from '@material-ui/icons/Edit';
 import InfoIcon from '@material-ui/icons/Info';
 import IconButton from '@material-ui/core/IconButton';
 import LibraryAddIcon from '@material-ui/icons/LibraryAdd';
@@ -40,10 +41,12 @@ function CharacterSheetEquipment() {
   const characterEquipment = useSelector(store=> store.equipment.characterEquipmentList);
   const dispatch = useDispatch();
   const paramsObject = useParams();
-
+  const [qtyToEdit, setQtyToEdit] = useState(0);
+  const [itemId, setItemId] = useState(0);
   const [open, setOpen] = useState({
     addItem: false,
     itemInfo: false,
+    editQty: false,
   });
 
   const totalCopper = character.baseInformation.cp_total;
@@ -84,7 +87,23 @@ function CharacterSheetEquipment() {
 
   const removeItem = (equipmentId) => {
     console.log('remove item', equipmentId);
+    dispatch({
+      type: 'REMOVE_EQUIPMENT',
+      payload: equipmentId
+    })
   }
+
+  const saveQty = () => {
+    console.log(`Save item ${itemId}'s qty to ${qtyToEdit}`);
+    dispatch({
+      type: 'UPDATE_EQUIPMENT_QTY',
+      payload: {
+        equipment_id: itemId,
+        qty: qtyToEdit
+      }
+    })
+  }
+
 
   return(
     <Grid container>
@@ -115,7 +134,16 @@ function CharacterSheetEquipment() {
               {characterEquipment.map(item => {
                 return(
                   <TableRow key={item.id}>
-                    <TableCell align="right">{item.qty}</TableCell>
+                    <TableCell align="right">
+                      {item.qty}
+                      <IconButton onClick={() => {
+                        setItemId(item.id);
+                        setQtyToEdit(item.qty);
+                        setOpen({...open, editQty: true});
+                      }}>
+                        <EditIcon color="action" />
+                      </IconButton>
+                    </TableCell>
                     <TableCell align="justify">
                       {item.equipment_name}
                     </TableCell>
@@ -137,6 +165,23 @@ function CharacterSheetEquipment() {
             </TableBody>
           </Table>
         </TableContainer>
+        
+        {/* Dialog for item qty update */}
+        <Dialog
+          open={open.editQty}
+          onClose={() => setOpen({...open, editQty: false})}
+        >
+          <DialogContent>
+            <TextField
+              type="number"
+              value={qtyToEdit}
+              onChange={(event) => setQtyToEdit(event.target.value)}
+            />
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={saveQty}>Save</Button>
+          </DialogActions>
+        </Dialog>
         
         {/* Dialog for item information, triggers when info button is clicked */}
         <Dialog

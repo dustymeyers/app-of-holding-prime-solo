@@ -351,12 +351,12 @@ router.post('/equipment/:characterId', rejectUnauthenticated, (req, res) => {
 router.get('/equipment/:characterId', rejectUnauthenticated, (req, res) => {
   console.log(`GET /api/characterCollection/equipment/${req.params.characterId} for user`, req.user.id);
   const characterEquipmentQuery = `
-  SELECT "equipment".*, "characters_equipment".qty FROM "equipment"
-  JOIN "characters_equipment"
-    ON "equipment".id = "characters_equipment".equipment_id
-  JOIN "characters"
-    ON "characters".id = "characters_equipment".character_id
-  WHERE "characters".id = $1 and "characters".user_id = $2;
+    SELECT "equipment".*, "characters_equipment".qty FROM "equipment"
+    JOIN "characters_equipment"
+      ON "equipment".id = "characters_equipment".equipment_id
+    JOIN "characters"
+      ON "characters".id = "characters_equipment".character_id
+    WHERE "characters".id = $1 and "characters".user_id = $2;
   `;
 
   pool
@@ -369,5 +369,27 @@ router.get('/equipment/:characterId', rejectUnauthenticated, (req, res) => {
 
       res.sendStatus(500);
     })
+})
+
+router.put('/equipment/updateQty', rejectUnauthenticated, (req, res) =>{
+  const updateQtyQuery = `
+    UPDATE "characters_equipment" SET "qty" = $1
+    WHERE "character_id" = $2 AND "equipment_id" = $3;
+  `;
+
+  pool
+    .query(updateQtyQuery, [req.body.qty, req.body.characterId, req.body.equipment_id])
+    .then(dbRes => {
+      console.log('QTY UPDATED FOR ITEM NUMBER', req.body.equipment_id);
+      console.log('dbRes', dbRes)
+      
+      res.sendStatus(200);
+    })
+    .catch(error => {
+      console.log('ERROR UPDATING ITEM QTY', error);
+      
+      res.sendStatus(500);
+    })
+
 })
 module.exports = router;
