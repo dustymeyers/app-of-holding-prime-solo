@@ -66,7 +66,7 @@ function* charactersSaga() {
 
   yield takeLatest('DELETE_CHARACTER', deleteCharacter);
 
-  yield takeLatest('UPDATE_CHARACTER', updateCharacter);
+  yield takeLatest('SAVE_CHARACTER_UPDATES', updateCharacter);
 } // end charactersSaga
 
 export default charactersSaga;
