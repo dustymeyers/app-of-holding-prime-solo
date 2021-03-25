@@ -1,7 +1,6 @@
 import axios from 'axios';
 import { put, takeLatest } from 'redux-saga/effects';
 
-
 function* generateRandomCharacter(action) {
   try {
     // get class info pertaining to user parameters for user review
@@ -27,6 +26,10 @@ function* saveGeneratedCharacter(action) {
   try {
     yield axios.post('/api/characterCreator/', action.payload);
     
+    yield put({
+      type: 'FETCH_CHARACTERS',
+      payload: 'FALSE'
+    })
   } catch (error) {
     console.log('Error saving generated character:', error);
   }

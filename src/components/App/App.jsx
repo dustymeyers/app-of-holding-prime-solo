@@ -91,7 +91,7 @@ function App() {
           <ProtectedRoute
             // logged in shows CharacterSheet else shows LoginPage
             exact
-            path="/characterSheet"
+            path="/characterSheet/:id"
           >
             <CharacterSheet />
           </ProtectedRoute>

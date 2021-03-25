@@ -77,14 +77,28 @@ router.get('/generate', rejectUnauthenticated, (req, res) => {
   `;
 
   // this will get us race skills
-  const raceSkills= `
+  const raceSkills = `
     SELECT "skills".* FROM "skills"
     JOIN "races_skills"
       ON "skills".id = "races_skills".skill_id
-    JOIN "races"
-      ON "races_skills".race_id = "races".id
-    WHERE "races".id = $1;  
+    WHERE "races_skills".race_id = $1;  
   `;
+
+  // this will get us languages the character knows based on race
+  const languages = `
+    SELECT "languages".* FROM "languages"
+    JOIN "races_languages"
+      ON "languages".id = "races_languages".language_id
+    WHERE "races_languages".race_id = $1;
+  `;
+
+  const savingThrows = `
+    SELECT "saving_throws".* FROM "saving_throws"
+    JOIN "classes_savingThrows" 
+      ON "saving_throws".id = "classes_savingThrows"."savingThrow_id"
+    WHERE "classes_savingThrows".class_id = $1;
+  `;
+
 
   // first query to get back classes that fit the description
   pool
@@ -103,45 +117,69 @@ router.get('/generate', rejectUnauthenticated, (req, res) => {
       pool // second query to get back random race info
         .query(raceInfoQuery, [randomRaceId])
         .then(raceResponse => {
-          console.log('Fetching race data related to id:', randomRaceId);          
+          console.log('Fetched race data related to id:', randomRaceId);          
 
           pool // third query to get back class information now that class has been chosen
             .query(classInfoQuery, [randomClassId])
             .then(classInfoResponse => {
-              console.log('Fetching class data related to id:', randomClassId);
+              console.log('Fetched class data related to id:', randomClassId);
 
               pool // fourth query to get back raceFeatures
                 .query(raceFeatures, [randomRaceId])
                 .then(raceFeatureResponse => {
-                  console.log('Fetching race features for race id:', randomRaceId);
+                  console.log('Fetched race features for race id:', randomRaceId);
 
                   pool // fifth query
                     .query(classSkills, [randomClassId])
                     .then(classSkillsResponse => {
-                      console.log('Fetching class skills data related to id:', randomClassId);
+                      console.log('Fetched class skills data related to id:', randomClassId);
                       
                       pool // sixth query
                         .query(raceSkills, [randomRaceId])
                         .then(raceSkillResponse => {
-                          console.log('Fetching race skills for race id:', randomRaceId);
+                          console.log('Fetched race skills for race id:', randomRaceId);
+                          
+                          pool // seventh query
+                            .query(languages, [randomRaceId])
+                            .then(languageResponse => {
+                              console.log('Fetched race languages for race id:', randomRaceId);
 
-                          res.send({
-                            classInfo: classInfoResponse.rows[0], 
-                            classSkills: classSkillsResponse.rows,
-                            raceFeatures: raceFeatureResponse.rows[0].race_features,
-                            raceInfo: raceResponse.rows[0], 
-                            raceSkills: raceSkillResponse.rows,
-                            str_score,
-                            dex_score,
-                            con_score,
-                            int_score,
-                            wis_score,
-                            cha_score
-                          });
+                              pool // eighth query
+                                .query(savingThrows, [randomClassId])
+                                .then(savingThrowsResponse => {
+                                  console.log('Fetched class saving throw data related to id:', randomClassId);
+
+                                  res.send({
+                                    classInfo: classInfoResponse.rows[0], 
+                                    classSkills: classSkillsResponse.rows,
+                                    raceFeatures: raceFeatureResponse.rows[0].race_features,
+                                    raceInfo: raceResponse.rows[0], 
+                                    raceSkills: raceSkillResponse.rows,
+                                    languagesKnown: languageResponse.rows,
+                                    savingThrowProficiencies: savingThrowsResponse.rows,
+                                    str_score,
+                                    dex_score,
+                                    con_score,
+                                    int_score,
+                                    wis_score,
+                                    cha_score
+                                  });
+                                }) // eighth catch
+                                .catch(savingThrowsError => {
+                                  console.log(`Error using class id ${randomClassId} to get class skills info`, savingThrowsError);
+                      
+                                  res.sendStatus(500);
+                                });
+                            }) // seventh catch
+                            .catch(languagesError => {
+                              console.log(`Error using race id ${randomRaceId} to get race features`, languagesError);
+
+                              res.sendStatus(500);
+                            });
                         })
                         // sixth catch
                         .catch(raceSkillsError => {
-                          console.log(`Error using race id ${randomRaceId} to get race features`, raceFeatureError);
+                          console.log(`Error using race id ${randomRaceId} to get race features`, raceSkillsError);
 
                           res.sendStatus(500);
                         })
@@ -196,7 +234,8 @@ router.post('/', rejectUnauthenticated, (req, res) => {
     req.body.characterWisdom,
     req.body.characterCharisma,
     req.body.maxHitPoints,
-    req.body.characterGender
+    req.body.characterGender,
+    req.body.baseArmorClass
   ];
   
   const charactersInsertQuery = `
@@ -210,23 +249,65 @@ router.post('/', rejectUnauthenticated, (req, res) => {
       "wis_score",
       "cha_score", 
       "max_hit_points", 
-      "gender" 
+      "gender",
+      "armor_class" 
     )
-    VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
+    VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
     RETURNING "id";
   `;
   
   const charactersClassesInsertQuery = `
-  INSERT INTO "characters_classes" ("character_id", "class_id")
-  VALUES ($1, $2);
+    INSERT INTO "characters_classes" ("character_id", "class_id")
+    VALUES ($1, $2);
   `;
   
   const charactersRacesInsertQuery = `
-  INSERT INTO "characters_races" ("character_id", "race_id")
-  VALUES ($1, $2);
+    INSERT INTO "characters_races" ("character_id", "race_id")
+    VALUES ($1, $2);
   `;
+
+  function insertSerializer(array) {	
+    let pgTemplateNum = 1;
+    let serialInsert = '';
   
-  pool // 1 of 3 DB Queries - INSERT INTO "characters"
+    for (let i = 0; i < array.length; i++) {
+      if (array.length - 1 === i ) {
+        pgTemplateNum ++;
+
+        serialInsert += `($1 , $${pgTemplateNum});`;
+      } else {
+        pgTemplateNum ++;
+
+        serialInsert += `($1 , $${pgTemplateNum}), `;
+      }    
+    } // end for
+    return serialInsert;
+  } // end insertSerializer
+
+  const charactersSkillsInsertQuery = `
+    INSERT INTO "characters_skills" ("character_id", "skill_id")
+    VALUES ${insertSerializer(req.body.skillsArray)}
+  `;  
+  
+  const characterSavingThrowsInsertQuery = `
+    INSERT INTO "characters_savingThrows" ("character_id", "savingThrow_id")
+    VALUES ${insertSerializer(req.body.savingThrowProficiencies)}
+  `;
+
+  const characterLanguagesInsertQuery = `
+    INSERT INTO "characters_languages" ("character_id", "language_id")
+    VALUES ${insertSerializer(req.body.languagesArray)}
+  `;
+
+  function pgSerializer(array, characterId) {
+    let pgInsert = [characterId];
+    for (let i = 0; i < array.length; i++) {
+      pgInsert.push(array[i].id);
+    }
+    return pgInsert;
+  } // end pgSerializer
+  
+  pool // 1 of 6 DB Queries - INSERT INTO "characters"
     .query(charactersInsertQuery, charactersInsertValues)
     .then(characterInsertResponse => {
       console.log('characterInsertResponse data', characterInsertResponse.rows[0].id);
@@ -236,7 +317,7 @@ router.post('/', rejectUnauthenticated, (req, res) => {
         req.body.classId
       ];
 
-      pool // 2 of 3 DB Queries - INSERT INTO "characters_classes"
+      pool // 2 of 6 DB Queries - INSERT INTO "characters_classes"
         .query(charactersClassesInsertQuery, charactersClassesInsertValues)
         .then(characterClassesInsertResponse => {
           console.log('characterClassesInsert QUERY SENT');
@@ -246,15 +327,56 @@ router.post('/', rejectUnauthenticated, (req, res) => {
             req.body.raceId
           ];
 
-          pool // 3 of 3 DB Queries - INSERT INTO "characters_races"
+          pool // 3 of 6 DB Queries - INSERT INTO "characters_races"
             .query(charactersRacesInsertQuery, charactersRacesInsertValues)
             .then(characterRacesInsertResponse => {
-              console.log('characterRacesInsert QUERY SENT');
+              console.log('characterRacesInsert QUERY SENT'); 
+              
+              let pgSkillsArray = pgSerializer(req.body.skillsArray, characterInsertResponse.rows[0].id);
 
-              res.sendStatus(201);
+              pool // 4 of 6 DB Queries - INSERT INTO "characters_skills"
+                .query(charactersSkillsInsertQuery, pgSkillsArray)
+                .then(characterSkillsInsertResponse => {
+                  console.log('characterSkillsInsert QUERY SENT');
+
+                  let pgSavingThrowsArray = pgSerializer(req.body.savingThrowProficiencies, characterInsertResponse.rows[0].id);
+
+                  pool // 5 of 6 DB Queries - INSERT INTO "characters_savingThrows"
+                    .query(characterSavingThrowsInsertQuery, pgSavingThrowsArray)
+                    .then(characterSavingThrowsInsertResponse => {
+                      console.log('characterSavingThrowsInsert QUERY SENT');
+                      
+                      let pgLanguagesArray = pgSerializer(req.body.languagesArray, characterInsertResponse.rows[0].id);
+
+                      pool // 6 of 6 DB Queries - INSERT INTO "characters_languages"
+                        .query(characterLanguagesInsertQuery, pgLanguagesArray)
+                        .then(characterLanguagesInsertResponse => {
+                          console.log('characterLanguagesInsert QUERY SENT');
+                        
+                          res.sendStatus(201);
+                        })
+                        .catch(characterLanguagesInsertError => {
+                          console.log('Error inserting languages', characterLanguagesInsertError);
+
+                          res.sendStatus(500);
+                        })
+                    }) // fifth catch
+                    .catch(characterSavingThrowsInsertError => {
+                      console.log('Error inserting skills', characterSavingThrowsInsertError);
+
+                      res.sendStatus(500);
+                    })
+                }) // fourthCatch
+                .catch(charactersSkillsInsertError => {
+                  console.log('Error inserting skills', charactersSkillsInsertError);
+
+                  res.sendStatus(500);
+                });
             }) // third catch
             .catch(charactersRacesInsertError => {
               console.log(`Error adding raceId ${req.body.raceId} for character ${req.body.characterName}`, charactersRacesInsertError);
+
+              res.sendStatus(500);
             });
         }) // second catch
         .catch(charactersClassesInsertError => {

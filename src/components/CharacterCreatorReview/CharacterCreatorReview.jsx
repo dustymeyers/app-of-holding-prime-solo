@@ -2,6 +2,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { useEffect } from 'react';
 
+// Material-UI Components
 import {
   ButtonGroup,
   Button,
@@ -24,13 +25,17 @@ function CharacterCreatorReview() {
   const characterCharisma = randomCharacter.cha_score;
   const classId = randomCharacter.classInfo.id;
   const raceId = randomCharacter.raceInfo.id;
+  const skillsArray = randomCharacter.classSkills.concat(randomCharacter.raceSkills);
+  const languagesArray = randomCharacter.languagesKnown;
+  const savingThrowProficiencies = randomCharacter.savingThrowProficiencies;
+  // array1.concat(array2)
 
   // Base Armor Class is calculated by the dexterity modifier + 10 (unarmored)
   // All ability score modifiers = (ability score - 10) / 2
-  const baseArmorClass = Math.floor((characterDexterity - 10 ) / 2) + 10;
+  const baseArmorClass = Math.floor((characterDexterity + randomCharacter.raceInfo.dex_bonus - 10 ) / 2) + 10;
 
   // Maximum Hit Points for level one  is calculated by the constitution modifier + max roll for that class's hit die
-  const maxHitPoints = randomCharacter.classInfo.hit_die + Math.floor((randomCharacter.con_score - 10 ) / 2);
+  const maxHitPoints = randomCharacter.classInfo.hit_die + Math.floor((characterConstitution + randomCharacter.raceInfo.con_bonus - 10 ) / 2);
 
   console.log('classId', classId);
   const saveCharacter = () => {
@@ -48,8 +53,13 @@ function CharacterCreatorReview() {
         maxHitPoints,
         characterGender,
         classId,
-        raceId
-      }
+        raceId,
+        skillsArray,
+        languagesArray,
+        savingThrowProficiencies,
+        baseArmorClass
+      },
+      onComplete: history.push('/')
     });
   }
 
