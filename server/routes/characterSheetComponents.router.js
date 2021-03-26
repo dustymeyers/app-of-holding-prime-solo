@@ -96,4 +96,22 @@ router.get('/equipment/information', rejectUnauthenticated, (req, res) => {
     })
 });
 
+router.get('/spell/information', rejectUnauthenticated, (req, res) => {
+  const spellSearch = req.query.api_index;
+  console.log('searching api for:', spellSearch);
+
+  axios
+    .get(`https://www.dnd5eapi.co/api/spells/${spellSearch}`)
+    .then(apiResponse => {
+      console.log('apiResponse', apiResponse.data);
+
+      res.send(apiResponse.data);
+    })
+    .catch(error => {
+      console.log(`Error getting information about ${spellSearch} from www.dnd5eapi.com`, error);
+
+      res.sendStatus(500);
+    })
+})
+
 module.exports = router;

@@ -81,7 +81,7 @@ function CharacterSheetSpells() {
   }
 
   const spellInformation = (spellApiIndex) => {
-    console.log('getting info for item with id:', spellApiIndex);
+    console.log('getting info for spell with id:', spellApiIndex);
     dispatch({ 
       type: 'FETCH_SPELL_INFO',
       payload: spellApiIndex

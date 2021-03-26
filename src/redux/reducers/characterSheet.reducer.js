@@ -27,6 +27,17 @@ const equipmentInformation = (state = {
   }
 } // end equipmentInformation
 
+const spellInformation = ( state = {}, action) => {
+  switch(action.type) {
+    case 'SET_SPELL_INFORMATION':
+      return action.payload;
+    case 'CLEAR_SPELL_INFO':
+      return state;
+    default:
+      return state;
+  }
+}
+
 const equipmentList = (state = [], action) => {
   switch (action.type) {
     case 'SET_EQUIPMENT_LIST':
@@ -59,5 +70,6 @@ export default combineReducers({
   skillsAndSavingThrowsList,
   equipmentList,
   equipmentInformation,
+  spellInformation,
   spellsList
 });

@@ -55,6 +55,19 @@ function* fetchEquipmentInfo(action) {
   }
 }
 
+function* fetchSpellInfo(action) {
+  try{
+    const spellInfo = yield axios.get(`/api/characterSheet/spell/information?api_index=${action.payload}`);
+
+    yield put({
+      type: 'SET_SPELL_INFORMATION',
+      payload: spellInfo.data
+    })    
+  } catch (error) {
+    console.log('Error fetching spell information from https://www.dnd5eapi.co', error)
+  }
+}
+
 function* characterSheetSaga() {
   yield takeLatest('FETCH_CHARACTER_SHEET_COMPONENTS', fetchCharacterSheetComponents);
 
@@ -63,6 +76,8 @@ function* characterSheetSaga() {
   yield takeLatest('FETCH_EQUIPMENT_INFO', fetchEquipmentInfo);
 
   yield takeLatest('FETCH_ALL_SPELLS', fetchAllSpells);
+
+  yield takeLatest('FETCH_SPELL_INFO', fetchSpellInfo);
 } // end characterSheetSaga
 
 export default characterSheetSaga;

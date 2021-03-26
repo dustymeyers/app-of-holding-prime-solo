@@ -46,7 +46,8 @@ function CharacterSheetEquipment() {
   const [itemId, setItemId] = useState(0);
   const [editMode, setEditMode] = useState({
     editCoinPurse: false
-  })
+  });
+  
   const [open, setOpen] = useState({
     addItem: false,
     itemInfo: false,
