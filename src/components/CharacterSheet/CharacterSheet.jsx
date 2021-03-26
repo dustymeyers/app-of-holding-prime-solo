@@ -56,9 +56,8 @@ function CharacterSheet() {
 
   return(
     <>
-      <Grid container component={Paper}>
-        <Grid item>
-          <h2>This is where the CharacterSheet will go.</h2>
+      <Grid container component={Paper} direction="column" spacing={5}>
+        <Grid item>          
           <ButtonGroup>
             <Button onClick={() => setCurrentView({
               main: true,
@@ -82,10 +81,12 @@ function CharacterSheet() {
               Spells
             </Button>
           </ButtonGroup>
+        </Grid>
+
+        <Grid item> 
           {currentView.main ? <CharacterSheetMain/> : <></>}
           {currentView.equipment ? <CharacterSheetEquipment /> : <></>}
-          {currentView.spells ? <CharacterSheetSpells /> : <></>}
-          
+          {currentView.spells ? <CharacterSheetSpells /> : <></>}          
         </Grid>
         
       </Grid>

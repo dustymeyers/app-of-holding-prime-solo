@@ -120,15 +120,28 @@ function CharacterSheetSpells() {
 
   return(
     <Grid container>
-      <Grid item>
-        <Typography>Spell Casting Ability: {character.baseInformation.spellcasting_ability}</Typography>
-        <Typography>Spell Save DC: {spellSaveDc}</Typography>
-        <Typography>Spell Attack Modifier: {spellcastingModifier()}</Typography>
+      <Grid item xs={10} >
+        <Grid container direction="row" spacing={2}>
+          <Grid item>
+            <Typography>Spell Casting Ability: {character.baseInformation.spellcasting_ability}</Typography>
+          </Grid>
+
+          <Grid item>            
+            <Typography>Spell Save DC: {spellSaveDc}</Typography>
+          </Grid>
+
+          <Grid item>
+            <Typography>Spell Attack Modifier: {spellcastingModifier()}</Typography>
+          </Grid>
+        </Grid>
       </Grid>
+
       {/* Add equipment, opens dialog box that allows user to search through available equipment */}
-      <IconButton onClick={() => setOpen({...open, addSpells: true})} >
-        <LibraryAddIcon fontSize="large" color="action" /> 
-      </IconButton>
+      <Grid item>
+        <IconButton onClick={() => setOpen({...open, addSpells: true})} >
+          <LibraryAddIcon fontSize="large" color="action" /> 
+        </IconButton>
+      </Grid>
 
       <Grid item>
         <h2>Cantrips:</h2>
