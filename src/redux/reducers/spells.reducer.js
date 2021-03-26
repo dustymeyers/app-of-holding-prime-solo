@@ -14,7 +14,7 @@ const spellsToAddList = (state = [], action) => {
     case 'SET_SPELLS_TO_ADD':
       return [...state, action.payload];
     case 'CLEAR_SPELLS_TO_ADD':
-      return state;
+      return [];
     default:
       return state;
   }

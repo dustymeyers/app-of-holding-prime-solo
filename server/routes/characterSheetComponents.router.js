@@ -62,7 +62,7 @@ router.get('/equipment', rejectUnauthenticated, (req, res) => {
  * GET all spells for add spells component.
  */
 router.get('/spells', rejectUnauthenticated, (req, res) => {
-  const allSpellsQuery = 'SELECT * FROM "spells";'
+  const allSpellsQuery = 'SELECT * FROM "spells" ORDER BY "spell_name";'
 
   pool
     .query(allSpellsQuery)

@@ -41,7 +41,34 @@ function CharacterSheetSpells() {
   const spellsToAddList = useSelector(store => store.spells.spellsToAddList);
   const dispatch = useDispatch();
   const paramsObject = useParams();
-  console.log(characterSpellsList)
+
+  const proficiencyBonus = Math.ceil((character.baseInformation.level)/4) + 1;
+  const spellcastingAbility = character.baseInformation.spellcasting_ability;
+
+  const abilityScoreModifier = (abilityScore) => {
+    return Math.floor((abilityScore - 10) / 2);
+  }
+  
+  const spellcastingModifier = () => {
+    if (spellcastingAbility === 'None') {
+      return 0;
+    } else if (spellcastingAbility === 'Intelligence') {
+      return abilityScoreModifier(character.baseInformation.int_score + character.baseInformation.int_bonus);
+    } else if (spellcastingAbility === 'Wisdom') {
+      return abilityScoreModifier(character.baseInformation.wis_score + character.baseInformation.wis_bonus);
+    } else if (spellcastingAbility === 'Charisma')  {
+      return abilityScoreModifier(character.baseInformation.cha_score + character.baseInformation.cha_bonus);
+    }
+  } 
+  
+  const spellSaveDc = proficiencyBonus + spellcastingModifier() + 8;
+
+  if (spellcastingAbility === 'None') {
+    spellSaveDC = 'None';
+  }
+
+  console.log('spellcastingModifier', spellcastingModifier())
+  console.log('spellSaveDc', spellSaveDc)
 
   const [open, setOpen] = useState({
     addSpells: false,
@@ -55,7 +82,7 @@ function CharacterSheetSpells() {
   }
 
   const closeSpellInfo = () => {
-    dispatch({ type: 'CLEAR_SPELLS_INFO'});
+    dispatch({ type: 'CLEAR_SPELL_INFO'});
     setOpen({...open, spellInfo: false});
   }
 
@@ -78,6 +105,7 @@ function CharacterSheetSpells() {
         spells: spellsToAddList
       }
     });
+    dispatch({ type: 'CLEAR_SPELLS_TO_ADD' });
     setOpen({...open, addSpells: false});
   }
 
@@ -94,7 +122,8 @@ function CharacterSheetSpells() {
     <Grid container>
       <Grid item>
         <Typography>Spell Casting Ability: {character.baseInformation.spellcasting_ability}</Typography>
-        <Typography>Spell Save DC: </Typography>
+        <Typography>Spell Save DC: {spellSaveDc}</Typography>
+        <Typography>Spell Attack Modifier: {spellcastingModifier()}</Typography>
       </Grid>
       {/* Add equipment, opens dialog box that allows user to search through available equipment */}
       <IconButton onClick={() => setOpen({...open, addSpells: true})} >
@@ -104,10 +133,10 @@ function CharacterSheetSpells() {
       <Grid item>
         <h2>Cantrips:</h2>
         <List>
-          {characterSpellsList.map(spell => {
+          {characterSpellsList.map((spell, index) => {
               if (spell.spellcasting_level === 0) {
                 return(    
-                  <ListItem>
+                  <ListItem key={index}>
                     <ListItemIcon>
                       <IconButton onClick={() => spellInformation(spell.api_index)}>
                         <InfoIcon color="action" />
@@ -129,10 +158,10 @@ function CharacterSheetSpells() {
       <Grid item>
         <h2>Level 1 Spells:</h2>
         <List>
-          {characterSpellsList.map(spell => {
+          {characterSpellsList.map((spell, index) => {
               if (spell.spellcasting_level === 1) {
                 return(    
-                  <ListItem>
+                  <ListItem key={index}>
                     <ListItemIcon>
                       <IconButton onClick={() => spellInformation(spell.api_index)}>
                         <InfoIcon color="action" />
@@ -160,9 +189,9 @@ function CharacterSheetSpells() {
           <DialogContent >
             <DialogContentText>Add spells to your character sheet by pressing the plus button and then clicking save.</DialogContentText>
             <List>
-              {spellsList.map(spell => {
+              {spellsList.map((spell, index) => {
                 return (
-                  <ListItem key={spell.id}>
+                  <ListItem key={index}>
                     <ListItemIcon>
                       <IconButton onClick={() => {
                         dispatch({
