@@ -36,6 +36,7 @@ import DeleteIcon from '@material-ui/icons/Delete';
 function CharacterSheetSpells() {
   const character = useSelector(store => store.characters.characterDetails);
   const characterSpellsList = useSelector(store => store.spells.characterSpellsList);
+  const spellInfo = useSelector(store => store.characterSheetComponents.spellInformation);
   const spellsList = useSelector(store => store.characterSheetComponents.spellsList);
   const spellsToAddList = useSelector(store => store.spells.spellsToAddList);
   const dispatch = useDispatch();
@@ -91,6 +92,10 @@ function CharacterSheetSpells() {
 
   return(
     <Grid container>
+      <Grid item>
+        <Typography>Spell Casting Ability: {character.baseInformation.spellcasting_ability}</Typography>
+        <Typography>Spell Save DC: </Typography>
+      </Grid>
       {/* Add equipment, opens dialog box that allows user to search through available equipment */}
       <IconButton onClick={() => setOpen({...open, addSpells: true})} >
         <LibraryAddIcon fontSize="large" color="action" /> 
@@ -196,9 +201,34 @@ function CharacterSheetSpells() {
           onClose={closeSpellInfo}
           scroll="paper"
         >
-          <DialogTitle>Spell name goes here</DialogTitle>
+          <DialogTitle>{spellInfo.name}</DialogTitle>
           <DialogContent>
-            <DialogContentText>This is where spell Info goes</DialogContentText>
+          {spellInfo.level > 0 ? <DialogContentText>{spellInfo.school.name} {spellInfo.level} {spellInfo.ritual ? '(ritual)' : <></>}</DialogContentText> : <DialogContentText>Cantrip</DialogContentText>}
+            <DialogContentText>Casting Time: {spellInfo.casting_time}</DialogContentText>
+            <DialogContentText>Range: {spellInfo.range}</DialogContentText>
+            <DialogContentText>
+              Components: {spellInfo.components.map((component, index) => {
+                console.log('index is', index)
+                if (spellInfo.components.length - 1 === index) {
+                  return `${component}`;
+                } else {
+                  return `${component}, `;
+                }
+              })}
+            </DialogContentText>
+            {spellInfo.material ? <DialogContentText>Materials Required: {spellInfo.material}</DialogContentText> : <></> }
+            <DialogContentText>Duration: {spellInfo.concentration ? 'Concentration,' : <></>} {spellInfo.duration}</DialogContentText>
+            {spellInfo.desc.map(description => <DialogContentText>{description}</DialogContentText>)}
+            {spellInfo.higher_level.map(description => <DialogContentText>{description}</DialogContentText>)}
+            <DialogContentText>
+              Classes: {spellInfo.classes.map((className, index) => {
+                if (spellInfo.classes.length - 1 === index) {
+                  return `${className.name}`;
+                } else {
+                  return `${className.name}, `;
+                }
+              })}
+            </DialogContentText>
           </DialogContent>
         </Dialog>
 

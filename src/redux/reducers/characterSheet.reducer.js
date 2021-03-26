@@ -27,7 +27,12 @@ const equipmentInformation = (state = {
   }
 } // end equipmentInformation
 
-const spellInformation = ( state = {}, action) => {
+const spellInformation = ( state = {
+  components: [],
+  desc: [],
+  classes: [],
+  higher_level: []
+}, action) => {
   switch(action.type) {
     case 'SET_SPELL_INFORMATION':
       return action.payload;
