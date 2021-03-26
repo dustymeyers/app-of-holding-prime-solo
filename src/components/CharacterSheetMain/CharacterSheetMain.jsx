@@ -76,9 +76,8 @@ function CharacterSheetMain({ }) {
 
   return(
     <Grid container spacing={5}>
-
-      {!editMode.editBasicInfo ?
-        <Grid item>
+      <Grid item xs={4}>
+        {!editMode.editBasicInfo ?
           <Grid container direction="column" spacing={2}>
             <Grid item>
               <Typography variant="h2">Character</Typography>
@@ -116,108 +115,121 @@ function CharacterSheetMain({ }) {
               <Button variant="outlined" onClick={() => setEditMode({...editMode, editBasicInfo: true})}>Edit</Button>
             </Grid>
           </Grid>
-        </Grid>
-        :
-        <Grid item>
-          <TextField 
-            label="Character Name"
-            onChange={event => dispatch({
-              type: 'UPDATE_CHARACTER',
-              payload: {
-                baseInformation: {
-                  ...character.baseInformation,
-                  character_name: event.target.value
-                }
-              }
-            })}
-            type="text"
-            value={character.baseInformation.character_name}
-          />
+          :
+          <Grid container direction="column" spacing={2}>
+            <Grid item>
+              <TextField 
+                label="Character Name"
+                onChange={event => dispatch({
+                  type: 'UPDATE_CHARACTER',
+                  payload: {
+                    baseInformation: {
+                      ...character.baseInformation,
+                      character_name: event.target.value
+                    }
+                  }
+                })}
+                type="text"
+                value={character.baseInformation.character_name}
+              />
+            </Grid>
 
-          <TextField 
-            label="Level"
-            min="1"
-            max="20"
-            onChange={event => dispatch({
-              type: 'UPDATE_CHARACTER',
-              payload: {
-                baseInformation: {
-                  ...character.baseInformation,
-                  level: event.target.value
-                }
-              }
-            })}
-            type="number"
-            value={character.baseInformation.level}
-          />
+            <Grid item>
+              <TextField 
+                label="Level"
+                min="1"
+                max="20"
+                onChange={event => dispatch({
+                  type: 'UPDATE_CHARACTER',
+                  payload: {
+                    baseInformation: {
+                      ...character.baseInformation,
+                      level: event.target.value
+                    }
+                  }
+                })}
+                type="number"
+                value={character.baseInformation.level}
+              />
+            </Grid>
 
-          <TextField 
-            label="Gender"
-            onChange={event => dispatch({
-              type: 'UPDATE_CHARACTER',
-              payload: {
-                baseInformation: {
-                  ...character.baseInformation,
-                  gender: event.target.value
-                }
-              }
-            })}
-            type="text"
-            value={character.baseInformation.gender}
-          />
+            <Grid item>
+              <TextField 
+                label="Gender"
+                onChange={event => dispatch({
+                  type: 'UPDATE_CHARACTER',
+                  payload: {
+                    baseInformation: {
+                      ...character.baseInformation,
+                      gender: event.target.value
+                    }
+                  }
+                })}
+                type="text"
+                value={character.baseInformation.gender}
+              />
+            </Grid>
 
-          <TextField 
-            label="Alignment"
-            onChange={event => dispatch({
-              type: 'UPDATE_CHARACTER',
-              payload: {
-                baseInformation: {
-                  ...character.baseInformation,
-                  alignment: event.target.value
-                }
-              }
-            })}
-            type="text"
-            value={character.baseInformation.alignment}
-          />
+            <Grid item>
+              <TextField 
+                label="Alignment"
+                onChange={event => dispatch({
+                  type: 'UPDATE_CHARACTER',
+                  payload: {
+                    baseInformation: {
+                      ...character.baseInformation,
+                      alignment: event.target.value
+                    }
+                  }
+                })}
+                type="text"
+                value={character.baseInformation.alignment}
+              />
+            </Grid>
 
-          <TextField
-            label="Experience Points"
-            onChange={event => dispatch({
-              type: 'UPDATE_CHARACTER',
-              payload: {
-                baseInformation: {
-                  ...character.baseInformation,
-                  experience_points: event.target.value
-                }
-              }
-            })}
-            type="number"
-            value={character.baseInformation.experience_points}
-          />
+            <Grid item>
+              <TextField
+                label="Experience Points"
+                onChange={event => dispatch({
+                  type: 'UPDATE_CHARACTER',
+                  payload: {
+                    baseInformation: {
+                      ...character.baseInformation,
+                      experience_points: event.target.value
+                    }
+                  }
+                })}
+                type="number"
+                value={character.baseInformation.experience_points}
+              />
+            </Grid>
 
-          <ButtonGroup variant="outlined">
-            <Button 
-              color="secondary" 
-              onClick={() => {
-                cancelEdit();
-                setEditMode({...editMode, editBasicInfo: false});
-              }}
-            >
-              Cancel
-            </Button>
-            <Button 
-              color="primary" 
-              onClick={() => {
-              saveEdit();
-              setEditMode({...editMode, editBasicInfo: false});
-              }}
-            >
-              Save
-            </Button>
-          </ButtonGroup>
-        </Grid>
-      }
+            <Grid item>
+              <ButtonGroup variant="outlined">
+                <Button 
+                  color="secondary" 
+                  onClick={() => {
+                    cancelEdit();
+                    setEditMode({...editMode, editBasicInfo: false});
+                  }}
+                >
+                  Cancel
+                </Button>
+                <Button 
+                  color="primary" 
+                  onClick={() => {
+                  saveEdit();
+                  setEditMode({...editMode, editBasicInfo: false});
+                  }}
+                >
+                  Save
+                </Button>
+              </ButtonGroup>
+            </Grid>
+          </Grid>
+        }
+      </Grid>
+
       {!editMode.editAbilityScores ?
         <Grid item>
           <h2>Ability Scores:</h2>
