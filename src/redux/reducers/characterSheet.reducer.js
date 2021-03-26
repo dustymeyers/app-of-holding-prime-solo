@@ -27,6 +27,22 @@ const equipmentInformation = (state = {
   }
 } // end equipmentInformation
 
+const spellInformation = ( state = {
+  components: [],
+  desc: [],
+  classes: [],
+  higher_level: []
+}, action) => {
+  switch(action.type) {
+    case 'SET_SPELL_INFORMATION':
+      return action.payload;
+    case 'CLEAR_SPELL_INFO':
+      return state;
+    default:
+      return state;
+  }
+}
+
 const equipmentList = (state = [], action) => {
   switch (action.type) {
     case 'SET_EQUIPMENT_LIST':
@@ -45,8 +61,20 @@ const skillsAndSavingThrowsList = (state = { skillsList: [], savingThrowsList: [
   }
 } // end skillsAndSavingThrowsList
 
+// full spellsList from servers
+const spellsList = (state = [], action) => {
+  switch (action.type) {
+    case 'SET_SPELLS_LIST':
+      return action.payload
+    default:
+      return state;
+  }
+}
+
 export default combineReducers({
   skillsAndSavingThrowsList,
   equipmentList,
-  equipmentInformation
+  equipmentInformation,
+  spellInformation,
+  spellsList
 });

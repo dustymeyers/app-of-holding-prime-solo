@@ -6,6 +6,32 @@ const userStrategy = require('../strategies/user.strategy');
 const pool = require('../modules/pool');
 const router = express.Router();
 
+function insertSerializer(array) {	
+  let pgTemplateNum = 1;
+  let serialInsert = '';
+
+  for (let i = 0; i < array.length; i++) {
+    if (array.length - 1 === i ) {
+      pgTemplateNum ++;
+
+      serialInsert += `($1 , $${pgTemplateNum});`;
+    } else {
+      pgTemplateNum ++;
+
+      serialInsert += `($1 , $${pgTemplateNum}), `;
+    }    
+  } // end for
+  return serialInsert;
+} // end insertSerializer
+
+function pgSerializer(array, characterId) {
+  let pgInsert = [characterId];
+  for (let i = 0; i < array.length; i++) {
+    pgInsert.push(array[i].id);
+  }
+  return pgInsert;
+} 
+
 /**
  * GET 
  * Returns full list of user specific characters 
@@ -297,32 +323,6 @@ router.put('/edit/:id', rejectUnauthenticated, (req, res) => {
 router.post('/equipment/:characterId', rejectUnauthenticated, (req, res) => {
   console.log(`POST /api/characterCollection/equipment/${req.params.characterId} adding:`, req.body);
   
-  function insertSerializer(array) {	
-    let pgTemplateNum = 1;
-    let serialInsert = '';
-  
-    for (let i = 0; i < array.length; i++) {
-      if (array.length - 1 === i ) {
-        pgTemplateNum ++;
-
-        serialInsert += `($1 , $${pgTemplateNum});`;
-      } else {
-        pgTemplateNum ++;
-
-        serialInsert += `($1 , $${pgTemplateNum}), `;
-      }    
-    } // end for
-    return serialInsert;
-  } // end insertSerializer
-
-  function pgSerializer(array, characterId) {
-    let pgInsert = [characterId];
-    for (let i = 0; i < array.length; i++) {
-      pgInsert.push(array[i].id);
-    }
-    return pgInsert;
-  } 
-
   const pgEquipmentArray = pgSerializer(req.body, req.params.characterId);
 
   const insertEquipmentQuery = `
@@ -350,6 +350,7 @@ router.post('/equipment/:characterId', rejectUnauthenticated, (req, res) => {
  */
 router.get('/equipment/:characterId', rejectUnauthenticated, (req, res) => {
   console.log(`GET /api/characterCollection/equipment/${req.params.characterId} for user`, req.user.id);
+  
   const characterEquipmentQuery = `
     SELECT "equipment".*, "characters_equipment".qty FROM "equipment"
     JOIN "characters_equipment"
@@ -369,8 +370,89 @@ router.get('/equipment/:characterId', rejectUnauthenticated, (req, res) => {
 
       res.sendStatus(500);
     })
-})
+});
 
+/**
+ * POST
+ * Adds spells to character sheet
+ */
+router.post('/spells/:characterId', rejectUnauthenticated, (req,res) => {
+  console.log(`POST /api/characterCollection/spells/${req.params.characterId} adding:`, req.body);
+
+  const pgSpellsArray = pgSerializer(req.body, req.params.characterId);
+
+  const insertSpellsQuery = `
+    INSERT INTO "characters_spells" ("character_id", "spell_id")
+    VALUES ${insertSerializer(req.body)}
+  `;
+
+  pool
+    .query(insertSpellsQuery, pgSpellsArray)
+    .then(dbRes => {
+      console.log('Added spells successfully!')
+      
+      res.sendStatus(200);
+    })
+    .catch(error => {
+      console.log('Error adding spells to character sheet', error);
+
+      res.sendStatus(500);
+    })
+}); 
+
+/**
+ * GET
+ * Get all character specific spells
+ */
+router.get('/spells/:characterId', rejectUnauthenticated, (req, res) => {
+  console.log(`GET /api/characterCollection/spells/${req.params.characterId} for user`, req.user.id);
+
+  const characterSpellsQuery = `
+    SELECT "spells".* FROM "spells"
+    JOIN "characters_spells"
+      ON "spells".id = "characters_spells".spell_id
+    JOIN "characters"
+      ON "characters_spells".character_id = "characters".id
+    WHERE "characters".id = $1 AND "characters".user_id = $2;
+  `;
+
+  pool
+    .query(characterSpellsQuery, [req.params.characterId, req.user.id])
+    .then(characterSpellsResponse => {
+      res.send(characterSpellsResponse.rows);
+    })
+    .catch(error => {
+      console.log('Error getting character spells', error);
+
+      res.sendStatus(500);
+    });
+});
+
+/**
+ * DELETE 
+ * Remove equipment from character sheet
+ */
+router.delete('/spell/remove/:id', rejectUnauthenticated, (req, res) => {
+  console.log('in delete equipment', req.body);
+  const deleteEquipmentQuery = `
+    DELETE FROM "characters_spells"
+    WHERE "character_id" = $1 AND "spell_id" = $2;	
+  `;
+
+  pool
+    .query(deleteEquipmentQuery, [req.query.characterId, req.params.id])
+    .then(dbRes => res.sendStatus(200))
+    .catch(error => {
+      console.log('Error deleting equipment', error);
+
+      res.sendStatus(500);
+    })
+});
+
+/**
+ * PUT
+ * Update equipment qty
+ */
 router.put('/equipment/updateQty', rejectUnauthenticated, (req, res) =>{
   const updateQtyQuery = `
     UPDATE "characters_equipment" SET "qty" = $1
@@ -392,6 +474,10 @@ router.put('/equipment/updateQty', rejectUnauthenticated, (req, res) =>{
 
 })
 
+/**
+ * DELETE 
+ * Remove equipment from character sheet
+ */
 router.delete('/equipment/remove/:id', rejectUnauthenticated, (req, res) => {
   console.log('in delete equipment', req.body);
   const deleteEquipmentQuery = `
@@ -407,5 +493,5 @@ router.delete('/equipment/remove/:id', rejectUnauthenticated, (req, res) => {
 
       res.sendStatus(500);
     })
-})
+});
 module.exports = router;

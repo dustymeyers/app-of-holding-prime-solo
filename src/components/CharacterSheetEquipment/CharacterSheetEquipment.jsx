@@ -46,7 +46,8 @@ function CharacterSheetEquipment() {
   const [itemId, setItemId] = useState(0);
   const [editMode, setEditMode] = useState({
     editCoinPurse: false
-  })
+  });
+  
   const [open, setOpen] = useState({
     addItem: false,
     itemInfo: false,
@@ -115,107 +116,148 @@ function CharacterSheetEquipment() {
 
 
   return(
-    <Grid container>
+    <Grid container spacing={3}>
       {/* Currency tracker */}
       {!editMode.editCoinPurse ? 
-        <Grid item>
-          <Paper>
-            <Typography>CP: {totalCopper}</Typography>
-            <Typography>SP: {totalSilver}</Typography>
-            <Typography>EP: {totalElectrum}</Typography>
-            <Typography>GP: {totalGold}</Typography>
-            <Typography>PP: {totalPlatinum}</Typography>
-            <IconButton>
-              <EditIcon onClick={() => setEditMode({...editMode, editCoinPurse: true})} />
-            </IconButton>
-          </Paper>
+        <Grid item xs={12}>
+          <Grid container direction="row" spacing={5}>     
+            <Grid item>
+              <Typography>CP: {totalCopper}</Typography>
+            </Grid>
+
+            <Grid item>
+              <Typography>SP: {totalSilver}</Typography>
+            </Grid>
+
+            <Grid item>
+              <Typography>EP: {totalElectrum}</Typography>
+            </Grid>
+
+            <Grid item>  
+              <Typography>GP: {totalGold}</Typography>
+            </Grid>
+
+            <Grid item>  
+              <Typography>PP: {totalPlatinum}</Typography>
+            </Grid>
+            
+            <Grid item>
+              <IconButton>
+                <EditIcon onClick={() => setEditMode({...editMode, editCoinPurse: true})} />
+              </IconButton>
+            </Grid>
+          </Grid>
         </Grid> :
-        <Grid item>
-          <TextField 
-            label="Copper Pieces"
-            onChange={event => dispatch({
-              type: 'UPDATE_CHARACTER',
-              payload: {
-                baseInformation: {
-                  ...character.baseInformation,
-                  cp_total: event.target.value
-                }
-              }
-            })}
-            value={totalCopper} 
-          />
+        <Grid item xs={12}>
+          <Grid container>
+            <Grid item>
+              <TextField 
+                label="Copper Pieces"
+                onChange={event => dispatch({
+                  type: 'UPDATE_CHARACTER',
+                  payload: {
+                    baseInformation: {
+                      ...character.baseInformation,
+                      cp_total: event.target.value
+                    }
+                  }
+                })}
+                value={totalCopper} 
+              />
+            </Grid>
 
-          <TextField 
-            label="Silver Pieces" 
-            onChange={event => dispatch({
-              type: 'UPDATE_CHARACTER',
-              payload: {
-                baseInformation: {
-                  ...character.baseInformation,
-                  sp_total: event.target.value
-                }
-              }
-            })}
-            value={totalSilver} 
-          />
+            <Grid item>
+              <TextField 
+                label="Silver Pieces" 
+                onChange={event => dispatch({
+                  type: 'UPDATE_CHARACTER',
+                  payload: {
+                    baseInformation: {
+                      ...character.baseInformation,
+                      sp_total: event.target.value
+                    }
+                  }
+                })}
+                value={totalSilver} 
+              />
+            </Grid>
 
-          <TextField 
-            label="Electrum Pieces" 
-            onChange={event => dispatch({
-              type: 'UPDATE_CHARACTER',
-              payload: {
-                baseInformation: {
-                  ...character.baseInformation,
-                  ep_total: event.target.value
-                }
-              }
-            })}
-            value={totalElectrum} 
-          />
+            <Grid item> 
+              <TextField 
+                label="Electrum Pieces" 
+                onChange={event => dispatch({
+                  type: 'UPDATE_CHARACTER',
+                  payload: {
+                    baseInformation: {
+                      ...character.baseInformation,
+                      ep_total: event.target.value
+                    }
+                  }
+                })}
+                value={totalElectrum} 
+              />
+            </Grid>
 
-          <TextField 
-            label="Gold Pieces" 
-            onChange={event => dispatch({
-              type: 'UPDATE_CHARACTER',
-              payload: {
-                baseInformation: {
-                  ...character.baseInformation,
-                  gp_total: event.target.value
-                }
-              }
-            })}
-            value={totalGold} 
-          />
+            <Grid item>
+              <TextField 
+                label="Gold Pieces" 
+                onChange={event => dispatch({
+                  type: 'UPDATE_CHARACTER',
+                  payload: {
+                    baseInformation: {
+                      ...character.baseInformation,
+                      gp_total: event.target.value
+                    }
+                  }
+                })}
+                value={totalGold} 
+              />
+            </Grid>
 
-          <TextField 
-            label="Platinum Pieces" 
-            onChange={event => dispatch({
-              type: 'UPDATE_CHARACTER',
-              payload: {
-                baseInformation: {
-                  ...character.baseInformation,
-                  pp_total: event.target.value
-                }
-              }
-            })}
-            value={totalPlatinum} 
-          />
+            <Grid item>
+              <TextField 
+                label="Platinum Pieces" 
+                onChange={event => dispatch({
+                  type: 'UPDATE_CHARACTER',
+                  payload: {
+                    baseInformation: {
+                      ...character.baseInformation,
+                      pp_total: event.target.value
+                    }
+                  }
+                })}
+                value={totalPlatinum} 
+              />
+            </Grid>
 
-          <ButtonGroup>
-            <Button onClick={() => setEditMode({...editMode, editCoinPurse: false})}>Cancel</Button>
-            <Button
-              color="secondary"
-              onClick={() => {
-                dispatch({
-                  type: 'SAVE_CHARACTER_UPDATES',
-                  payload: character
-                });
-                setEditMode({...editMode, editCoinPurse: false})
-              }}
-            >Save</Button>
-          </ButtonGroup>
+            <Grid item>
+              <ButtonGroup>
+                <Button onClick={() => setEditMode({...editMode, editCoinPurse: false})}>
+                  Cancel
+                </Button>
+
+                <Button
+                  color="secondary"
+                  onClick={() => {
+                    dispatch({
+                      type: 'SAVE_CHARACTER_UPDATES',
+                      payload: character
+                    });
+                    setEditMode({...editMode, editCoinPurse: false})
+                  }}
+                >
+                  Save
+                </Button>
+              </ButtonGroup>
+            </Grid>
+          </Grid>
         </Grid>
       }
+
+      {/* Add equipment, opens dialog box that allows user to search through available equipment */}
+      <IconButton onClick={() => setOpen({...open, addItem: true})} >
+        <LibraryAddIcon fontSize="large" color="action" /> 
+      </IconButton>
 
       {/* Character's Equipment library */}
       <Grid item>
@@ -266,100 +308,97 @@ function CharacterSheetEquipment() {
             </TableBody>
           </Table>
         </TableContainer>
-        
-        {/* Dialog for item qty update */}
-        <Dialog
-          open={open.editQty}
-          onClose={() => setOpen({...open, editQty: false})}
-        >
-          <DialogContent>
-            <TextField
-              type="number"
-              value={qtyToEdit}
-              onChange={(event) => setQtyToEdit(event.target.value)}
-            />
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={saveQty}>Save</Button>
-          </DialogActions>
-        </Dialog>
-        
-        {/* Dialog for item information, triggers when info button is clicked */}
-        <Dialog
-          open={open.itemInfo}
-          onClose={closeItemInfo}
-          scroll="paper"
-        >
-          <DialogTitle>{equipmentInfo.name}</DialogTitle>
-          <DialogContent>
-            {equipmentInfo.armor_category ? <DialogContentText>Armor Category: {equipmentInfo.armor_category}</DialogContentText> : <></>}
-            {equipmentInfo.armor_class ? <DialogContentText>Armor Class: {equipmentInfo.armor_class.base}</DialogContentText> : <></>}
-            {equipmentInfo.weapon_category ? <DialogContentText>Weapon Category: {equipmentInfo.weapon_category}</DialogContentText> : <></>}
-            {equipmentInfo.weapon_range ? <DialogContentText>Range: {equipmentInfo.weapon_range}</DialogContentText> : <></>}
-            {equipmentInfo.damage ? <DialogContentText>Damage: {equipmentInfo.damage.damage_dice} {equipmentInfo.damage.damage_type.name}</DialogContentText> : <></>}
-            {equipmentInfo.desc ? 
-              <DialogContentText>
-                {equipmentInfo.desc.map(description => description)}
-              </DialogContentText> :
-              <></>
-            }
-            {equipmentInfo.special ? <DialogContentText>{equipmentInfo.special.map(description => description)}</DialogContentText> : <></>}
-            <DialogContentText>Cost: {equipmentInfo.cost.quantity} {equipmentInfo.cost.unit} </DialogContentText>
-            <DialogContentText>Weight: {equipmentInfo.weight} lbs</DialogContentText>
-          </DialogContent>
-        </Dialog>
-
-        {/* Add equipment, opens dialog box that allows user to search through available equipment */}
-        <IconButton onClick={() => setOpen({...open, addItem: true})} >
-          <LibraryAddIcon fontSize="large" color="action" /> 
-        </IconButton>
-
-        {/* Dialog for full equipment library, allows users to add equipment to their character sheet */}
-        <Dialog
-          open={open.addItem}
-          onClose={closeAddItem}
-          scroll="paper"
-        >
-            <DialogTitle>Add items:</DialogTitle>
-          <DialogContent >
-            <DialogContentText>Add items to your character sheet by pressing the plus button and then clicking save.</DialogContentText>
-            <List>
-              {equipmentList.map(equipment => {
-                return (
-                  <ListItem key={equipment.id}>
-                    <ListItemIcon>
-                      <IconButton onClick={() => {
-                        dispatch({
-                          type: 'SET_ITEMS_TO_ADD',
-                          payload: { id: equipment.id }
-                        })
-                      }}>
-                        <AddIcon color="action" />
-                      </IconButton>
-                    </ListItemIcon>
-                    
-                    <ListItemText>
-                      {equipment.equipment_name}
-                    </ListItemText>
-
-                    <ListItemIcon>
-                      <IconButton onClick={() => itemInformation(equipment.api_index)}>
-                        <InfoIcon color="action" />
-                      </IconButton>
-                    </ListItemIcon>
-                  </ListItem>
-                );
-              })}
-            </List>
-          </DialogContent>
-
-          <DialogActions>
-            <Button color="primary" onClick={addItems}>Save Items</Button>
-            <Button color="secondary" onClick={closeAddItem}>Cancel</Button>
-          </DialogActions>
-        </Dialog>
-
       </Grid>
+
+      {/* Dialog for item qty update */}
+      <Dialog
+        open={open.editQty}
+        onClose={() => setOpen({...open, editQty: false})}
+      >
+        <DialogContent>
+          <TextField
+            type="number"
+            value={qtyToEdit}
+            onChange={(event) => setQtyToEdit(event.target.value)}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={saveQty}>Save</Button>
+        </DialogActions>
+      </Dialog>
+      
+      {/* Dialog for item information, triggers when info button is clicked */}
+      <Dialog
+        open={open.itemInfo}
+        onClose={closeItemInfo}
+        scroll="paper"
+      >
+        <DialogTitle>{equipmentInfo.name}</DialogTitle>
+        <DialogContent>
+          {equipmentInfo.armor_category ? <DialogContentText>Armor Category: {equipmentInfo.armor_category}</DialogContentText> : <></>}
+          {equipmentInfo.armor_class ? <DialogContentText>Armor Class: {equipmentInfo.armor_class.base}</DialogContentText> : <></>}
+          {equipmentInfo.weapon_category ? <DialogContentText>Weapon Category: {equipmentInfo.weapon_category}</DialogContentText> : <></>}
+          {equipmentInfo.weapon_range ? <DialogContentText>Range: {equipmentInfo.weapon_range}</DialogContentText> : <></>}
+          {equipmentInfo.damage ? <DialogContentText>Damage: {equipmentInfo.damage.damage_dice} {equipmentInfo.damage.damage_type.name}</DialogContentText> : <></>}
+          {equipmentInfo.desc ? 
+            <DialogContentText>
+              {equipmentInfo.desc.map(description => description)}
+            </DialogContentText> :
+            <></>
+          }
+          {equipmentInfo.special ? <DialogContentText>{equipmentInfo.special.map(description => description)}</DialogContentText> : <></>}
+          <DialogContentText>Cost: {equipmentInfo.cost.quantity} {equipmentInfo.cost.unit} </DialogContentText>
+          <DialogContentText>Weight: {equipmentInfo.weight} lbs</DialogContentText>
+        </DialogContent>
+      </Dialog>
+
+      
+
+      {/* Dialog for full equipment library, allows users to add equipment to their character sheet */}
+      <Dialog
+        open={open.addItem}
+        onClose={closeAddItem}
+        scroll="paper"
+      >
+        <DialogTitle>Add items:</DialogTitle>
+        <DialogContent >
+          <DialogContentText>Add items to your character sheet by pressing the plus button and then clicking save.</DialogContentText>
+          <List>
+            {equipmentList.map(equipment => {
+              return (
+                <ListItem key={equipment.id}>
+                  <ListItemIcon>
+                    <IconButton onClick={() => {
+                      dispatch({
+                        type: 'SET_ITEMS_TO_ADD',
+                        payload: { id: equipment.id }
+                      })
+                    }}>
+                      <AddIcon color="action" />
+                    </IconButton>
+                  </ListItemIcon>
+                  
+                  <ListItemText>
+                    {equipment.equipment_name}
+                  </ListItemText>
+
+                  <ListItemIcon>
+                    <IconButton onClick={() => itemInformation(equipment.api_index)}>
+                      <InfoIcon color="action" />
+                    </IconButton>
+                  </ListItemIcon>
+                </ListItem>
+              );
+            })}
+          </List>
+        </DialogContent>
+
+        <DialogActions>
+          <Button color="primary" onClick={addItems}>Save Items</Button>
+          <Button color="secondary" onClick={closeAddItem}>Cancel</Button>
+        </DialogActions>
+      </Dialog>
+
     </Grid>
   );
 }// end CharacterSheetEquipment

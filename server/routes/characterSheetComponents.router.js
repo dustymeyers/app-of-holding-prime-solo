@@ -58,6 +58,26 @@ router.get('/equipment', rejectUnauthenticated, (req, res) => {
     });
 }); 
 
+/**
+ * GET all spells for add spells component.
+ */
+router.get('/spells', rejectUnauthenticated, (req, res) => {
+  const allSpellsQuery = 'SELECT * FROM "spells" ORDER BY "spell_name";'
+
+  pool
+    .query(allSpellsQuery)
+    .then(spellsListResponse => {
+      res.send(spellsListResponse.rows);
+    }) 
+    .catch(error => {
+      console.log('Error getting all spells list');
+
+      res.sendStatus(500);
+    });
+});
+
+
+// third party api GET
 router.get('/equipment/information', rejectUnauthenticated, (req, res) => {
   const equipmentSearch = req.query.api_index;
   console.log('searching api for:', equipmentSearch)
@@ -71,6 +91,24 @@ router.get('/equipment/information', rejectUnauthenticated, (req, res) => {
     })
     .catch(error => {
       console.log(`Error getting information about ${equipmentSearch} from www.dnd5eapi.com`, error);
+
+      res.sendStatus(500);
+    })
+});
+
+router.get('/spell/information', rejectUnauthenticated, (req, res) => {
+  const spellSearch = req.query.api_index;
+  console.log('searching api for:', spellSearch);
+
+  axios
+    .get(`https://www.dnd5eapi.co/api/spells/${spellSearch}`)
+    .then(apiResponse => {
+      console.log('apiResponse', apiResponse.data);
+
+      res.send(apiResponse.data);
+    })
+    .catch(error => {
+      console.log(`Error getting information about ${spellSearch} from www.dnd5eapi.com`, error);
 
       res.sendStatus(500);
     })

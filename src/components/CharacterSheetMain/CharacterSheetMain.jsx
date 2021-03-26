@@ -75,19 +75,47 @@ function CharacterSheetMain({ }) {
   console.log(editMode)
 
   return(
-    <Grid container>
+    <Grid container spacing={5}>
 
       {!editMode.editBasicInfo ?
         <Grid item>
-          <h2>Character</h2>
-          <p>Name: {character.baseInformation.character_name}</p>
-          <p>Class and Level: Level {character.baseInformation.level} {character.baseInformation.class_name}</p>
-          <p>Background: {character.baseInformation.background}</p>
-          <p>Race: {character.baseInformation.race_name}</p>
-          <p>Gender: {character.baseInformation.gender}</p>
-          <p>Alignment: {character.baseInformation.alignment}</p>
-          <p>Experience Points: {character.baseInformation.experience_points}</p>
-          <Button variant="outlined" onClick={() => setEditMode({...editMode, editBasicInfo: true})}>Edit</Button>
+          <Grid container direction="column" spacing={2}>
+            <Grid item>
+              <Typography variant="h2">Character</Typography>
+            </Grid>
+
+            <Grid item>
+              <Typography variant="body">Name: {character.baseInformation.character_name}</Typography>
+            </Grid>
+
+            <Grid item>
+              <Typography variant="body">Class and Level: Level {character.baseInformation.level} {character.baseInformation.class_name}</Typography>
+            </Grid>
+
+            <Grid item>
+              <Typography variant="body">Background: {character.baseInformation.background}</Typography>
+            </Grid>
+
+            <Grid item>
+              <Typography variant="body">Race: {character.baseInformation.race_name}</Typography>
+            </Grid>
+
+            <Grid item>
+              <Typography variant="body">Gender: {character.baseInformation.gender}</Typography>
+            </Grid>
+
+            <Grid item>
+              <Typography variant="body">Alignment: {character.baseInformation.alignment}</Typography>
+            </Grid>
+
+            <Grid item>
+              <Typography variant="body">Experience Points: {character.baseInformation.experience_points}</Typography>
+            </Grid>
+
+            <Grid item>
+              <Button variant="outlined" onClick={() => setEditMode({...editMode, editBasicInfo: true})}>Edit</Button>
+            </Grid>
+          </Grid>
         </Grid>
         :
         <Grid item>
