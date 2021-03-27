@@ -119,7 +119,7 @@ function CharacterSheetSpells() {
   }
 
   return(
-    <Grid container>
+    <Grid container direction="column">
       <Grid item xs={10} >
         <Grid container direction="row" spacing={2}>
           <Grid item>
@@ -260,7 +260,9 @@ function CharacterSheetSpells() {
             </DialogContentText>
             {spellInfo.material ? <DialogContentText>Materials Required: {spellInfo.material}</DialogContentText> : <></> }
             <DialogContentText>Duration: {spellInfo.concentration ? 'Concentration,' : <></>} {spellInfo.duration}</DialogContentText>
-            {spellInfo.desc.map(description => <DialogContentText>{description}</DialogContentText>)}
+            {spellInfo.desc.map(description => {
+              <DialogContentText>{description}</DialogContentText>
+            })}
             {spellInfo.higher_level.map(description => <DialogContentText>{description}</DialogContentText>)}
             <DialogContentText>
               Classes: {spellInfo.classes.map((className, index) => {

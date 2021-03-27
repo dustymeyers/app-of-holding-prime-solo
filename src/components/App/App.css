@@ -5,6 +5,7 @@ body,
 }
 
 body {
+  background-color: rgb(122, 107, 107);
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   margin: 0px;
 }

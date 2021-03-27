@@ -4,9 +4,15 @@ import { useEffect } from 'react';
 
 // Material-UI Components
 import {
+  Box,
   ButtonGroup,
   Button,
   Grid,
+  List,
+  ListItem,
+  ListItemText,
+  Paper,
+  Typography
 } from '@material-ui/core';
 
 function CharacterCreatorReview() {
@@ -68,114 +74,243 @@ function CharacterCreatorReview() {
   }
 
   return(
-    <Grid container spacing={3}>
-          <Grid item>
-            <h2>Character Review</h2>
+    <Box component={Paper} p={5}>
+      <Grid container spacing={3}>
+
+        <Grid item xs={12} align="justify">
+          <Typography variant="h2" align="center">Character Review</Typography>
+          <Typography variant="body1" paragraph>Here is your randomly generated character! Feel free to review the information before committing it to save. If you are unhappy with the class or race that was selected for you, feel free to click the cancel button to start the generator over. You can also edit your ability scores from the character sheet after the character has been created.</Typography>
+        </Grid>
+
+        {/* Displays character's randomly generated ability scores */}
+        <Grid item xs={4}>
+          <Grid container spacing={3} >
+            <Grid item xs={12}>
+              <Typography variant="h4">Ability Scores:</Typography>
+            </Grid>
+
+            <Grid item xs={6}>
+              <Typography variant="body">
+                <strong>Strength</strong>: {characterStrength}
+              </Typography>
+            </Grid>
+
+            <Grid item xs={6}>
+              <Typography variant="body">
+                <strong>Dexterity</strong>: {characterDexterity}
+              </Typography>
+            </Grid>
+
+            <Grid item xs={6}>
+              <Typography variant="body">
+                <strong>Constitution</strong>: {characterConstitution}
+              </Typography>
+            </Grid>
+
+            <Grid item xs={6}>
+              <Typography variant="body">
+                <strong>Intelligence</strong>: {characterIntelligence}
+              </Typography>
+            </Grid>
+
+            <Grid item xs={6}>
+              <Typography variant="body">
+                <strong>Wisdom</strong>: {characterWisdom
+              }</Typography>
+            </Grid>
+
+            <Grid item xs={6}>
+              <Typography variant="body">
+                <strong>Charisma</strong>: {characterCharisma}
+              </Typography>
+            </Grid>
           </Grid>
+        </Grid>
 
-          {/* Displays character's randomly generated ability scores */}
-          <Grid item>
-            <h3>Ability Scores:</h3>
-            <p>Strength: {characterStrength}</p>
-            <p>Dexterity: {characterDexterity}</p>
-            <p>Constitution: {characterConstitution}</p>
-            <p>Intelligence: {characterIntelligence}</p>
-            <p>Wisdom: {characterWisdom}</p>
-            <p>Charisma: {characterCharisma}</p>
+        {/* Displays user chosen name/gender */}
+        <Grid item xs={4}>
+          <Grid container direction="column" spacing={3}>
+            <Grid item>
+              <Typography variant="h4">Character Name: {characterName}</Typography>
+            </Grid>
+
+            <Grid item>
+              <Typography variant="h5">Gender: {characterGender}</Typography>
+            </Grid>
+
+            <Grid item>
+              <Typography variant="h5">Level 1</Typography>
+            </Grid>
           </Grid>
+        </Grid>
 
-          {/* Displays user chosen name/gender */}
-          <Grid item>
-            <h3>Character Name: {characterName}</h3>
-            <p>Gender: {characterGender}</p>
-            <p>Level 1</p>
+        {/* Displays character's calculated base armor class and level 1 hit points */}
+        <Grid item xs={4}>
+          <Grid container direction="column" spacing={3}>
+            <Grid item>
+              <Typography variant="h4">Base Health & AC:</Typography>
+            </Grid>
+
+            <Grid item>
+              <Typography variant="h5">
+                <strong>Starting Health</strong>: {maxHitPoints}
+              </Typography>
+            </Grid>
+
+            <Grid item>
+              <Typography variant="h5">
+                <strong>Base Armor Class</strong> (unarmored): {baseArmorClass}
+              </Typography>
+            </Grid>
           </Grid>
+        </Grid>
 
-          {/* Displays character's calculated base armor class and level 1 hit points */}
-          <Grid item>
-            <h3>Base Health and AC</h3>
-            <p>Starting Health: {maxHitPoints}</p>
-            <p>Base Armor Class (unarmored): {baseArmorClass}</p>
-          </Grid>
+        {/* Skill proficiencies from race and class displayed here */}
+        <Grid item xs={4}>
+          <Grid container direction="column" spacing={3}>
+            <Grid item>
+              <Typography variant="h4">Skill Proficiencies</Typography>
+              <Typography variant="body1" paragraph>These skills have been chosen for you based on your class, background, and race.</Typography>
+            </Grid>
 
-          {/* TO DO - BACKGROUND PERSONALITY STUFF */}
-          <Grid item>
-            <h3>Acolyte</h3>
-            <h4>personality traits, ideals, bonds, flaws, starting equipment, background</h4>
-          </Grid>
-
-          {/* Skill proficiencies from race and class displayed here */}
-          <Grid item>
-            <h3>Skill Proficiencies</h3>
-            <ul>
-              {randomCharacter.classSkills.map(skill => {
-                return(
-                  <li key={skill.id}>{skill.skill_name}</li>
-                )
-              })}
-              {randomCharacter.raceSkills.map(skill => {
-                return(
-                  <li key={skill.id}>{skill.skill_name}</li>
-                )
-              })}
-            </ul>
-          </Grid>
-
-          {/* Displays randomly generated class information for user */}
-          <Grid item>
-            <h3>Class: {randomCharacter.classInfo.class_name}</h3>
-            <ul>
-              {randomCharacter.classInfo.class_features.map((feature, index) => {
-                return(
-                  <li key={index}><strong>{feature[0]}: </strong>{feature[1]}</li>
-                );
-              })}
-            </ul>
-            {randomCharacter.classInfo.spellcasting_ability !== 'None' ? 
-              <h4>Spellcasting Ability: {randomCharacter.classInfo.spellcasting_ability}</h4> :
-              <h4>This class doesn't cast spells.</h4>
-            }
-            <p>{JSON.stringify(randomCharacter.classInfo)}</p>            
-          </Grid>
-
-          {/* Displays randomly generated race information and bonuses attributed to said race */}
-          <Grid item>
-            <h3>Race: {randomCharacter.raceInfo.race_name}</h3>
-            
-            <h4>Ability Score Bonuses: </h4>
-
-            <ul>
-              <li><strong>Strength: </strong>+ {randomCharacter.raceInfo.str_bonus}</li>
-              <li><strong>Dexterity: </strong>+ {randomCharacter.raceInfo.dex_bonus}</li>
-              <li><strong>Constitution: </strong>+ {randomCharacter.raceInfo.con_bonus}</li>
-              <li><strong>Intelligence: </strong>+ {randomCharacter.raceInfo.int_bonus}</li>
-              <li><strong>Wisdom: </strong>+ {randomCharacter.raceInfo.wis_bonus}</li>
-              <li><strong>Charisma: </strong>+ {randomCharacter.raceInfo.cha_bonus}</li>
-            </ul>
-
-            <h4>Speed: {randomCharacter.raceInfo.speed}</h4>
-
-            <ul>
-              {randomCharacter.raceInfo.race_name === 'Human' ? 
-                <li>Humans don't have any other features</li> :
-                randomCharacter.raceFeatures.map((feature, index) => {
+            <Grid item>
+              <List>
+                {randomCharacter.classSkills.map(skill => {
                   return(
-                    <li key={index}><strong>{feature[0]}: </strong>{feature[1]}</li>
-                  );
-              })}
-            </ul>            
-            <p>{JSON.stringify(randomCharacter.raceInfo)}</p>
+                    <ListItem key={skill.id}>
+                      <ListItemText>{skill.skill_name}</ListItemText>
+                    </ListItem>
+                  )
+                })}
+                {randomCharacter.raceSkills.map(skill => {
+                  return(
+                    <ListItem key={skill.id}>
+                      <ListItemText>{skill.skill_name}</ListItemText>
+                    </ListItem>
+                  )
+                })}
+              </List>
+            </Grid>
           </Grid>
+        </Grid>
 
-          <Grid item>
-            <ButtonGroup variant="contained">
-              <Button color="secondary" onClick={cancelCharacterCreator}>Cancel</Button>
-              <Button color="primary" onClick={saveCharacter}>
-                Save
-              </Button>
-            </ButtonGroup>
+        {/* Displays randomly generated race information and bonuses attributed to said race */}
+        <Grid item xs={8}>
+          <Grid container spacing={3}>
+            
+            <Grid item xs={12}>
+              <Typography variant="h4">Race: {randomCharacter.raceInfo.race_name}</Typography>
+            </Grid>
+            
+            <Grid item xs={5}>
+              <List>
+                <ListItem>
+                  <ListItemText><strong>Strength Bonus: </strong>+ {randomCharacter.raceInfo.str_bonus}</ListItemText>
+                </ListItem>
+
+                <ListItem>
+                  <ListItemText><strong>Dexterity Bonus: </strong>+ {randomCharacter.raceInfo.dex_bonus}</ListItemText>
+                </ListItem>
+
+                <ListItem>
+                  <ListItemText><strong>Constitution Bonus: </strong>+ {randomCharacter.raceInfo.con_bonus}</ListItemText>
+                </ListItem>
+
+                <ListItem>
+                  <ListItemText><strong>Intelligence Bonus: </strong>+ {randomCharacter.raceInfo.int_bonus}</ListItemText>
+                </ListItem>
+
+                <ListItem>
+                  <ListItemText><strong>Wisdom Bonus: </strong>+ {randomCharacter.raceInfo.wis_bonus}</ListItemText>
+                </ListItem>
+
+                <ListItem>
+                  <ListItemText><strong>Charisma Bonus: </strong>+ {randomCharacter.raceInfo.cha_bonus}</ListItemText>
+                </ListItem>
+              </List>
+            </Grid>
+
+            <Grid item xs={7}>
+              <Typography variant="h5">Speed: {randomCharacter.raceInfo.speed}</Typography>
+              <Typography variant="h5">Features:</Typography>
+              <List>
+                {randomCharacter.raceInfo.race_name === 'Human' ? 
+                  <ListItem><ListItemText>Humans don't have any other features</ListItemText></ListItem> :
+                  randomCharacter.raceFeatures.map((feature, index) => {
+                    return(
+                      <ListItem key={index}>
+                        <ListItemText><strong>{feature[0]}: </strong>{feature[1]}</ListItemText>
+                      </ListItem>
+                    );
+                })}
+              </List>
+            </Grid>
           </Grid>
-    </Grid>
+        </Grid>
+
+        {/* Displays randomly generated class information for user */}
+        <Grid item xs={12}>
+          <Grid container direction="column" spacing={3}>
+            <Grid item>
+              <Typography variant="h4">Class: {randomCharacter.classInfo.class_name}</Typography>
+              <List>
+                {randomCharacter.classInfo.class_features.map((feature, index) => {
+                  return(
+                    <ListItem key={index}>
+                      <ListItemText><strong>{feature[0]}: </strong>{feature[1]}</ListItemText>
+                    </ListItem>
+                  );
+                })}
+              </List>
+            </Grid>
+            
+            <Grid item>
+              <List>
+                {randomCharacter.classInfo.spellcasting_ability !== 'None' ? 
+                  <>
+                    <Typography variant="h5">Spellcasting Ability: {randomCharacter.classInfo.spellcasting_ability}</Typography>
+                    <Typography variant="body1">You can add spells for your class from the character sheet.</Typography> 
+                  </> :
+                  <Typography variant="h5">This class doesn't cast spells.</Typography>
+                }        
+              </List>
+            </Grid>
+          </Grid>
+        </Grid>
+
+        
+
+        <Grid item align="justify"> 
+          <Grid container>
+            <Grid item>
+              <Typography variant="h4">Background: Acolyte</Typography>
+              <Typography variant="body1" paragraph>
+                <strong>Shelter of the Faithful</strong>: As an acolyte, you command the respect of those who share your faith, and you can perform the religious ceremonies of your deity. You and your adventuring companions can expect to receive free healing and care at a temple, shrine, or other established presence of your faith, though you must provide any material components needed for spells. Those who share your religion will support you (but only you) at a modest lifestyle.
+                <br/>
+                <br/>
+                You might also have ties to a specific temple dedicated to your chosen deity or pantheon, and you have a residence there. This could be the temple where you used to serve, if you remain on good terms with it, or a temple where you have found a new home. While near your temple, you can call upon the priests for assistance, provided the assistance you ask for is not hazardous and you remain in good standing with your temple.
+              </Typography>
+            </Grid>
+
+            <Grid item>
+              <Typography variant="caption" paragraph>
+                The official Dungeons & Dragons SRD only allows the redistribution of the Acolyte background. Talk with your Dungeon Master about other backgrounds you might use that are available within the official Player's Handbook. If you do choose to stick with this background, feel free to add the following equipment: A holy symbol, a prayer book or prayer wheel, 5 sticks of incense, vestments, a set of common clothes, and a belt pouch container 15gp.
+              </Typography>
+            </Grid>
+          </Grid>
+        </Grid>
+
+        <Grid item xs={12} align="center">
+          <ButtonGroup variant="contained">
+            <Button color="secondary" onClick={cancelCharacterCreator}>Cancel</Button>
+            <Button color="primary" onClick={saveCharacter}>
+              Save
+            </Button>
+          </ButtonGroup>
+        </Grid>
+      </Grid>
+    </Box>
+ 
   )
 } // end CharacterCreatorReview 
 
