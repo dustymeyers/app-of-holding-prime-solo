@@ -61,10 +61,10 @@ function CharacterSheetSpells() {
     }
   } 
   
-  const spellSaveDc = proficiencyBonus + spellcastingModifier() + 8;
+  let spellSaveDc = proficiencyBonus + spellcastingModifier() + 8;
 
   if (spellcastingAbility === 'None') {
-    spellSaveDC = 'None';
+    spellSaveDc = 'None';
   }
 
   console.log('spellcastingModifier', spellcastingModifier())
