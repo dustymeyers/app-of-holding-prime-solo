@@ -14,7 +14,8 @@ import {
   TextField,
   Typography
 } from '@material-ui/core';
-import { AccessAlarm, EditIcon, ThreeDRotation } from '@material-ui/icons';
+import EditIcon from '@material-ui/icons/Edit';
+import IconButton from '@material-ui/core/IconButton';
 
 function CharacterSheetMain({ }) {
   console.log('skills and saving throws', skillsAndSavingThrows);
@@ -76,43 +77,49 @@ function CharacterSheetMain({ }) {
 
   return(
     <Grid container spacing={5}>
+      {/* Basic character information, including name, class, race, level and gender */}
       <Grid item xs={4}>
         {!editMode.editBasicInfo ?
-          <Grid container direction="column" spacing={2}>
+          <Grid container direction="column" spacing={3}>
             <Grid item>
-              <Typography variant="h3">Character</Typography>
+              <Grid container alignItems="flex-end" direction="row">
+                <Grid item>
+                  <Typography variant="h3">Character</Typography>
+                </Grid>
+                <Grid item>
+                  <IconButton>
+                    <EditIcon onClick={() => setEditMode({...editMode, editBasicInfo: true})} />
+                  </IconButton>
+                </Grid>
+              </Grid>
             </Grid>
 
             <Grid item>
-              <Typography variant="body">Name: {character.baseInformation.character_name}</Typography>
+              <Typography variant="body"><strong>Name</strong>: {character.baseInformation.character_name}</Typography>
             </Grid>
 
             <Grid item>
-              <Typography variant="body">Class and Level: Level {character.baseInformation.level} {character.baseInformation.class_name}</Typography>
+              <Typography variant="body"><strong>Class and Level</strong>: Level {character.baseInformation.level} {character.baseInformation.class_name}</Typography>
             </Grid>
 
             <Grid item>
-              <Typography variant="body">Background: {character.baseInformation.background}</Typography>
+              <Typography variant="body"><strong>Background</strong>: {character.baseInformation.background}</Typography>
             </Grid>
 
             <Grid item>
-              <Typography variant="body">Race: {character.baseInformation.race_name}</Typography>
+              <Typography variant="body"><strong>Race</strong>: {character.baseInformation.race_name}</Typography>
             </Grid>
 
             <Grid item>
-              <Typography variant="body">Gender: {character.baseInformation.gender}</Typography>
+              <Typography variant="body"><strong>Gender</strong>: {character.baseInformation.gender}</Typography>
             </Grid>
 
             <Grid item>
-              <Typography variant="body">Alignment: {character.baseInformation.alignment}</Typography>
+              <Typography variant="body"><strong>Alignment</strong>: {character.baseInformation.alignment}</Typography>
             </Grid>
 
             <Grid item>
-              <Typography variant="body">Experience Points: {character.baseInformation.experience_points}</Typography>
-            </Grid>
-
-            <Grid item>
-              <Button variant="outlined" onClick={() => setEditMode({...editMode, editBasicInfo: true})}>Edit</Button>
+              <Typography variant="body"><strong>Experience Points</strong>: {character.baseInformation.experience_points}</Typography>
             </Grid>
           </Grid>
           :
