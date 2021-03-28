@@ -2,6 +2,14 @@ import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import {useSelector} from 'react-redux';
 
+import {
+  Button, 
+  FormControl, 
+  Grid, 
+  Typography, 
+  TextField
+} from '@material-ui/core';
+
 function LoginForm() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -26,39 +34,45 @@ function LoginForm() {
 
   return (
     <form className="formPanel" onSubmit={login}>
-      <h2>Login</h2>
+      <Typography variant="h2">Login</Typography>
       {errors.loginMessage && (
         <h3 className="alert" role="alert">
           {errors.loginMessage}
         </h3>
       )}
-      <div>
-        <label htmlFor="username">
-          Username:
-          <input
-            type="text"
-            name="username"
-            required
-            value={username}
-            onChange={(event) => setUsername(event.target.value)}
-          />
-        </label>
-      </div>
-      <div>
-        <label htmlFor="password">
-          Password:
-          <input
-            type="password"
-            name="password"
-            required
-            value={password}
-            onChange={(event) => setPassword(event.target.value)}
-          />
-        </label>
-      </div>
-      <div>
-        <input className="btn" type="submit" name="submit" value="Log In" />
-      </div>
+      <Grid item container direction="column" alignItems="stretch" spacing={3} xs={12}>
+        <Grid item>
+          <FormControl fullWidth>
+            <TextField
+              label="Username"
+              type="text"
+              name="username"
+              required
+              value={username}
+              variant="outlined"
+              onChange={(event) => setUsername(event.target.value)}
+            />
+          </FormControl>
+        </Grid>
+        
+        <Grid item>
+          <FormControl fullWidth>
+            <TextField
+              label="Password"
+              type="password"
+              name="password"
+              required
+              value={password}
+              variant="outlined"
+              onChange={(event) => setPassword(event.target.value)}
+            />
+          </FormControl>
+        </Grid>
+
+        <Grid item container justify="center">
+          <Button color="primary" variant="contained" className="btn" type="submit" name="submit">Log In</Button>
+        </Grid>
+      </Grid>
     </form>
   );
 }

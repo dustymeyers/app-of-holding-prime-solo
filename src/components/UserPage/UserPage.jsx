@@ -14,7 +14,7 @@ function UserPage() {
       </Grid>
 
       <Grid item>
-        <LogOutButton className="btn" />
+        <LogOutButton variant="contained" color="secondary" />
       </Grid>
     </Grid>
   );
