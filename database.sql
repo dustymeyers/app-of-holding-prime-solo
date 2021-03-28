@@ -4,6 +4,12 @@
 -- ex. SELECT * FROM "user";
 -- Otherwise you will have errors!
 
+CREATE TABLE "user" (
+    "id" SERIAL PRIMARY KEY,
+    "username" VARCHAR (80) UNIQUE NOT NULL,
+    "password" VARCHAR (1000) NOT NULL
+);
+
 CREATE TABLE "characters" (
   "id" SERIAL PRIMARY KEY,
   "user_id" INT REFERENCES "user" NOT NULL,
@@ -20,6 +26,7 @@ CREATE TABLE "characters" (
   "current_hit_points" INT,
   "max_hit_points" INT NOT NULL,
   "temporary_hit_points" INT,
+  "armor_class" INT NOT NULL,
   "cp_total" INT NOT NULL DEFAULT 0,
   "sp_total" INT NOT NULL DEFAULT 0,
   "ep_total" INT NOT NULL DEFAULT 0,
@@ -39,7 +46,7 @@ CREATE TABLE "characters" (
 CREATE TABLE "classes" (
 	"id" SERIAL PRIMARY KEY,
 	"class_name" VARCHAR(15) NOT NULL,
-  "spellcasting_ability" VARCHAR(4),
+  "spellcasting_ability" VARCHAR(15),
   "hit_die" INT NOT NULL,
   "play_style" VARCHAR(15) NOT NULL,
   "magic_style" VARCHAR(15) NOT NULL
@@ -90,12 +97,6 @@ CREATE TABLE "spells" (
   "api_index" VARCHAR(300) NOT NULL,
   "spell_name" VARCHAR(300) NOT NULL,
   "spellcasting_level" INT NOT NULL
-);
-
-CREATE TABLE "user" (
-    "id" SERIAL PRIMARY KEY,
-    "username" VARCHAR (80) UNIQUE NOT NULL,
-    "password" VARCHAR (1000) NOT NULL
 );
 
 -- Joining tables
@@ -160,7 +161,7 @@ CREATE TABLE "classes_savingThrows" (
 CREATE TABLE "classes_skills" (
   "id" SERIAL PRIMARY KEY,
   "class_id" INT REFERENCES "classes" NOT NULL,
-  "skill_id" INT REFERENCES "skill" NOT NULL
+  "skill_id" INT REFERENCES "skills" NOT NULL
 );
 
 CREATE TABLE "races_features" (
@@ -724,6 +725,22 @@ VALUES
     ('Intelligence'),
     ('Wisdom'),
     ('Charisma');
+
+------------ classes_features -------------  
+INSERT INTO "classes_features" ( "class_id", "feature_id" )
+VALUES 
+    (1, 1), (1, 2),	-- Barbarian
+    (2, 3), (2, 4), 	    -- Bard
+    (3, 5), (3, 6),    	-- Cleric
+    (4, 7), (4, 8), 	  	-- Druid
+    (5, 9), (5, 10),  	-- Fighter
+    (6, 11), (6, 12), 	   	-- Monk
+    (7, 13), (7, 14),  	-- Paladin
+    (8, 15),	(8, 16),   	-- Ranger
+    (9, 17),	(9, 18), (9, 19),   	-- Rogue
+    (10, 20), (10, 21), (10, 22), (10, 23),	-- Sorcerer
+    (11, 24), (11, 25), (11, 26), 	-- Warlock
+    (12, 27), (12, 27);	   	-- Wizard
 
 ------------ classes_savingThrows -------------  
 INSERT INTO "classes_savingThrows" ( "class_id", "savingThrow_id" )
