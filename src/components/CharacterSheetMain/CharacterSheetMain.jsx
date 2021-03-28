@@ -74,7 +74,7 @@ function CharacterSheetMain({ }) {
     });
     setEditMode(false);
   }
-  
+
   return(
     <Grid container spacing={5}>
       {/* Basic character information, including name, class, race, level and gender */}
@@ -88,8 +88,8 @@ function CharacterSheetMain({ }) {
                 </Grid>
 
                 <Grid item>
-                  <IconButton>
-                    <EditIcon onClick={() => setEditMode({...editMode, editBasicInfo: true})} />
+                  <IconButton onClick={() => setEditMode({...editMode, editBasicInfo: true})} >
+                    <EditIcon />
                   </IconButton>
                 </Grid>
               </Grid>
@@ -273,8 +273,8 @@ function CharacterSheetMain({ }) {
                 </Grid>
 
                 <Grid item>
-                  <IconButton>
-                    <EditIcon onClick={() => setEditMode({...editMode, editAbilityScores: true})} />
+                  <IconButton onClick={() => setEditMode({...editMode, editAbilityScores: true})}>
+                    <EditIcon />
                   </IconButton>
                 </Grid>
               </Grid>
@@ -475,8 +475,8 @@ function CharacterSheetMain({ }) {
                 </Typography>
               </Grid>
 
-              <IconButton>
-                <EditIcon onClick={() => setEditMode({...editMode, editHealth: true})} />
+              <IconButton onClick={() => setEditMode({...editMode, editHealth: true})}>
+                <EditIcon />
               </IconButton>
             </Grid>
 
@@ -505,7 +505,7 @@ function CharacterSheetMain({ }) {
             </Grid>
 
             <Grid item>
-              <Typography variant="bod1">
+              <Typography variant="body1">
                 <strong>Hit Dice Available</strong>: {character.baseInformation.hit_dice_available}
               </Typography>
             </Grid>
@@ -653,7 +653,7 @@ function CharacterSheetMain({ }) {
 
       {/* This section holds saving throws, languages, proficiency bonus, & passive perception. Wrapped together to dynamically design the page.  */}
       <Grid item container direction="column" xs={8}>
-        <Grid item container>
+        <Grid item container spacing={5}>
           {/* Saving Throws Proficiencies section */}
           <Grid item xs={6}>
             <Typography variant="h5">Saving Throw Proficiencies</Typography>

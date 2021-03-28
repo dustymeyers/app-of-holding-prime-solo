@@ -116,70 +116,74 @@ function CharacterSheetEquipment() {
 
 
   return(
-    <Grid container spacing={3}>
+    <Grid container spacing={5} justify="center">
+      <Typography variant="h2">Equipment</Typography>
+      <Typography variant="body1" paragraph>The equipment you have for this character will be available in the table below. Feel free to add more equipment with the plus button. </Typography>
       {/* Currency tracker */}
-      {!editMode.editCoinPurse ? 
-        <Grid item xs={12}>
-          <Grid container direction="row" spacing={5}>     
+      <Grid item container direction="row" justify="center" spacing={5} xs={12}> 
+        {!editMode.editCoinPurse ? 
+          <>
             <Grid item>
-              <Typography>CP: {totalCopper}</Typography>
+              <Typography variant="h3">CP: {totalCopper}</Typography>
             </Grid>
 
             <Grid item>
-              <Typography>SP: {totalSilver}</Typography>
+              <Typography variant="h3">SP: {totalSilver}</Typography>
             </Grid>
 
             <Grid item>
-              <Typography>EP: {totalElectrum}</Typography>
+              <Typography variant="h3">EP: {totalElectrum}</Typography>
             </Grid>
 
             <Grid item>  
-              <Typography>GP: {totalGold}</Typography>
+              <Typography variant="h3">GP: {totalGold}</Typography>
             </Grid>
 
             <Grid item>  
-              <Typography>PP: {totalPlatinum}</Typography>
+              <Typography variant="h3">PP: {totalPlatinum}</Typography>
             </Grid>
             
             <Grid item>
-              <IconButton>
-                <EditIcon onClick={() => setEditMode({...editMode, editCoinPurse: true})} />
+              <IconButton onClick={() => setEditMode({...editMode, editCoinPurse: true})}>
+                <EditIcon />
               </IconButton>
             </Grid>
-          </Grid>
-        </Grid> :
-        <Grid item xs={12}>
-          <Grid container>
+          </> :        
+          <>
             <Grid item>
-              <TextField 
-                label="Copper Pieces"
-                onChange={event => dispatch({
-                  type: 'UPDATE_CHARACTER',
-                  payload: {
-                    baseInformation: {
-                      ...character.baseInformation,
-                      cp_total: event.target.value
+              <FormControl>
+                <TextField 
+                  label="Copper Pieces"
+                  onChange={event => dispatch({
+                    type: 'UPDATE_CHARACTER',
+                    payload: {
+                      baseInformation: {
+                        ...character.baseInformation,
+                        cp_total: event.target.value
+                      }
                     }
-                  }
-                })}
-                value={totalCopper} 
-              />
+                  })}
+                  value={totalCopper} 
+                />
+              </FormControl>
             </Grid>
 
             <Grid item>
-              <TextField 
-                label="Silver Pieces" 
-                onChange={event => dispatch({
-                  type: 'UPDATE_CHARACTER',
-                  payload: {
-                    baseInformation: {
-                      ...character.baseInformation,
-                      sp_total: event.target.value
+              <FormControl>
+                <TextField 
+                  label="Silver Pieces" 
+                  onChange={event => dispatch({
+                    type: 'UPDATE_CHARACTER',
+                    payload: {
+                      baseInformation: {
+                        ...character.baseInformation,
+                        sp_total: event.target.value
+                      }
                     }
-                  }
-                })}
-                value={totalSilver} 
-              />
+                  })}
+                  value={totalSilver} 
+                />
+              </FormControl>
             </Grid>
 
             <Grid item> 
@@ -250,17 +254,17 @@ function CharacterSheetEquipment() {
                 </Button>
               </ButtonGroup>
             </Grid>
-          </Grid>
-        </Grid>
-      }
+          </>        
+        }
+        {/* Add equipment, opens dialog box that allows user to search through available equipment */}
+        <IconButton onClick={() => setOpen({...open, addItem: true})} >
+          <LibraryAddIcon fontSize="large" color="action" /> 
+        </IconButton>
+      </Grid>
 
-      {/* Add equipment, opens dialog box that allows user to search through available equipment */}
-      <IconButton onClick={() => setOpen({...open, addItem: true})} >
-        <LibraryAddIcon fontSize="large" color="action" /> 
-      </IconButton>
 
       {/* Character's Equipment library */}
-      <Grid item>
+      <Grid item xs={12}>
         <TableContainer component={Paper}>
           <Table>
 
