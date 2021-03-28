@@ -60,6 +60,7 @@ function CharacterSheetEquipment() {
   const totalGold = character.baseInformation.gp_total;
   const totalPlatinum = character.baseInformation.pp_total;
 
+  // handles the add items button
   const addItems = () => {
     dispatch({
       type: 'SAVE_ITEMS',
@@ -116,11 +117,17 @@ function CharacterSheetEquipment() {
 
 
   return(
-    <Grid container spacing={5} justify="center">
-      <Typography variant="h2">Equipment</Typography>
-      <Typography variant="body1" paragraph>The equipment you have for this character will be available in the table below. Feel free to add more equipment with the plus button. </Typography>
-      {/* Currency tracker */}
+    <Grid container spacing={5} justify="center" direction="column">
+      <Grid item container justify="center">
+        <Typography variant="h2">Equipment</Typography>
+      </Grid>
+
+      <Grid item>
+        <Typography variant="body1" paragraph>The equipment you have for this character will be available in the table below. Feel free to add more equipment with the plus button. The info button provides information for each item using the dnd5eapi. To learn more about this technology, click <a href="http://www.dnd5eapi.co/">here</a>.</Typography>
+      </Grid>
+      
       <Grid item container direction="row" justify="center" spacing={5} xs={12}> 
+        {/* Currency tracker */}
         {!editMode.editCoinPurse ? 
           <>
             <Grid item>
@@ -187,67 +194,76 @@ function CharacterSheetEquipment() {
             </Grid>
 
             <Grid item> 
-              <TextField 
-                label="Electrum Pieces" 
-                onChange={event => dispatch({
-                  type: 'UPDATE_CHARACTER',
-                  payload: {
-                    baseInformation: {
-                      ...character.baseInformation,
-                      ep_total: event.target.value
+              <FormControl>
+                <TextField 
+                  label="Electrum Pieces" 
+                  onChange={event => dispatch({
+                    type: 'UPDATE_CHARACTER',
+                    payload: {
+                      baseInformation: {
+                        ...character.baseInformation,
+                        ep_total: event.target.value
+                      }
                     }
-                  }
-                })}
-                value={totalElectrum} 
-              />
+                  })}
+                  value={totalElectrum} 
+                />
+              </FormControl>
             </Grid>
 
             <Grid item>
-              <TextField 
-                label="Gold Pieces" 
-                onChange={event => dispatch({
-                  type: 'UPDATE_CHARACTER',
-                  payload: {
-                    baseInformation: {
-                      ...character.baseInformation,
-                      gp_total: event.target.value
+              <FormControl>
+                <TextField 
+                  label="Gold Pieces" 
+                  onChange={event => dispatch({
+                    type: 'UPDATE_CHARACTER',
+                    payload: {
+                      baseInformation: {
+                        ...character.baseInformation,
+                        gp_total: event.target.value
+                      }
                     }
-                  }
-                })}
-                value={totalGold} 
-              />
+                  })}
+                  value={totalGold} 
+                />
+              </FormControl>
             </Grid>
 
             <Grid item>
-              <TextField 
-                label="Platinum Pieces" 
-                onChange={event => dispatch({
-                  type: 'UPDATE_CHARACTER',
-                  payload: {
-                    baseInformation: {
-                      ...character.baseInformation,
-                      pp_total: event.target.value
+              <FormControl>
+                <TextField 
+                  label="Platinum Pieces" 
+                  onChange={event => dispatch({
+                    type: 'UPDATE_CHARACTER',
+                    payload: {
+                      baseInformation: {
+                        ...character.baseInformation,
+                        pp_total: event.target.value
+                      }
                     }
-                  }
-                })}
-                value={totalPlatinum} 
-              />
+                  })}
+                  value={totalPlatinum} 
+                />
+              </FormControl>
             </Grid>
 
             <Grid item>
               <ButtonGroup>
-                <Button onClick={() => setEditMode({...editMode, editCoinPurse: false})}>
+                <Button 
+                  color="secondary" 
+                  onClick={() => setEditMode({...editMode, editCoinPurse: false})}
+                >
                   Cancel
                 </Button>
 
                 <Button
-                  color="secondary"
+                  color="primary"
                   onClick={() => {
                     dispatch({
                       type: 'SAVE_CHARACTER_UPDATES',
                       payload: character
                     });
-                    setEditMode({...editMode, editCoinPurse: false})
+                    setEditMode({...editMode, editCoinPurse: false});
                   }}
                 >
                   Save
@@ -255,7 +271,7 @@ function CharacterSheetEquipment() {
               </ButtonGroup>
             </Grid>
           </>        
-        }
+        } {/* end currency tracker */}
         {/* Add equipment, opens dialog box that allows user to search through available equipment */}
         <IconButton onClick={() => setOpen({...open, addItem: true})} >
           <LibraryAddIcon fontSize="large" color="action" /> 
@@ -312,7 +328,7 @@ function CharacterSheetEquipment() {
             </TableBody>
           </Table>
         </TableContainer>
-      </Grid>
+      </Grid> {/* end character's equipment library */}
 
       {/* Dialog for item qty update */}
       <Dialog
@@ -320,16 +336,19 @@ function CharacterSheetEquipment() {
         onClose={() => setOpen({...open, editQty: false})}
       >
         <DialogContent>
-          <TextField
-            type="number"
-            value={qtyToEdit}
-            onChange={(event) => setQtyToEdit(event.target.value)}
-          />
+          <FormControl>
+            <TextField
+              type="number"
+              value={qtyToEdit}
+              onChange={(event) => setQtyToEdit(event.target.value)}
+            />
+          </FormControl>
         </DialogContent>
+
         <DialogActions>
           <Button onClick={saveQty}>Save</Button>
         </DialogActions>
-      </Dialog>
+      </Dialog> {/* end dialog for item qty update */}
       
       {/* Dialog for item information, triggers when info button is clicked */}
       <Dialog
@@ -354,9 +373,7 @@ function CharacterSheetEquipment() {
           <DialogContentText>Cost: {equipmentInfo.cost.quantity} {equipmentInfo.cost.unit} </DialogContentText>
           <DialogContentText>Weight: {equipmentInfo.weight} lbs</DialogContentText>
         </DialogContent>
-      </Dialog>
-
-      
+      </Dialog> {/* end dialog for item information */}
 
       {/* Dialog for full equipment library, allows users to add equipment to their character sheet */}
       <Dialog
@@ -401,8 +418,7 @@ function CharacterSheetEquipment() {
           <Button color="primary" onClick={addItems}>Save Items</Button>
           <Button color="secondary" onClick={closeAddItem}>Cancel</Button>
         </DialogActions>
-      </Dialog>
-
+      </Dialog> {/* end add item dialog */}
     </Grid>
   );
 }// end CharacterSheetEquipment
