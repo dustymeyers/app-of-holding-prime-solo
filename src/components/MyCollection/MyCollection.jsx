@@ -1,10 +1,15 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 // Material-UI Components
 import { 
   Button,         // replace <button>
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
   Table,          // replaces <table>
   TableBody,      // replaces <tbody>
   TableCell,      // replaces <td>
@@ -18,8 +23,11 @@ function MyCollection() {
   const dispatch = useDispatch();
   const history = useHistory();
   const livingCharactersList = useSelector(store => store.characters.charactersList);
-
-  console.log('livingCharactersList', livingCharactersList);
+  const [open, setOpen] = useState(false);
+  const [characterToDelete, setCharacterToDelete] = useState({
+    id: 0,
+    name:''
+  });
 
   useEffect(() => {
     dispatch({
@@ -27,14 +35,13 @@ function MyCollection() {
       payload: 'FALSE', // query for all characters that are not marked as dead
     })
   }, []);
-
-  const handleDeleteClick = (characterId) => {
+  
+  const handleDeleteClick = (characterId, characterName) => {
     console.log('delete characterId', characterId);
+    setOpen(true);
+    setCharacterToDelete({ id: characterId, name: characterName});
 
-    dispatch({
-      type: 'DELETE_CHARACTER',
-      payload: characterId
-    })
+   
   } // end handleDeleteClick
 
   // routes user to character specific CharacterSheet view
@@ -42,6 +49,20 @@ function MyCollection() {
     console.log('view characterId', characterId);
     history.push(`/characterSheet/${characterId}`);
   } // end handleViewClick
+
+  const cancelDelete = () => {
+    setCharacterToDelete({ id: 0, name: '' });
+    setOpen(false);
+  }
+
+  const deleteCharacter = () => {
+    dispatch({
+      type: 'DELETE_CHARACTER',
+      payload: characterToDelete.id
+    })
+    setCharacterToDelete({ id: 0, name: '' });
+    setOpen(false);
+  }
 
   return(
     <>
@@ -66,7 +87,11 @@ function MyCollection() {
                 <TableRow key={character.id}>
                   {/* View Button */}
                   <TableCell>
-                    <Button variant="outlined" color="primary" onClick={() => handleViewClick(character.id)}>
+                    <Button 
+                      variant="outlined" 
+                      color="primary" 
+                      onClick={() => handleViewClick(character.id)}
+                    >
                       View
                     </Button>
                   </TableCell>
@@ -92,7 +117,11 @@ function MyCollection() {
                   </TableCell>
 
                   <TableCell>
-                    <Button variant="outlined" color="secondary" onClick={() => handleDeleteClick(character.id)}>
+                    <Button 
+                    variant="outlined" 
+                    color="secondary" 
+                    onClick={() => handleDeleteClick(character.id, character.character_name)}
+                    >
                       Delete
                     </Button>
                   </TableCell>
@@ -103,6 +132,25 @@ function MyCollection() {
 
         </Table>
       </TableContainer>
+
+      <Dialog
+        open={open}
+        onClose={() => setOpen(false)}
+      >
+        <DialogContent>
+          <DialogContentText>
+            Are you sure you want to delete <strong>{characterToDelete.name}</strong> along with all of their equipment and spells? This can not be undone.
+          </DialogContentText>
+          <DialogActions>
+            <Button variant="contained" color="secondary" onClick={cancelDelete}>
+              No, I'm not ready to delete {characterToDelete.name}
+            </Button>
+            <Button variant="contained" color="primary" onClick={deleteCharacter}>
+              Yes. I've said my goodbyes to {characterToDelete.name}
+            </Button>
+          </DialogActions>
+        </DialogContent>
+      </Dialog>
 
     </>
   );

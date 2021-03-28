@@ -118,11 +118,11 @@ function CharacterSheetEquipment() {
 
   return(
     <Grid container spacing={5} justify="center" direction="column">
-      <Grid item container justify="center">
+      <Grid item container justify="center" xs={12}>
         <Typography variant="h2">Equipment</Typography>
       </Grid>
 
-      <Grid item>
+      <Grid item xs={12}>
         <Typography variant="body1" paragraph>The equipment you have for this character will be available in the table below. Feel free to add more equipment with the plus button. The info button provides information for each item using the dnd5eapi. To learn more about this technology, click <a href="http://www.dnd5eapi.co/">here</a>.</Typography>
       </Grid>
       
