@@ -272,6 +272,7 @@ router.put('/edit/:id', rejectUnauthenticated, (req, res) => {
     req.body.baseInformation.experience_points,
     req.body.baseInformation.alignment,
     req.body.baseInformation.gender,
+    req.body.baseInformation.armor_class,
     req.user.id,
     req.params.id
   ];
@@ -298,8 +299,9 @@ router.put('/edit/:id', rejectUnauthenticated, (req, res) => {
       "pp_total" = $17,
       "experience_points" = $18,
       "alignment" = $19,
-      "gender" = $20
-    WHERE "user_id" = $21 AND "id" = $22;
+      "gender" = $20,
+      "armor_class" = $21
+    WHERE "user_id" = $22 AND "id" = $23;
   `;
 
   pool

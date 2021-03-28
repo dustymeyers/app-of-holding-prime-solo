@@ -61,10 +61,10 @@ function CharacterSheetSpells() {
     }
   } 
   
-  const spellSaveDc = proficiencyBonus + spellcastingModifier() + 8;
+  let spellSaveDc = proficiencyBonus + spellcastingModifier() + 8;
 
   if (spellcastingAbility === 'None') {
-    spellSaveDC = 'None';
+    spellSaveDc = 'None';
   }
 
   console.log('spellcastingModifier', spellcastingModifier())
@@ -119,31 +119,38 @@ function CharacterSheetSpells() {
   }
 
   return(
-    <Grid container>
-      <Grid item xs={10} >
-        <Grid container direction="row" spacing={2}>
-          <Grid item>
-            <Typography>Spell Casting Ability: {character.baseInformation.spellcasting_ability}</Typography>
-          </Grid>
+    <Grid container justify="center">
 
-          <Grid item>            
-            <Typography>Spell Save DC: {spellSaveDc}</Typography>
-          </Grid>
+      <Grid item container justify="center" xs={12}>
+        <Typography variant="h2">Spells and Spellcasting</Typography>
+      </Grid>
 
-          <Grid item>
-            <Typography>Spell Attack Modifier: {spellcastingModifier()}</Typography>
-          </Grid>
+      <Grid item xs={12}>
+        <Typography variant="body1" paragraph>The spells you have for this character will be available in the lists below. Refer to the Player's Handbook or your dungeon master to find out what spells you can add at first level. Feel free to add more spells with the plus button. The info button provides information for each item using the dnd5eapi. To learn more about this technology, click <a href="http://www.dnd5eapi.co/">here</a>.</Typography>
+      </Grid>
+      <Grid item xs={12} container direction="row" spacing={1} justify="space-between" alignItems="center">
+        <Grid item>
+          <Typography variant="h4">Spell Casting Ability: {character.baseInformation.spellcasting_ability}</Typography>
+        </Grid>
+
+        <Grid item>
+          <Typography variant="h4">Spell Save DC: {spellSaveDc}</Typography>
+        </Grid>
+
+        <Grid item>
+          <Typography variant="h4">Spell Attack Modifier: {spellcastingModifier()}</Typography>
+        </Grid>
+
+        {/* Add equipment, opens dialog box that allows user to search through available equipment */}
+        <Grid item>
+          <IconButton onClick={() => setOpen({...open, addSpells: true})} >
+            <LibraryAddIcon fontSize="large" color="action" /> 
+          </IconButton>
         </Grid>
       </Grid>
 
-      {/* Add equipment, opens dialog box that allows user to search through available equipment */}
-      <Grid item>
-        <IconButton onClick={() => setOpen({...open, addSpells: true})} >
-          <LibraryAddIcon fontSize="large" color="action" /> 
-        </IconButton>
-      </Grid>
 
-      <Grid item>
+      <Grid item xs={6}>
         <h2>Cantrips:</h2>
         <List>
           {characterSpellsList.map((spell, index) => {
@@ -168,7 +175,7 @@ function CharacterSheetSpells() {
         </List>
       </Grid>
 
-      <Grid item>
+      <Grid item xs={6}>
         <h2>Level 1 Spells:</h2>
         <List>
           {characterSpellsList.map((spell, index) => {
@@ -199,7 +206,7 @@ function CharacterSheetSpells() {
           scroll="paper"
         >
           <DialogTitle>Add spells:</DialogTitle>
-          <DialogContent >
+          <DialogContent>
             <DialogContentText>Add spells to your character sheet by pressing the plus button and then clicking save.</DialogContentText>
             <List>
               {spellsList.map((spell, index) => {
@@ -232,8 +239,8 @@ function CharacterSheetSpells() {
           </DialogContent>
 
           <DialogActions>
-            <Button color="primary" onClick={saveSpells}>Save spells</Button>
             <Button color="secondary" onClick={closeAddSpells}>Cancel</Button>
+            <Button color="primary" onClick={saveSpells}>Save spells</Button>
           </DialogActions>
         </Dialog>
 
@@ -260,8 +267,10 @@ function CharacterSheetSpells() {
             </DialogContentText>
             {spellInfo.material ? <DialogContentText>Materials Required: {spellInfo.material}</DialogContentText> : <></> }
             <DialogContentText>Duration: {spellInfo.concentration ? 'Concentration,' : <></>} {spellInfo.duration}</DialogContentText>
-            {spellInfo.desc.map(description => <DialogContentText>{description}</DialogContentText>)}
-            {spellInfo.higher_level.map(description => <DialogContentText>{description}</DialogContentText>)}
+            {spellInfo.desc.map(description => {
+              <DialogContentText>{description}</DialogContentText>
+            })}
+            {spellInfo.higher_level.map((description, index) => <DialogContentText key={index}>{description}</DialogContentText>)}
             <DialogContentText>
               Classes: {spellInfo.classes.map((className, index) => {
                 if (spellInfo.classes.length - 1 === index) {

@@ -2,7 +2,9 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import LogOutButton from '../LogOutButton/LogOutButton';
 import './Nav.css';
-import {useSelector} from 'react-redux';
+import { useSelector } from 'react-redux';
+
+import { Grid, Typography } from '@material-ui/core';
 
 function Nav() {
   const user = useSelector((store) => store.user);
@@ -18,11 +20,13 @@ function Nav() {
   }
 
   return (
-    <div className="nav">
-      <Link to="/home">
-        <h2 className="nav-title">Prime Solo Project</h2>
-      </Link>
-      <div>
+    <Grid item container className="nav" alignItems="stretch" direction="row" justify="space-between">
+      <Grid item xs={8}>
+        <Link to="/home">
+          <Typography variant="h1" className="nav-title">App of Holding</Typography>
+        </Link>
+      </Grid>
+      <Grid item container xs={4} justify="flex-end" alignItems="stretch" wrap="nowrap">
         <Link className="navLink" to={loginLinkData.path}>
           {loginLinkData.text}
         </Link>
@@ -32,18 +36,12 @@ function Nav() {
             <Link className="navLink" to="/characterCreator">
               Character Creator
             </Link>
-            <Link className="navLink" to="/info">
-              Info Page
-            </Link>
-            <LogOutButton className="navLink" />
+
+            <LogOutButton className="navLink" color="default" variant="text" />
           </>
         )}
-
-        <Link className="navLink" to="/about">
-          About
-        </Link>
-      </div>
-    </div>
+      </Grid>
+    </Grid>
   );
 }
 

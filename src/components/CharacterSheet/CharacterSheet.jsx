@@ -9,6 +9,7 @@ import CharacterSheetSpells from '../CharacterSheetSpells/CharacterSheetSpells';
 
 // Material-UI components
 import { 
+  Box,
   Button,
   ButtonGroup,
   Grid,
@@ -55,9 +56,9 @@ function CharacterSheet() {
 
 
   return(
-    <>
-      <Grid container component={Paper} direction="column" spacing={5}>
-        <Grid item>          
+    
+      <Grid container component={Paper} direction="column" spacing={4}>
+        <Grid item xs={12}>          
           <ButtonGroup>
             <Button onClick={() => setCurrentView({
               main: true,
@@ -83,14 +84,14 @@ function CharacterSheet() {
           </ButtonGroup>
         </Grid>
 
-        <Grid item> 
-          {currentView.main ? <CharacterSheetMain/> : <></>}
-          {currentView.equipment ? <CharacterSheetEquipment /> : <></>}
-          {currentView.spells ? <CharacterSheetSpells /> : <></>}          
+        <Grid item xs={12}>
+          <Box p={4}>
+            {currentView.main ? <CharacterSheetMain/> : <></>}
+            {currentView.equipment ? <CharacterSheetEquipment /> : <></>}
+            {currentView.spells ? <CharacterSheetSpells /> : <></>}
+          </Box>
         </Grid>
-        
       </Grid>
-    </>
   );
 }// end CharacterSheet
 

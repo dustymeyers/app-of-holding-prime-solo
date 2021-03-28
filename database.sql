@@ -4,6 +4,12 @@
 -- ex. SELECT * FROM "user";
 -- Otherwise you will have errors!
 
+CREATE TABLE "user" (
+    "id" SERIAL PRIMARY KEY,
+    "username" VARCHAR (80) UNIQUE NOT NULL,
+    "password" VARCHAR (1000) NOT NULL
+);
+
 CREATE TABLE "characters" (
   "id" SERIAL PRIMARY KEY,
   "user_id" INT REFERENCES "user" NOT NULL,
@@ -20,6 +26,7 @@ CREATE TABLE "characters" (
   "current_hit_points" INT,
   "max_hit_points" INT NOT NULL,
   "temporary_hit_points" INT,
+  "armor_class" INT NOT NULL,
   "cp_total" INT NOT NULL DEFAULT 0,
   "sp_total" INT NOT NULL DEFAULT 0,
   "ep_total" INT NOT NULL DEFAULT 0,
@@ -39,7 +46,7 @@ CREATE TABLE "characters" (
 CREATE TABLE "classes" (
 	"id" SERIAL PRIMARY KEY,
 	"class_name" VARCHAR(15) NOT NULL,
-  "spellcasting_ability" VARCHAR(4),
+  "spellcasting_ability" VARCHAR(15),
   "hit_die" INT NOT NULL,
   "play_style" VARCHAR(15) NOT NULL,
   "magic_style" VARCHAR(15) NOT NULL
@@ -82,7 +89,7 @@ CREATE TABLE "saving_throws" (
 
 CREATE TABLE "skills" (
   "id" SERIAL PRIMARY KEY,
-  "skill_name" VARCHAR(20) NOT NULL
+  "skill_name" VARCHAR(30) NOT NULL
 );
 
 CREATE TABLE "spells" (
@@ -90,12 +97,6 @@ CREATE TABLE "spells" (
   "api_index" VARCHAR(300) NOT NULL,
   "spell_name" VARCHAR(300) NOT NULL,
   "spellcasting_level" INT NOT NULL
-);
-
-CREATE TABLE "user" (
-    "id" SERIAL PRIMARY KEY,
-    "username" VARCHAR (80) UNIQUE NOT NULL,
-    "password" VARCHAR (1000) NOT NULL
 );
 
 -- Joining tables
@@ -160,7 +161,7 @@ CREATE TABLE "classes_savingThrows" (
 CREATE TABLE "classes_skills" (
   "id" SERIAL PRIMARY KEY,
   "class_id" INT REFERENCES "classes" NOT NULL,
-  "skill_id" INT REFERENCES "skill" NOT NULL
+  "skill_id" INT REFERENCES "skills" NOT NULL
 );
 
 CREATE TABLE "races_features" (
@@ -683,24 +684,24 @@ VALUES
 ------------ Skills -------------
 INSERT INTO "skills" ( "skill_name" )
 VALUES
-    ('Acrobatics'),       -- 1
-    ('Animal Handling'),  -- 2 
-    ('Arcana'), -- 3
-    ('Athletics'), -- 4
-    ('Deception'),-- 5
-    ('History'), -- 6
-    ('Insight'), -- 7
-    ('Intimidation'), -- 8
-    ('Investigation'), -- 9 
-    ('Medicine'), -- 10
-    ('Nature'), -- 11
-    ('Perception'), -- 12
-    ('Performance'), -- 13
-    ('Persuasion'), -- 14
-    ('Religion'),  -- 15
-    ('Sleight of Hand'), -- 16
-    ('Stealth'), -- 17
-    ('Survival'); -- 18
+    ('Acrobatics (Dex)'),       -- 1
+    ('Animal Handling (Wis)'),  -- 2 
+    ('Arcana (Int)'), -- 3
+    ('Athletics (Str)'), -- 4
+    ('Deception (Cha)'),-- 5
+    ('History (Int)'), -- 6
+    ('Insight (Wis)'), -- 7
+    ('Intimidation (Cha)'), -- 8
+    ('Investigation (Int)'), -- 9 
+    ('Medicine (Wis)'), -- 10
+    ('Nature (Int)'), -- 11
+    ('Perception (Wis)'), -- 12
+    ('Performance (Cha)'), -- 13
+    ('Persuasion (Cha)'), -- 14
+    ('Religion (Int)'),  -- 15
+    ('Sleight of Hand (Dex)'), -- 16
+    ('Stealth (Dex)'), -- 17
+    ('Survival (Wis)'); -- 18
 
 ------------ Races -------------
 INSERT INTO "races" ( "race_name" , "str_bonus" , "dex_bonus" , "con_bonus" , "int_bonus" , "wis_bonus" , "cha_bonus" , "speed" )
@@ -724,6 +725,22 @@ VALUES
     ('Intelligence'),
     ('Wisdom'),
     ('Charisma');
+
+------------ classes_features -------------  
+INSERT INTO "classes_features" ( "class_id", "feature_id" )
+VALUES 
+    (1, 1), (1, 2),	-- Barbarian
+    (2, 3), (2, 4), 	    -- Bard
+    (3, 5), (3, 6),    	-- Cleric
+    (4, 7), (4, 8), 	  	-- Druid
+    (5, 9), (5, 10),  	-- Fighter
+    (6, 11), (6, 12), 	   	-- Monk
+    (7, 13), (7, 14),  	-- Paladin
+    (8, 15),	(8, 16),   	-- Ranger
+    (9, 17),	(9, 18), (9, 19),   	-- Rogue
+    (10, 20), (10, 21), (10, 22), (10, 23),	-- Sorcerer
+    (11, 24), (11, 25), (11, 26), 	-- Warlock
+    (12, 27), (12, 27);	   	-- Wizard
 
 ------------ classes_savingThrows -------------  
 INSERT INTO "classes_savingThrows" ( "class_id", "savingThrow_id" )
@@ -768,7 +785,7 @@ VALUES
     (6, 52), (6, 53), (6, 54),                                       -- Half-Orc
     (7, 38), (7, 39), (7, 40), (7, 41),                             -- Halfling
     -- No human features
-    (8, 55), (8, 56), (8, 57);                                      -- Tiefling
+    (9, 55), (9, 56), (9, 57);                                      -- Tiefling
 
 ------------ RACES_LANGUAGES -------------  
 INSERT INTO "races_languages" ( "race_id", "language_id")
