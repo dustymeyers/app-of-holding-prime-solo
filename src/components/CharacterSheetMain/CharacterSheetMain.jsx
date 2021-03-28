@@ -4,6 +4,7 @@ import { useHistory, useParams } from 'react-router-dom';
 
 // Material-UI Components
 import {
+  Box,
   Button,
   ButtonGroup,
   FormControl,
@@ -41,6 +42,17 @@ function CharacterSheetMain({ }) {
 
   const abilityScoreModifier = (abilityScore) => {
     return Math.floor((abilityScore - 10) / 2);
+  }
+
+  function passivePerception(skillsArray) {
+    let passivePerceptionScore = 10 + abilityScoreModifier(baseWisdom);
+    for (let proficiency of skillsArray) {
+      // id 12 is the wisdom score, passive perception is
+      if (proficiency.id === 12) {
+        passivePerceptionScore += proficiencyBonus;
+      }
+    }
+    return passivePerceptionScore;
   }
 
   const cancelEdit = () => {
@@ -610,8 +622,9 @@ function CharacterSheetMain({ }) {
         }
       </Grid>
 
-      <Grid item>
+      <Grid item xs={4}>
         <Typography variant="h5">Skill Proficiencies</Typography>
+        <Typography variant="caption" paragraph>For skill checks, add the respective ability score modifier to each roll. If you are proficient, add your proficiency bonus as well.</Typography>
         
         <List>
           {skillsAndSavingThrows.skillsList.map(skill => {
@@ -641,6 +654,7 @@ function CharacterSheetMain({ }) {
         <Grid item container>
           <Grid item xs={6}>
             <Typography variant="h5">Saving Throw Proficiencies</Typography>
+            <Typography variant="caption" paragraph>For saving throws, add the respective ability score modifier to each roll. If you are proficient, add your proficiency bonus as well.</Typography>
             <List>
               {skillsAndSavingThrows.savingThrowsList.map(savingThrow => {
                 let savingThrowElement = (
@@ -669,7 +683,7 @@ function CharacterSheetMain({ }) {
                 <Typography variant="h5">Proficiency Bonus: +{proficiencyBonus}</Typography>
               </Grid>
               <Grid item>
-                <Typography variant="h5">Passive Perception: <strong>TODO</strong></Typography>
+                <Typography variant="h5">Passive Perception: <strong>{passivePerception(skillsAndSavingThrows.skillsList)}</strong></Typography>
               </Grid>
             </Grid>
 

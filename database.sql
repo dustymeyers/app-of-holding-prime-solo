@@ -82,7 +82,7 @@ CREATE TABLE "saving_throws" (
 
 CREATE TABLE "skills" (
   "id" SERIAL PRIMARY KEY,
-  "skill_name" VARCHAR(20) NOT NULL
+  "skill_name" VARCHAR(30) NOT NULL
 );
 
 CREATE TABLE "spells" (
@@ -683,24 +683,24 @@ VALUES
 ------------ Skills -------------
 INSERT INTO "skills" ( "skill_name" )
 VALUES
-    ('Acrobatics'),       -- 1
-    ('Animal Handling'),  -- 2 
-    ('Arcana'), -- 3
-    ('Athletics'), -- 4
-    ('Deception'),-- 5
-    ('History'), -- 6
-    ('Insight'), -- 7
-    ('Intimidation'), -- 8
-    ('Investigation'), -- 9 
-    ('Medicine'), -- 10
-    ('Nature'), -- 11
-    ('Perception'), -- 12
-    ('Performance'), -- 13
-    ('Persuasion'), -- 14
-    ('Religion'),  -- 15
-    ('Sleight of Hand'), -- 16
-    ('Stealth'), -- 17
-    ('Survival'); -- 18
+    ('Acrobatics (Dex)'),       -- 1
+    ('Animal Handling (Wis)'),  -- 2 
+    ('Arcana (Int)'), -- 3
+    ('Athletics (Str)'), -- 4
+    ('Deception (Cha)'),-- 5
+    ('History (Int)'), -- 6
+    ('Insight (Wis)'), -- 7
+    ('Intimidation (Cha)'), -- 8
+    ('Investigation (Int)'), -- 9 
+    ('Medicine (Wis)'), -- 10
+    ('Nature (Int)'), -- 11
+    ('Perception (Wis)'), -- 12
+    ('Performance (Cha)'), -- 13
+    ('Persuasion (Cha)'), -- 14
+    ('Religion (Int)'),  -- 15
+    ('Sleight of Hand (Dex)'), -- 16
+    ('Stealth (Dex)'), -- 17
+    ('Survival (Wis)'); -- 18
 
 ------------ Races -------------
 INSERT INTO "races" ( "race_name" , "str_bonus" , "dex_bonus" , "con_bonus" , "int_bonus" , "wis_bonus" , "cha_bonus" , "speed" )
