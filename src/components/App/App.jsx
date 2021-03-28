@@ -8,7 +8,7 @@ import {
 
 import { useDispatch } from 'react-redux';
 
-import { Box, Grid } from '@material-ui/core';
+import { Box, Grid, Paper } from '@material-ui/core';
 
 import Nav from '../Nav/Nav';
 import Footer from '../Footer/Footer';
@@ -20,7 +20,6 @@ import AboutPage from '../AboutPage/AboutPage';
 import CharacterCreatorInput from '../CharacterCreatorInput/CharacterCreatorInput';
 import CharacterCreatorReview from '../CharacterCreatorReview/CharacterCreatorReview';
 import CharacterSheet from '../CharacterSheet/CharacterSheet';
-import UserPage from '../UserPage/UserPage';
 import InfoPage from '../InfoPage/InfoPage';
 import LandingPage from '../LandingPage/LandingPage';
 import LoginPage from '../LoginPage/LoginPage';
@@ -59,16 +58,15 @@ function App() {
               </Route>
 
               {/* For protected routes, the view could show one of several things on the same route.
-                Visiting localhost:3000/user will show the UserPage if the user is logged in.
+                Visiting localhost:3000/user will show the MyCollection if the user is logged in.
                 If the user is not logged in, the ProtectedRoute will show the LoginPage (component).
                 Even though it seems like they are different pages, the user is always on localhost:3000/user */}
               <ProtectedRoute
-                // logged in shows UserPage else shows LoginPage
+                // logged in shows MyCollection else shows LoginPage
                 exact
                 path="/user"
               >
-                <UserPage />
-                <MyCollection />
+                  <MyCollection />
               </ProtectedRoute>
 
               <ProtectedRoute

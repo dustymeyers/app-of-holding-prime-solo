@@ -2,21 +2,25 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 
+import UserPage from '../UserPage/UserPage';
+
 // Material-UI Components
-import { 
+import {
+  Box,
   Button,         // replace <button>
   Dialog,
   DialogActions,
   DialogContent,
   DialogContentText,
-  DialogTitle,
+  Grid,
+  Paper,          // <div> that creates the illusion of dimensionality
   Table,          // replaces <table>
   TableBody,      // replaces <tbody>
   TableCell,      // replaces <td>
   TableContainer, // acts as a <div> for the table
   TableHead,      // replaces <thead>
   TableRow,       // replaces <tr>
-  Paper           // <div> that creates the illusion of dimensionality
+  Typography
 } from '@material-ui/core';
 
 function MyCollection() {
@@ -40,8 +44,6 @@ function MyCollection() {
     console.log('delete characterId', characterId);
     setOpen(true);
     setCharacterToDelete({ id: characterId, name: characterName});
-
-   
   } // end handleDeleteClick
 
   // routes user to character specific CharacterSheet view
@@ -65,73 +67,84 @@ function MyCollection() {
   }
 
   return(
-    <>
-      <h1>Pick a Character</h1>
-      <TableContainer component={Paper}>
-        <Table>
+    <Grid item container alignItems="stretch" component={Paper} direction="column" spacing={4}>
+      <Grid item container alignItems="center" direction="row-reverse" justify="space-around">
+        <Grid item>
+          <UserPage />
+        </Grid>
 
-          <TableHead>
-            <TableRow>
-              <TableCell>{/* View Button Column */}</TableCell>
-              <TableCell>Character Name</TableCell>
-              <TableCell align="center">Level</TableCell>
-              <TableCell align="center">Race</TableCell>
-              <TableCell align="center">Class</TableCell>
-              <TableCell>{/* DELETE Button Column */}</TableCell>
-            </TableRow>
-          </TableHead>
+        <Grid item>
+          <Typography variant="h3">Pick a Character</Typography>
+        </Grid>
+      </Grid>
 
-          <TableBody>
-            {livingCharactersList.map(character => {
-              return(
-                <TableRow key={character.id}>
-                  {/* View Button */}
-                  <TableCell>
-                    <Button 
-                      variant="outlined" 
-                      color="primary" 
-                      onClick={() => handleViewClick(character.id)}
-                    >
-                      View
-                    </Button>
-                  </TableCell>
-
-                  {/* Character Name */}
-                  <TableCell>
-                    {character.character_name}
-                  </TableCell>
-
-                  {/* Character Level */}
-                  <TableCell align="center">
-                    {character.level}
-                  </TableCell>
-
-                  {/* Character Race */}
-                  <TableCell align="center">
-                    {character.race_name}
-                  </TableCell>
-
-                  {/* Character Class */}
-                  <TableCell align="center">
-                    {character.class_name}
-                  </TableCell>
-
-                  <TableCell>
-                    <Button 
-                    variant="outlined" 
-                    color="secondary" 
-                    onClick={() => handleDeleteClick(character.id, character.character_name)}
-                    >
-                      Delete
-                    </Button>
-                  </TableCell>
+      <Grid item>
+        <Box pr={10} pl={10} pb={5}>
+          <TableContainer component={Paper}>
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <TableCell>{/* View Button Column */}</TableCell>
+                  <TableCell>Character Name</TableCell>
+                  <TableCell align="center">Level</TableCell>
+                  <TableCell align="center">Race</TableCell>
+                  <TableCell align="center">Class</TableCell>
+                  <TableCell>{/* DELETE Button Column */}</TableCell>
                 </TableRow>
-              );
-            })}        
-          </TableBody>
+              </TableHead>
 
-        </Table>
-      </TableContainer>
+              <TableBody>
+                {livingCharactersList.map(character => {
+                  return(
+                    <TableRow key={character.id}>
+                      {/* View Button */}
+                      <TableCell>
+                        <Button 
+                          variant="outlined" 
+                          color="primary" 
+                          onClick={() => handleViewClick(character.id)}
+                        >
+                          View
+                        </Button>
+                      </TableCell>
+
+                      {/* Character Name */}
+                      <TableCell>
+                        {character.character_name}
+                      </TableCell>
+
+                      {/* Character Level */}
+                      <TableCell align="center">
+                        {character.level}
+                      </TableCell>
+
+                      {/* Character Race */}
+                      <TableCell align="center">
+                        {character.race_name}
+                      </TableCell>
+
+                      {/* Character Class */}
+                      <TableCell align="center">
+                        {character.class_name}
+                      </TableCell>
+
+                      <TableCell>
+                        <Button 
+                        variant="outlined" 
+                        color="secondary" 
+                        onClick={() => handleDeleteClick(character.id, character.character_name)}
+                        >
+                          Delete
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}        
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </Box>
+      </Grid>
 
       <Dialog
         open={open}
@@ -152,7 +165,7 @@ function MyCollection() {
         </DialogContent>
       </Dialog>
 
-    </>
+    </Grid>
   );
 }// end MyCollection
 

@@ -56,7 +56,7 @@ function CharacterSheet() {
 
 
   return(
-    <>
+    
       <Grid container component={Paper} direction="column" spacing={4}>
         <Grid item xs={12}>          
           <ButtonGroup>
@@ -91,9 +91,7 @@ function CharacterSheet() {
             {currentView.spells ? <CharacterSheetSpells /> : <></>}
           </Box>
         </Grid>
-        
       </Grid>
-    </>
   );
 }// end CharacterSheet
 
