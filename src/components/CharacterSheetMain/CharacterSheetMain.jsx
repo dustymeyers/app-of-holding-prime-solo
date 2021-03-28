@@ -11,6 +11,7 @@ import {
   List,
   ListItem,
   ListItemText,
+  Paper,
   TextField,
   Typography
 } from '@material-ui/core';
@@ -37,19 +38,6 @@ function CharacterSheetMain({ }) {
     editBasicInfo: false,
     editHealth: false
   });
-
-
-  // let characterState;
-
-  // useEffect(() => {
-  //   dispatch({
-  //     type: 'FETCH_CHARACTER_SHEET_COMPONENTS'
-  //   });
-  //   dispatch({
-  //     type: 'FETCH_CHARACTER',
-  //     payload: paramsObject.id
-  //   });
-  // }, []);
 
   const abilityScoreModifier = (abilityScore) => {
     return Math.floor((abilityScore - 10) / 2);
@@ -95,143 +83,171 @@ function CharacterSheetMain({ }) {
             </Grid>
 
             <Grid item>
-              <Typography variant="body"><strong>Name</strong>: {character.baseInformation.character_name}</Typography>
+              <Typography variant="body">
+                <strong>Name</strong>: {character.baseInformation.character_name}
+              </Typography>
             </Grid>
 
             <Grid item>
-              <Typography variant="body"><strong>Class and Level</strong>: Level {character.baseInformation.level} {character.baseInformation.class_name}</Typography>
+              <Typography variant="body">
+                <strong>Class and Level</strong>: Level {character.baseInformation.level} {character.baseInformation.class_name}
+              </Typography>
             </Grid>
 
             <Grid item>
-              <Typography variant="body"><strong>Background</strong>: {character.baseInformation.background}</Typography>
+              <Typography variant="body">
+                <strong>Background</strong>: {character.baseInformation.background}
+              </Typography>
             </Grid>
 
             <Grid item>
-              <Typography variant="body"><strong>Race</strong>: {character.baseInformation.race_name}</Typography>
+              <Typography variant="body">
+                <strong>Race</strong>: {character.baseInformation.race_name}
+              </Typography>
             </Grid>
 
             <Grid item>
-              <Typography variant="body"><strong>Gender</strong>: {character.baseInformation.gender}</Typography>
+              <Typography variant="body">
+                <strong>Gender</strong>: {character.baseInformation.gender}
+              </Typography>
             </Grid>
 
             <Grid item>
-              <Typography variant="body"><strong>Alignment</strong>: {character.baseInformation.alignment}</Typography>
+              <Typography variant="body">
+                <strong>Alignment</strong>: {character.baseInformation.alignment}
+              </Typography>
             </Grid>
 
             <Grid item>
-              <Typography variant="body"><strong>Experience Points</strong>: {character.baseInformation.experience_points}</Typography>
+              <Typography variant="body">
+                <strong>Experience Points</strong>: {character.baseInformation.experience_points}
+              </Typography>
             </Grid>
           </Grid>
           :
           <Grid container direction="column" spacing={2}>
-            <Grid item>
-              <TextField 
-                label="Character Name"
-                onChange={event => dispatch({
-                  type: 'UPDATE_CHARACTER',
-                  payload: {
-                    baseInformation: {
-                      ...character.baseInformation,
-                      character_name: event.target.value
+            <Grid item xs={12}>
+              <FormControl fullWidth>
+                <TextField 
+                  label="Character Name"
+                  onChange={event => dispatch({
+                    type: 'UPDATE_CHARACTER',
+                    payload: {
+                      baseInformation: {
+                        ...character.baseInformation,
+                        character_name: event.target.value
+                      }
                     }
-                  }
-                })}
-                type="text"
-                value={character.baseInformation.character_name}
-              />
+                  })}
+                  type="text"
+                  value={character.baseInformation.character_name}
+                />
+              </FormControl>
             </Grid>
 
             <Grid item>
-              <TextField 
-                label="Level"
-                min="1"
-                max="20"
-                onChange={event => dispatch({
-                  type: 'UPDATE_CHARACTER',
-                  payload: {
-                    baseInformation: {
-                      ...character.baseInformation,
-                      level: event.target.value
+              <FormControl fullWidth>
+                <TextField 
+                  label="Level"
+                  min="1"
+                  max="20"
+                  onChange={event => dispatch({
+                    type: 'UPDATE_CHARACTER',
+                    payload: {
+                      baseInformation: {
+                        ...character.baseInformation,
+                        level: event.target.value
+                      }
                     }
-                  }
-                })}
-                type="number"
-                value={character.baseInformation.level}
-              />
+                  })}
+                  type="number"
+                  value={character.baseInformation.level}
+                />
+              </FormControl>
             </Grid>
 
             <Grid item>
-              <TextField 
-                label="Gender"
-                onChange={event => dispatch({
-                  type: 'UPDATE_CHARACTER',
-                  payload: {
-                    baseInformation: {
-                      ...character.baseInformation,
-                      gender: event.target.value
+              <FormControl fullWidth>
+                <TextField 
+                  label="Gender"
+                  onChange={event => dispatch({
+                    type: 'UPDATE_CHARACTER',
+                    payload: {
+                      baseInformation: {
+                        ...character.baseInformation,
+                        gender: event.target.value
+                      }
                     }
-                  }
-                })}
-                type="text"
-                value={character.baseInformation.gender}
-              />
+                  })}
+                  type="text"
+                  value={character.baseInformation.gender}
+                />
+              </FormControl>
             </Grid>
 
             <Grid item>
-              <TextField 
-                label="Alignment"
-                onChange={event => dispatch({
-                  type: 'UPDATE_CHARACTER',
-                  payload: {
-                    baseInformation: {
-                      ...character.baseInformation,
-                      alignment: event.target.value
+              <FormControl fullWidth>
+                <TextField 
+                  label="Alignment"
+                  onChange={event => dispatch({
+                    type: 'UPDATE_CHARACTER',
+                    payload: {
+                      baseInformation: {
+                        ...character.baseInformation,
+                        alignment: event.target.value
+                      }
                     }
-                  }
-                })}
-                type="text"
-                value={character.baseInformation.alignment}
-              />
+                  })}
+                  type="text"
+                  value={character.baseInformation.alignment}
+                />
+              </FormControl>
             </Grid>
 
             <Grid item>
-              <TextField
-                label="Experience Points"
-                onChange={event => dispatch({
-                  type: 'UPDATE_CHARACTER',
-                  payload: {
-                    baseInformation: {
-                      ...character.baseInformation,
-                      experience_points: event.target.value
+              <FormControl fullWidth>
+                <TextField
+                  label="Experience Points"
+                  onChange={event => dispatch({
+                    type: 'UPDATE_CHARACTER',
+                    payload: {
+                      baseInformation: {
+                        ...character.baseInformation,
+                        experience_points: event.target.value
+                      }
                     }
-                  }
-                })}
-                type="number"
-                value={character.baseInformation.experience_points}
-              />
+                  })}
+                  type="number"
+                  value={character.baseInformation.experience_points}
+                />
+              </FormControl>
             </Grid>
 
             <Grid item>
-              <ButtonGroup variant="outlined">
-                <Button 
-                  color="secondary" 
-                  onClick={() => {
-                    cancelEdit();
-                    setEditMode({...editMode, editBasicInfo: false});
-                  }}
-                >
-                  Cancel
-                </Button>
-                <Button 
-                  color="primary" 
-                  onClick={() => {
-                  saveEdit();
-                  setEditMode({...editMode, editBasicInfo: false});
-                  }}
-                >
-                  Save
-                </Button>
-              </ButtonGroup>
+              <Grid container justify="flex-end">
+                <Grid item>
+                  <ButtonGroup variant="outlined">
+                    <Button 
+                      color="secondary" 
+                      onClick={() => {
+                        cancelEdit();
+                        setEditMode({...editMode, editBasicInfo: false});
+                      }}
+                    >
+                      Cancel
+                    </Button>
+                    <Button 
+                      color="primary" 
+                      onClick={() => {
+                      saveEdit();
+                      setEditMode({...editMode, editBasicInfo: false});
+                      }}
+                    >
+                      Save
+                    </Button>
+                  </ButtonGroup>
+                </Grid>
+              </Grid>
             </Grid>
           </Grid>
         }
