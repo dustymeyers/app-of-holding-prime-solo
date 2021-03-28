@@ -70,7 +70,7 @@ function CharacterSheetMain({ }) {
         {!editMode.editBasicInfo ?
           <Grid container direction="column" spacing={3}>
             <Grid item>
-              <Grid container alignItems="flex-end">
+              <Grid container alignItems="flex-end" justify="space-between">
                 <Grid item>
                   <Typography variant="h4">Character</Typography>
                 </Grid>
@@ -255,9 +255,9 @@ function CharacterSheetMain({ }) {
         {!editMode.editAbilityScores ?
           <Grid container direction="column" spacing={3}>
             <Grid item>
-              <Grid container alignItems="flex-end" wrap="nowrap">
+              <Grid container alignItems="flex-end" wrap="nowrap" justify="space-between">
                 <Grid item>
-                  <Typography variant="h4">Ability Scores:</Typography>
+                  <Typography variant="h4">Ability Scores</Typography>
                 </Grid>
 
                 <Grid item>
@@ -455,15 +455,21 @@ function CharacterSheetMain({ }) {
       <Grid item xs={4}>
         {!editMode.editHealth ? 
           // Text View !editMode.editHealth = true
-          <Grid container direction="column" spacing={2}>
-            <Grid item>
-              <Typography variant="h4">
-                <strong>AC</strong>: {character.baseInformation.armor_class}
-              </Typography>
+          <Grid container direction="column" spacing={3}>
+            <Grid item container justify="space-between">
+              <Grid item>
+                <Typography variant="h4">
+                  AC: {character.baseInformation.armor_class}
+                </Typography>
+              </Grid>
+
+              <IconButton>
+                <EditIcon onClick={() => setEditMode({...editMode, editHealth: true})} />
+              </IconButton>
             </Grid>
 
             <Grid item>
-              <Typography variant="h4">
+              <Typography variant="h5">
                 <strong>Current Health Points</strong>: {character.baseInformation.current_hit_points}
               </Typography>
             </Grid>
@@ -498,9 +504,6 @@ function CharacterSheetMain({ }) {
               </Typography>
             </Grid>
 
-            <Grid item>
-              <Button variant="outlined" onClick={() => setEditMode({...editMode, editHealth: true})}>Edit</Button>
-            </Grid>
           </Grid> 
           : // Edit View !editMode.editHealth = false
           <Grid container direction="column" spacing={2}>
@@ -608,17 +611,25 @@ function CharacterSheetMain({ }) {
       </Grid>
 
       <Grid item>
-        <h2>Skill Proficiencies</h2>
+        <Typography variant="h5">Skill Proficiencies</Typography>
         
         <List>
           {skillsAndSavingThrows.skillsList.map(skill => {
-            let skillElement = <ListItem key={skill.id}>{skill.skill_name}</ListItem>;
+            let skillElement = (
+              <ListItem key={skill.id}>
+                <ListItemText>{skill.skill_name}</ListItemText>
+              </ListItem>
+            );
             // console.log('skill.id', skill.id);
             for (let proficiency of character.skillProficiencies){
               // console.log('proficiency.id', proficiency.id);
               if (proficiency.id === skill.id) {
                 // console.log('id is equal')
-                return skillElement = <ListItem key={skill.id}>{skill.skill_name} Proficient</ListItem>;
+                return skillElement = (
+                  <ListItem key={skill.id}>
+                    <ListItemText>{skill.skill_name} <strong>Proficient</strong></ListItemText>
+                  </ListItem>
+                );
               }   
             }
             return skillElement;
@@ -629,13 +640,21 @@ function CharacterSheetMain({ }) {
       <Grid item container direction="column" xs={8}>
         <Grid item container>
           <Grid item xs={6}>
-            <Typography variant="h4">Saving Throw Proficiencies</Typography>
+            <Typography variant="h5">Saving Throw Proficiencies</Typography>
             <List>
               {skillsAndSavingThrows.savingThrowsList.map(savingThrow => {
-                let savingThrowElement = <ListItem key={savingThrow.id}>{savingThrow.saving_throw_name}</ListItem>;
+                let savingThrowElement = (
+                  <ListItem key={savingThrow.id}>
+                    <ListItemText>{savingThrow.saving_throw_name}</ListItemText>
+                  </ListItem>
+                );
                 for (let proficiency of character.savingThrowProficiencies) {
                   if (proficiency.id === savingThrow.id) {
-                    savingThrowElement = <ListItem key={savingThrow.id}>{savingThrow.saving_throw_name} Proficient</ListItem>;
+                    savingThrowElement = (
+                      <ListItem key={savingThrow.id}>
+                        <ListItemText>{savingThrow.saving_throw_name} <strong>Proficient</strong></ListItemText>
+                      </ListItem>
+                    );
                   }
                 }
                 return savingThrowElement;
@@ -644,17 +663,25 @@ function CharacterSheetMain({ }) {
           </Grid>
 
 
-          <Grid item container direction="column" xs={6}>
-            <Grid item container direction="column">
+          <Grid item container direction="column" xs={6} justify="space-between">
+            <Grid item container direction="column" spacing ={3}>
+              <Grid item>
                 <Typography variant="h5">Proficiency Bonus: +{proficiencyBonus}</Typography>
+              </Grid>
+              <Grid item>
                 <Typography variant="h5">Passive Perception: <strong>TODO</strong></Typography>
+              </Grid>
             </Grid>
 
             <Grid item>
-              <Typography variant="h4">Languages Known</Typography>
+              <Typography variant="h5">Languages Known</Typography>
               <List>
                 {character.languagesKnown.map(language => {
-                  return <ListItem key={language.id}>{language.language_name}</ListItem>
+                  return(
+                  <ListItem key={language.id}>
+                    <ListItemText>{language.language_name}</ListItemText>
+                  </ListItem>
+                  );
                 })}
               </List>
             </Grid>
@@ -662,7 +689,7 @@ function CharacterSheetMain({ }) {
         </Grid>
 
         <Grid item>
-          <h2>Features: </h2>
+          <Typography variant="h5">Features</Typography>
           <List>
             {character.features.map((feature, index) => {
               return(
