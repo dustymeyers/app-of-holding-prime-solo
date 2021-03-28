@@ -260,7 +260,7 @@ function CharacterSheetMain({ }) {
             </Grid>
           </Grid>
         }
-      </Grid>
+      </Grid>  {/* End basic character info */}
       
       {/* Ability score section */}
       <Grid item xs={4}>
@@ -461,7 +461,7 @@ function CharacterSheetMain({ }) {
             </Grid>
           </Grid>
         }
-      </Grid>
+      </Grid> {/* End Ability Score section */}
 
       {/* renders character health and armor class as well as edit button */}
       <Grid item xs={4}>
@@ -620,8 +620,9 @@ function CharacterSheetMain({ }) {
             </Grid>
           </Grid>
         }
-      </Grid>
+      </Grid> {/* End health section */}
 
+      {/* Skill Proficiencies section */}
       <Grid item xs={4}>
         <Typography variant="h5">Skill Proficiencies</Typography>
         <Typography variant="caption" paragraph>For skill checks, add the respective ability score modifier to each roll. If you are proficient, add your proficiency bonus as well.</Typography>
@@ -648,10 +649,12 @@ function CharacterSheetMain({ }) {
             return skillElement;
           })}
         </List>
-      </Grid>
+      </Grid> {/* End Skill Proficiencies section */}
 
+      {/* This section holds saving throws, languages, proficiency bonus, & passive perception. Wrapped together to dynamically design the page.  */}
       <Grid item container direction="column" xs={8}>
         <Grid item container>
+          {/* Saving Throws Proficiencies section */}
           <Grid item xs={6}>
             <Typography variant="h5">Saving Throw Proficiencies</Typography>
             <Typography variant="caption" paragraph>For saving throws, add the respective ability score modifier to each roll. If you are proficient, add your proficiency bonus as well.</Typography>
@@ -674,10 +677,11 @@ function CharacterSheetMain({ }) {
                 return savingThrowElement;
                 })}
             </List>
-          </Grid>
+          </Grid>  {/* Saving Throws Proficiencies section */}
 
-
+          {/* Proficiency Bonus/Passive Perception and Languages, wrapped together for dynamic rendering */}
           <Grid item container direction="column" xs={6} justify="space-between">
+            {/* Proficiency Bonus/Passive Perception */}
             <Grid item container direction="column" spacing ={3}>
               <Grid item>
                 <Typography variant="h5">Proficiency Bonus: +{proficiencyBonus}</Typography>
@@ -685,8 +689,9 @@ function CharacterSheetMain({ }) {
               <Grid item>
                 <Typography variant="h5">Passive Perception: <strong>{passivePerception(skillsAndSavingThrows.skillsList)}</strong></Typography>
               </Grid>
-            </Grid>
+            </Grid>{/* End Proficiency Bonus/Passive Perception */}
 
+            {/* Languages Known */}
             <Grid item>
               <Typography variant="h5">Languages Known</Typography>
               <List>
@@ -698,10 +703,11 @@ function CharacterSheetMain({ }) {
                   );
                 })}
               </List>
-            </Grid>
+            </Grid>{/* End Languages Known */}
           </Grid>
         </Grid>
 
+        {/* Character Features Section */}
         <Grid item>
           <Typography variant="h5">Features</Typography>
           <List>
@@ -715,7 +721,7 @@ function CharacterSheetMain({ }) {
               );
             })}
           </List>
-        </Grid>
+        </Grid>{/* End Character Features Section */}
       </Grid>
     </Grid>
   );
