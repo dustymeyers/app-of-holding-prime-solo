@@ -224,36 +224,33 @@ function CharacterSheetMain({ }) {
               </FormControl>
             </Grid>
 
-            <Grid item>
-              <Grid container justify="flex-end">
-                <Grid item>
-                  <ButtonGroup variant="outlined">
-                    <Button 
-                      color="secondary" 
-                      onClick={() => {
-                        cancelEdit();
-                        setEditMode({...editMode, editBasicInfo: false});
-                      }}
-                    >
-                      Cancel
-                    </Button>
-                    <Button 
-                      color="primary" 
-                      onClick={() => {
-                      saveEdit();
-                      setEditMode({...editMode, editBasicInfo: false});
-                      }}
-                    >
-                      Save
-                    </Button>
-                  </ButtonGroup>
-                </Grid>
-              </Grid>
+            <Grid item container justify="flex-end">
+              <ButtonGroup variant="outlined">
+                <Button 
+                  color="secondary" 
+                  onClick={() => {
+                    cancelEdit();
+                    setEditMode({...editMode, editBasicInfo: false});
+                  }}
+                >
+                  Cancel
+                </Button>
+                <Button 
+                  color="primary" 
+                  onClick={() => {
+                  saveEdit();
+                  setEditMode({...editMode, editBasicInfo: false});
+                  }}
+                >
+                  Save
+                </Button>
+              </ButtonGroup>
             </Grid>
           </Grid>
         }
       </Grid>
       
+      {/* Ability score section */}
       <Grid item xs={4}>
         {!editMode.editAbilityScores ?
           <Grid container direction="column" spacing={3}>
@@ -428,55 +425,77 @@ function CharacterSheetMain({ }) {
               </FormControl>
             </Grid>
 
-            <Grid item>
-              <Grid container justify="flex-end">
-                <Grid item>
-                  <ButtonGroup variant="outlined">
-                    <Button 
-                      color="secondary" 
-                      onClick={() => {
-                        cancelEdit();
-                        setEditMode({...editMode, editAbilityScores: false});
-                      }}
-                    >
-                      Cancel
-                    </Button>
-                    <Button 
-                      color="primary" 
-                      onClick={() => {
-                      saveEdit();
-                      setEditMode({...editMode, editAbilityScores: false});
-                      }}
-                    >
-                      Save
-                    </Button>
-                  </ButtonGroup>
-                </Grid>
-              </Grid>
+            <Grid item container justify="flex-end">              
+              <ButtonGroup variant="outlined">
+                <Button 
+                  color="secondary" 
+                  onClick={() => {
+                    cancelEdit();
+                    setEditMode({...editMode, editAbilityScores: false});
+                  }}
+                >
+                  Cancel
+                </Button>
+                <Button 
+                  color="primary" 
+                  onClick={() => {
+                  saveEdit();
+                  setEditMode({...editMode, editAbilityScores: false});
+                  }}
+                >
+                  Save
+                </Button>
+              </ButtonGroup>
             </Grid>
           </Grid>
         }
       </Grid>
 
-      {/* renders character health and armor class with edit button */}
+      {/* renders character health and armor class as well as edit button */}
       <Grid item xs={4}>
         {!editMode.editHealth ? 
           // Text View !editMode.editHealth = true
           <Grid container direction="column" spacing={2}>
             <Grid item>
-              <Typography variant="h3">AC: {character.baseInformation.armor_class}</Typography>
+              <Typography variant="h4">
+                <strong>AC</strong>: {character.baseInformation.armor_class}
+              </Typography>
             </Grid>
 
             <Grid item>
-              <Typography variant="h3">Current Health Points: {character.baseInformation.current_hit_points}</Typography>
+              <Typography variant="h4">
+                <strong>Current Health Points</strong>: {character.baseInformation.current_hit_points}
+              </Typography>
             </Grid>
             
             <Grid item>
-              <Typography variant="h4">Max Health Points: {character.baseInformation.max_hit_points}</Typography>
+              <Typography variant="h5">
+                <strong>Max Health Points</strong>: {character.baseInformation.max_hit_points}
+              </Typography>
             </Grid>
 
             <Grid item>
-              <Typography variant="h4">Temporary Health Points: {character.baseInformation.temporary_hit_points}</Typography>
+              <Typography variant="h5">
+                <strong>Temporary Health Points</strong>: {character.baseInformation.temporary_hit_points}
+              </Typography>
+            </Grid>
+
+            <Grid item>
+              <Typography variant="h5">
+                <strong>Hit Die</strong>: 1d{character.baseInformation.hit_die}
+              </Typography>
+            </Grid>
+
+            <Grid item>
+              <Typography variant="bod1">
+                <strong>Hit Dice Available</strong>: {character.baseInformation.hit_dice_available}
+              </Typography>
+            </Grid>
+
+            <Grid item>
+              <Typography variant="body1">
+                <strong>Maximum Number of Hit Dice</strong>: {character.baseInformation.level}
+              </Typography>
             </Grid>
 
             <Grid item>
@@ -487,74 +506,82 @@ function CharacterSheetMain({ }) {
           <Grid container direction="column" spacing={2}>
             
             <Grid item>
-              <TextField 
-                label="Armor Class"
-                onChange={event => dispatch({
-                  type: 'UPDATE_CHARACTER',
-                  payload: {
-                    baseInformation: {
-                      ...character.baseInformation,
-                      armor_class: event.target.value
+              <FormControl fullWidth>
+                <TextField 
+                  label="Armor Class"
+                  onChange={event => dispatch({
+                    type: 'UPDATE_CHARACTER',
+                    payload: {
+                      baseInformation: {
+                        ...character.baseInformation,
+                        armor_class: event.target.value
+                      }
                     }
-                  }
-                })}
-                type="number"
-                value={character.baseInformation.armor_class}
-              />
+                  })}
+                  type="number"
+                  value={character.baseInformation.armor_class}
+                />
+              </FormControl>
             </Grid>
 
             <Grid item>
-              <TextField 
-                label="Current Health Points"
-                onChange={event => dispatch({
-                  type: 'UPDATE_CHARACTER',
-                  payload: {
-                    baseInformation: {
-                      ...character.baseInformation,
-                      current_hit_points: event.target.value
+              <FormControl fullWidth>
+                <TextField 
+                  label="Current Health Points"
+                  onChange={event => dispatch({
+                    type: 'UPDATE_CHARACTER',
+                    payload: {
+                      baseInformation: {
+                        ...character.baseInformation,
+                        current_hit_points: event.target.value
+                      }
                     }
-                  }
-                })}
-                type="number"
-                value={character.baseInformation.current_hit_points}
-              />
+                  })}
+                  type="number"
+                  value={character.baseInformation.current_hit_points}
+                />
+              </FormControl>
             </Grid>
 
             <Grid item>
-              <TextField
-                label="Max Health Points"
-                onChange={event => dispatch({
-                  type: 'UPDATE_CHARACTER',
-                  payload: {
-                    baseInformation: {
-                      ...character.baseInformation,
-                      max_hit_points: event.target.value
+              <FormControl fullWidth>
+                <TextField
+                  label="Max Health Points"
+                  onChange={event => dispatch({
+                    type: 'UPDATE_CHARACTER',
+                    payload: {
+                      baseInformation: {
+                        ...character.baseInformation,
+                        max_hit_points: event.target.value
+                      }
                     }
-                  }
-                })}
-                type="number"
-                value={character.baseInformation.max_hit_points}
-              />
+                  })}
+                  type="number"
+                  value={character.baseInformation.max_hit_points}
+                />
+              </FormControl>
             </Grid>
 
             <Grid item>
-              <TextField 
-                label="Temporary Health Points"
-                onChange={event => dispatch({
-                  type: 'UPDATE_CHARACTER',
-                  payload: {
-                    baseInformation: {
-                      ...character.baseInformation,
-                      temporary_hit_points: event.target.value
+              <FormControl fullWidth>
+                <TextField 
+                  label="Temporary Health Points"
+                  onChange={event => dispatch({
+                    type: 'UPDATE_CHARACTER',
+                    payload: {
+                      baseInformation: {
+                        ...character.baseInformation,
+                        temporary_hit_points: event.target.value
+                      }
                     }
-                  }
-                })}
-                type="number"
-                value={character.baseInformation.temporary_hit_points}
-              />
+                  })}
+                  type="number"
+                  value={character.baseInformation.temporary_hit_points}
+                />
+              </FormControl>
             </Grid>
 
-            <Grid item>
+            <Grid item container justify="flex-end">
               <ButtonGroup variant="outlined">
                 <Button 
                   color="secondary" 
@@ -580,45 +607,6 @@ function CharacterSheetMain({ }) {
         }
       </Grid>
 
-
-      <Grid item>
-        <Grid container direction="column">
-          <Grid item>
-            <Typography variant="h3">Hit Die: 1d{character.baseInformation.hit_die}</Typography>
-          </Grid>
-          <Grid item>
-            <Typography variant="h3">Hit Dice Available: {character.baseInformation.hit_dice_available}</Typography>
-          </Grid>
-          <Grid item>
-            <Typography variant="h3">Maximum Number of Hit Dice: {character.baseInformation.level}</Typography>
-          </Grid>
-        </Grid>
-      </Grid>
-
-      <Grid item>
-        <Grid container direction="column">
-          <h2>Proficiency Bonus: +{proficiencyBonus}</h2>
-          <h3>Passive Perception: <strong>TODO</strong></h3>
-        </Grid>
-      </Grid>
-
-
-
-      <Grid item>
-        <h2>Features: </h2>
-        <List>
-          {character.features.map((feature, index) => {
-            return(
-              <ListItem key={index}>
-                <ListItemText>
-                  <strong>{feature.feature_name}</strong>: {feature.feature_description}
-                </ListItemText>
-              </ListItem>
-            );
-          })}
-        </List>
-      </Grid>
-
       <Grid item>
         <h2>Skill Proficiencies</h2>
         
@@ -638,28 +626,55 @@ function CharacterSheetMain({ }) {
         </List>
       </Grid>
 
-      <Grid item>
-        <Typography variant="h2">Saving Throw Proficiencies</Typography>
-        <List>
-          {skillsAndSavingThrows.savingThrowsList.map(savingThrow => {
-            let savingThrowElement = <ListItem key={savingThrow.id}>{savingThrow.saving_throw_name}</ListItem>;
-            for (let proficiency of character.savingThrowProficiencies) {
-              if (proficiency.id === savingThrow.id) {
-                savingThrowElement = <ListItem key={savingThrow.id}>{savingThrow.saving_throw_name} Proficient</ListItem>;
-              }
-            }
-            return savingThrowElement;
-            })}
-        </List>
-      </Grid>
+      <Grid item container direction="column" xs={8}>
+        <Grid item container>
+          <Grid item xs={6}>
+            <Typography variant="h4">Saving Throw Proficiencies</Typography>
+            <List>
+              {skillsAndSavingThrows.savingThrowsList.map(savingThrow => {
+                let savingThrowElement = <ListItem key={savingThrow.id}>{savingThrow.saving_throw_name}</ListItem>;
+                for (let proficiency of character.savingThrowProficiencies) {
+                  if (proficiency.id === savingThrow.id) {
+                    savingThrowElement = <ListItem key={savingThrow.id}>{savingThrow.saving_throw_name} Proficient</ListItem>;
+                  }
+                }
+                return savingThrowElement;
+                })}
+            </List>
+          </Grid>
 
-      <Grid item>
-        <Typography variant="h2">Languages Known</Typography>
-        <List>
-          {character.languagesKnown.map(language => {
-            return <ListItem key={language.id}>{language.language_name}</ListItem>
-          })}
-        </List>
+
+          <Grid item container direction="column" xs={6}>
+            <Grid item container direction="column">
+                <Typography variant="h5">Proficiency Bonus: +{proficiencyBonus}</Typography>
+                <Typography variant="h5">Passive Perception: <strong>TODO</strong></Typography>
+            </Grid>
+
+            <Grid item>
+              <Typography variant="h4">Languages Known</Typography>
+              <List>
+                {character.languagesKnown.map(language => {
+                  return <ListItem key={language.id}>{language.language_name}</ListItem>
+                })}
+              </List>
+            </Grid>
+          </Grid>
+        </Grid>
+
+        <Grid item>
+          <h2>Features: </h2>
+          <List>
+            {character.features.map((feature, index) => {
+              return(
+                <ListItem key={index}>
+                  <ListItemText>
+                    <strong>{feature.feature_name}</strong>: {feature.feature_description}
+                  </ListItemText>
+                </ListItem>
+              );
+            })}
+          </List>
+        </Grid>
       </Grid>
     </Grid>
   );
