@@ -26,6 +26,7 @@ function CharacterSheetMain({ }) {
   const dispatch = useDispatch();
   const paramsObject = useParams();
 
+  // base ability score stats.
   const baseStrength = character.baseInformation.str_score;
   const baseDexterity = character.baseInformation.dex_score;
   const baseConstitution = character.baseInformation.con_score;
@@ -34,16 +35,19 @@ function CharacterSheetMain({ }) {
   const baseCharisma = character.baseInformation.cha_score;
   const proficiencyBonus = Math.ceil((character.baseInformation.level)/4) + 1;
 
+  // state for opening dialog edit sections
   const [editMode, setEditMode] = useState({
     editAbilityScores: false,
     editBasicInfo: false,
     editHealth: false
   });
 
+  // calculates the ability score modifier, uses the base ability score as argument
   const abilityScoreModifier = (abilityScore) => {
     return Math.floor((abilityScore - 10) / 2);
   }
 
+  // calculates passive perception, checks for proficiency
   function passivePerception(skillsArray) {
     let passivePerceptionScore = 10 + abilityScoreModifier(baseWisdom);
     for (let proficiency of skillsArray) {
@@ -55,11 +59,13 @@ function CharacterSheetMain({ }) {
     return passivePerceptionScore;
   }
 
+  // handles the cancel button inside edit dialog
   const cancelEdit = () => {
     console.log('clicked cancel');
     setEditMode(false);
   }
 
+  // handles the save button inside edit dialog
   const saveEdit = () => {
     console.log('clicked save');
     dispatch({
@@ -68,13 +74,7 @@ function CharacterSheetMain({ }) {
     });
     setEditMode(false);
   }
-
-  const handleEdit = (key) => {
-    setEditMode({ key: true});
-  }
-
-  console.log(editMode)
-
+  
   return(
     <Grid container spacing={5}>
       {/* Basic character information, including name, class, race, level and gender */}
