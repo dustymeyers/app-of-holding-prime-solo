@@ -70,10 +70,11 @@ function CharacterSheetMain({ }) {
         {!editMode.editBasicInfo ?
           <Grid container direction="column" spacing={3}>
             <Grid item>
-              <Grid container alignItems="flex-end" direction="row">
+              <Grid container alignItems="flex-end">
                 <Grid item>
-                  <Typography variant="h3">Character</Typography>
+                  <Typography variant="h4">Character</Typography>
                 </Grid>
+
                 <Grid item>
                   <IconButton>
                     <EditIcon onClick={() => setEditMode({...editMode, editBasicInfo: true})} />
@@ -83,43 +84,43 @@ function CharacterSheetMain({ }) {
             </Grid>
 
             <Grid item>
-              <Typography variant="body">
+              <Typography variant="body1">
                 <strong>Name</strong>: {character.baseInformation.character_name}
               </Typography>
             </Grid>
 
             <Grid item>
-              <Typography variant="body">
+              <Typography variant="body1">
                 <strong>Class and Level</strong>: Level {character.baseInformation.level} {character.baseInformation.class_name}
               </Typography>
             </Grid>
 
             <Grid item>
-              <Typography variant="body">
+              <Typography variant="body1">
                 <strong>Background</strong>: {character.baseInformation.background}
               </Typography>
             </Grid>
 
             <Grid item>
-              <Typography variant="body">
+              <Typography variant="body1">
                 <strong>Race</strong>: {character.baseInformation.race_name}
               </Typography>
             </Grid>
 
             <Grid item>
-              <Typography variant="body">
+              <Typography variant="body1">
                 <strong>Gender</strong>: {character.baseInformation.gender}
               </Typography>
             </Grid>
 
             <Grid item>
-              <Typography variant="body">
+              <Typography variant="body1">
                 <strong>Alignment</strong>: {character.baseInformation.alignment}
               </Typography>
             </Grid>
 
             <Grid item>
-              <Typography variant="body">
+              <Typography variant="body1">
                 <strong>Experience Points</strong>: {character.baseInformation.experience_points}
               </Typography>
             </Grid>
@@ -255,169 +256,203 @@ function CharacterSheetMain({ }) {
       
       <Grid item xs={4}>
         {!editMode.editAbilityScores ?
-          <Grid container direction="column" spacing={2}>
+          <Grid container direction="column" spacing={3}>
             <Grid item>
-              <Typography variant="h3">Ability Scores:</Typography>
+              <Grid container alignItems="flex-end" wrap="nowrap">
+                <Grid item>
+                  <Typography variant="h4">Ability Scores:</Typography>
+                </Grid>
+
+                <Grid item>
+                  <IconButton>
+                    <EditIcon onClick={() => setEditMode({...editMode, editAbilityScores: true})} />
+                  </IconButton>
+                </Grid>
+              </Grid>
             </Grid>
 
             <Grid item>
-              <Typography variant="body">Strength: {baseStrength + character.baseInformation.str_bonus}, Modifier: {abilityScoreModifier(baseStrength)}</Typography>
+              <Typography variant="body1">
+                <strong>Strength</strong>: {baseStrength + character.baseInformation.str_bonus}, <strong>Modifier</strong>: {abilityScoreModifier(baseStrength)}
+              </Typography>
             </Grid>
 
             <Grid item>
-              <Typography variant="body">Dexterity: {baseDexterity + character.baseInformation.dex_bonus}, Modifier: {abilityScoreModifier(baseDexterity)}</Typography>
+              <Typography variant="body1">
+                <strong>Dexterity</strong>: {baseDexterity + character.baseInformation.dex_bonus}, <strong>Modifier</strong>: {abilityScoreModifier(baseDexterity)}
+              </Typography>
             </Grid>
 
             <Grid item>
-              <Typography variant="body">Constitution: {baseConstitution + character.baseInformation.con_bonus}, Modifier: {abilityScoreModifier(baseConstitution)}</Typography>
+              <Typography variant="body1">
+                <strong>Constitution</strong>: {baseConstitution + character.baseInformation.con_bonus}, <strong>Modifier</strong>: {abilityScoreModifier(baseConstitution)}
+              </Typography>
             </Grid>
 
             <Grid item>
-              <Typography variant="body">Intelligence: {baseIntelligence + character.baseInformation.int_bonus}, Modifier: {abilityScoreModifier(baseIntelligence)}</Typography>
+              <Typography variant="body1">
+                <strong>Intelligence</strong>: {baseIntelligence + character.baseInformation.int_bonus}, <strong>Modifier</strong>: {abilityScoreModifier(baseIntelligence)}
+              </Typography>
             </Grid>
             
             <Grid item>
-              <Typography variant="body">Wisdom: {baseWisdom + character.baseInformation.wis_bonus}, Modifier: {abilityScoreModifier(baseWisdom)}</Typography>
+              <Typography variant="body1">
+                <strong>Wisdom</strong>: {baseWisdom + character.baseInformation.wis_bonus}, <strong>Modifier</strong>: {abilityScoreModifier(baseWisdom)}
+              </Typography>
             </Grid>
 
             <Grid item>
-              <Typography variant="body">Charisma: {baseCharisma + character.baseInformation.cha_bonus}, Modifier: {abilityScoreModifier(baseCharisma)}</Typography>
-            </Grid>
-
-            <Grid>
-              <Button variant="outlined" onClick={() => setEditMode({...editMode, editAbilityScores: true})}>Edit</Button>
+              <Typography variant="body1">
+                <strong>Charisma</strong>: {baseCharisma + character.baseInformation.cha_bonus}, <strong>Modifier</strong>: {abilityScoreModifier(baseCharisma)}
+              </Typography>
             </Grid>
           </Grid> :
           <Grid container direction="column" spacing={2}>
             <Grid item>
-              <TextField 
-                label="Strength"
-                min="3"
-                onChange={event => dispatch({
-                  type: 'UPDATE_CHARACTER',
-                  payload: {
-                    baseInformation: {
-                      ...character.baseInformation,
-                      str_score: event.target.value
+              <FormControl fullWidth>
+                <TextField 
+                  label="Strength"
+                  min="3"
+                  onChange={event => dispatch({
+                    type: 'UPDATE_CHARACTER',
+                    payload: {
+                      baseInformation: {
+                        ...character.baseInformation,
+                        str_score: event.target.value
+                      }
                     }
-                  }
-                })}
-                type="number"
-                value={baseStrength}
-              />
+                  })}
+                  type="number"
+                  value={baseStrength}
+                />
+              </FormControl>
             </Grid>
 
             <Grid item>
-              <TextField 
-                label="Dexterity"
-                min="3"
-                onChange={event => dispatch({
-                  type: 'UPDATE_CHARACTER',
-                  payload: {
-                    baseInformation: {
-                      ...character.baseInformation,
-                      dex_score: event.target.value
+              <FormControl fullWidth>
+                <TextField 
+                  label="Dexterity"
+                  min="3"
+                  onChange={event => dispatch({
+                    type: 'UPDATE_CHARACTER',
+                    payload: {
+                      baseInformation: {
+                        ...character.baseInformation,
+                        dex_score: event.target.value
+                      }
                     }
-                  }
-                })}
-                type="number"
-                value={baseDexterity}
-              />
+                  })}
+                  type="number"
+                  value={baseDexterity}
+                />
+              </FormControl>
             </Grid>
 
             <Grid item>
-              <TextField 
-                label="Constitution"
-                min="3"
-                onChange={event => dispatch({
-                  type: 'UPDATE_CHARACTER',
-                  payload: {
-                    baseInformation: {
-                      ...character.baseInformation,
-                      con_score: event.target.value
+              <FormControl fullWidth>
+                <TextField 
+                  label="Constitution"
+                  min="3"
+                  onChange={event => dispatch({
+                    type: 'UPDATE_CHARACTER',
+                    payload: {
+                      baseInformation: {
+                        ...character.baseInformation,
+                        con_score: event.target.value
+                      }
                     }
-                  }
-                })}
-                type="number"
-                value={baseConstitution}
-              />
+                  })}
+                  type="number"
+                  value={baseConstitution}
+                />
+              </FormControl>
             </Grid>
 
             <Grid item>
-              <TextField 
-                label="Intelligence"
-                min="3"
-                onChange={event => dispatch({
-                  type: 'UPDATE_CHARACTER',
-                  payload: {
-                    baseInformation: {
-                      ...character.baseInformation,
-                      int_score: event.target.value
+              <FormControl fullWidth>
+                <TextField 
+                  label="Intelligence"
+                  min="3"
+                  onChange={event => dispatch({
+                    type: 'UPDATE_CHARACTER',
+                    payload: {
+                      baseInformation: {
+                        ...character.baseInformation,
+                        int_score: event.target.value
+                      }
                     }
-                  }
-                })}
-                type="number"
-                value={baseIntelligence}
-              />
+                  })}
+                  type="number"
+                  value={baseIntelligence}
+                />
+              </FormControl>
             </Grid>
 
             <Grid item>
-              <TextField 
-                label="Wisdom"
-                min="3"
-                onChange={event => dispatch({
-                  type: 'UPDATE_CHARACTER',
-                  payload: {
-                    baseInformation: {
-                      ...character.baseInformation,
-                      wis_score: event.target.value
+              <FormControl fullWidth>
+                <TextField 
+                  label="Wisdom"
+                  min="3"
+                  onChange={event => dispatch({
+                    type: 'UPDATE_CHARACTER',
+                    payload: {
+                      baseInformation: {
+                        ...character.baseInformation,
+                        wis_score: event.target.value
+                      }
                     }
-                  }
-                })}
-                type="number"
-                value={baseWisdom}
-              />  
+                  })}
+                  type="number"
+                  value={baseWisdom}
+                />  
+              </FormControl>
             </Grid>
 
             <Grid item>
-              <TextField 
-                label="Charisma"
-                min="3"
-                onChange={event => dispatch({
-                  type: 'UPDATE_CHARACTER',
-                  payload: {
-                    baseInformation: {
-                      ...character.baseInformation,
-                      cha_score: event.target.value
+              <FormControl fullWidth>
+                <TextField 
+                  label="Charisma"
+                  min="3"
+                  onChange={event => dispatch({
+                    type: 'UPDATE_CHARACTER',
+                    payload: {
+                      baseInformation: {
+                        ...character.baseInformation,
+                        cha_score: event.target.value
+                      }
                     }
-                  }
-                })}
-                type="number"
-                value={baseCharisma}
-              />
+                  })}
+                  type="number"
+                  value={baseCharisma}
+                />
+              </FormControl>
             </Grid>
 
             <Grid item>
-              <ButtonGroup variant="outlined">
-                <Button 
-                  color="secondary" 
-                  onClick={() => {
-                    cancelEdit();
-                    setEditMode({...editMode, editAbilityScores: false});
-                  }}
-                >
-                  Cancel
-                </Button>
-                <Button 
-                  color="primary" 
-                  onClick={() => {
-                  saveEdit();
-                  setEditMode({...editMode, editAbilityScores: false});
-                  }}
-                >
-                  Save
-                </Button>
-              </ButtonGroup>
+              <Grid container justify="flex-end">
+                <Grid item>
+                  <ButtonGroup variant="outlined">
+                    <Button 
+                      color="secondary" 
+                      onClick={() => {
+                        cancelEdit();
+                        setEditMode({...editMode, editAbilityScores: false});
+                      }}
+                    >
+                      Cancel
+                    </Button>
+                    <Button 
+                      color="primary" 
+                      onClick={() => {
+                      saveEdit();
+                      setEditMode({...editMode, editAbilityScores: false});
+                      }}
+                    >
+                      Save
+                    </Button>
+                  </ButtonGroup>
+                </Grid>
+              </Grid>
             </Grid>
           </Grid>
         }
