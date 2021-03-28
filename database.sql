@@ -785,7 +785,7 @@ VALUES
     (6, 52), (6, 53), (6, 54),                                       -- Half-Orc
     (7, 38), (7, 39), (7, 40), (7, 41),                             -- Halfling
     -- No human features
-    (8, 55), (8, 56), (8, 57);                                      -- Tiefling
+    (9, 55), (9, 56), (9, 57);                                      -- Tiefling
 
 ------------ RACES_LANGUAGES -------------  
 INSERT INTO "races_languages" ( "race_id", "language_id")

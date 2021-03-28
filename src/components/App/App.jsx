@@ -134,7 +134,7 @@ function App() {
                 path="/home"
                 authRedirect="/user"
               >
-                <LandingPage />
+                <RegisterPage />
               </ProtectedRoute>
 
               {/* If none of the other routes matched, we will show a 404. */}
