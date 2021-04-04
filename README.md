@@ -1,121 +1,86 @@
+# Prime Digital Academy Solo Project: _App of Holding_
 
-# EDA Project
-This version uses React, Redux, Express, Passport, and PostgreSQL (a full list of dependencies can be found in `package.json`).
+## Description
 
-We **STRONGLY** recommend following these instructions carefully. It's a lot, and will take some time to set up, but your life will be much easier this way in the long run.
+_Duration: 2 Week Sprint_
 
-## Use the Template for This Repository (Don't Clone)
+Often times, when people are first introduced to Dungeons and Dragons, they are fascinated by many aspects of the game. However, the daunting task of building that first character will oftentimes scare off potential first-time players. A lot of aspects go into your character and it can be overwhelming to know where to even begin. By reducing the amount of decisions that the player needs to make during the initial character creator, Dungeons and Dragons becomes more accessible to a larger crowd.
 
-- Don't Fork or Clone. Instead, click the `Use this Template` button, and make a copy to your personal account.
+The App of Holding was created to reduce the amount of decisions needed to create a level 1 character for Dungeons and Dragons, as well as a convenient place to store those generated characters and edit them. Characters are generated on the `Character Creator` page, where they can input two parameters, `Play Style` and `Magic Style`, that ultimately determine the logic for a "randomly" generated character. 
 
+With the use of authorization, all characters generated and stored are user specific and can be accessed, edited, or deleted after a user has logged on and found the character within the `My Collection` page. 
 
-## Prerequisites
+This application implements the full use of CRUD methodologies as the framework for its RESTful API. This project is not intended for sale, but as a demonstration of my ability to write a full-stack application.
 
-Before you get started, make sure you have the following software installed on your computer:
+To see the fully functional site, please visit: [App of Holding](https://app-of-holding.herokuapp.com/)
+
+## Screen Shot
+
+The `My Collection` page is the home page of the app for logged in user. It displays all characters available from the database for that user.
+![My Collection page, user view](AoH-Images/MyCollection-AoH.png)
+
+The user is asked to verify character deletion, upon clicking the delete button.
+![My Collection page, Delete Character Dialog](AoH-Images/MyCollection-AoH-DeleteCharacter.png)
+
+Play Style and Magic Style parameters are placed before a character is generated for review. The user can review the character before saving it to the database.
+![Character Creator page](AoH-Images/CharacterCreator-AoH.gif)
+
+Many of the character stats and information are editable in the `Character Sheet` view.
+![Edit Character Sheet](AoH-Images/CharacterSheet-AoH-edit.gif)
+
+Information for weapons and spells are rendered from a [3rd party api](http://www.dnd5eapi.co/).
+![Character Sheet Equipment page, equipment info](AoH-Images/CharacterSheetEquipment-AoH-info.gif)
+
+### Prerequisites
+
+Link to software that is required to install the app (e.g. node).
 
 - [Node.js](https://nodejs.org/en/)
-- [PostrgeSQL](https://www.postgresql.org/)
-- [Nodemon](https://nodemon.io/)
+- [Postgres](https://www.postgresql.org/download/)
+- [Postico](https://eggerapps.at/postico/)
 
-## Create database and table
+## Installation
 
-Create a new database called `prime_app` and create a `user` table:
+How do you get your application up and running? This is a step by step list for how another developer could get this project up and running. The good target audience in terms of knowledge, would be a fellow Primer from another cohort being able to spin up this project. Note that you do not need a paragraph here to intro Installation. It should be step-by-step.
 
-```SQL
-CREATE TABLE "user" (
-    "id" SERIAL PRIMARY KEY,
-    "username" VARCHAR (80) UNIQUE NOT NULL,
-    "password" VARCHAR (1000) NOT NULL
-);
-```
+If your application has secret keys (for example --  Twilio), make sure you tell them how to set that up, both in getting the key and then what to call it in the `.env` file.
 
-If you would like to name your database something else, you will need to change `prime_app` to the name of your new database name in `server/modules/pool.js`
+1. Create a database named `prime_app`,
+2. The queries in the `database.sql` file are set up to create all the necessary tables and populate the needed data to allow the application to run correctly. 
+3. Open up your editor of choice and run an `npm install`
+4. Run `npm run server` in your terminal
+5. Run `npm run client` in your terminal
+6. The `npm run client` command will open up a new browser tab for you!
 
-## Development Setup Instructions
+## Usage
+How does someone use this application? Tell a user story here.
 
-- Run `npm install`
-- Create a `.env` file at the root of the project and paste this line into the file:
-  ```
-  SERVER_SESSION_SECRET=superDuperSecret
-  ```
-  While you're in your new `.env` file, take the time to replace `superDuperSecret` with some long random string like `25POUbVtx6RKVNWszd9ERB9Bb6` to keep your application secure. Here's a site that can help you: [https://passwordsgenerator.net/](https://passwordsgenerator.net/). If you don't do this step, create a secret with less than eight characters, or leave it as `superDuperSecret`, you will get a warning.
-- Start postgres if not running already by using `brew services start postgresql`
-- Run `npm run server`
-- Run `npm run client`
-- Navigate to `localhost:3000`
+1. As a user, I can create an account so that I can manage my characters.
+2. As a user, I can put in parameters to influence the character created for me.
+3. As a user, I can read/review the character created for me before saving it to my account.
+4. As a user, I can view a full list of the characters I've created.
+5. As a user, I can delete a character that I've created after they have died in a campaign or if they are taking up too much space in my collection
+6. As a user, I can read/view all of the specific details of each of my characters.
+7. As a user, I can edit important aspects of my character sheet, such as health, equipment, spells, ability scores, etc.
+8. As a user, I can view important information about equipment and spells.
 
-## Debugging
 
-To debug, you will need to run the client-side separately from the server. Start the client by running the command `npm run client`. Start the debugging server by selecting the Debug button.
+## Built With
 
-![VSCode Toolbar](documentation/images/vscode-toolbar.png)
+- HTML
+- CSS
+- Javascript
+- React
+- Redux
+- Node.js
+- Express
+- PostgreSQL
+- Material-UI
+- [D&D 5e API](http://www.dnd5eapi.co/)
 
-Then make sure `Launch Program` is selected from the dropdown, then click the green play arrow.
 
-![VSCode Debug Bar](documentation/images/vscode-debug-bar.png)
+## Acknowledgement
+Thanks to [Prime Digital Academy](www.primeacademy.io) who equipped and helped me to make this application a reality, especially Edan Schwartz and Chad Smith. Thanks to my family and friends who supported me. And a big thanks to the members of my cohort for helping me solve problems and work through bugs.
 
-## Testing Routes with Postman
-
-To use Postman with this repo, you will need to set up requests in Postman to register a user and login a user at a minimum.
-
-Keep in mind that once you using the login route, Postman will manage your session cookie for you just like a browser, ensuring it is sent with each subsequent request. If you delete the `localhost` cookie in Postman, it will effectively log you out.
-
-1. Start the server - `npm run server`
-2. [Import the sample routes JSON file](./PostmanPrimeSoloRoutes.json) by clicking `Import` in Postman. Select the file.
-3. Click `Collections` and `Send` the following three calls in order:
-   1. `POST /api/user/register` registers a new user, see body to change username/password
-   2. `POST /api/user/login` will login a user, see body to change username/password
-   3. `GET /api/user` will get user information, by default it's not very much
-
-After running the login route above, you can try any other route you've created that requires a logged in user!
-
-## Production Build
-
-Before pushing to Heroku, run `npm run build` in terminal. This will create a build folder that contains the code Heroku will be pointed at. You can test this build by typing `npm start`. Keep in mind that `npm start` will let you preview the production build but will **not** auto update.
-
-- Start postgres if not running already by using `brew services start postgresql`
-- Run `npm start`
-- Navigate to `localhost:5000`
-
-## Lay of the Land
-
-There are a few videos linked below that show a walkthrough the client and sever setup to help acclimatize to the boilerplate. Please take some time to watch the videos in order to get a better understanding of what the boilerplate is like.
-
-- [Initial Set](https://vimeo.com/453297271)
-- [Server Walkthrough](https://vimeo.com/453297212)
-- [Client Walkthrough](https://vimeo.com/453297124)
-
-Directory Structure:
-
-- `src/` contains the React application
-- `public/` contains static assets for the client-side
-- `build/` after you build the project, contains the transpiled code from `src/` and `public/` that will be viewed on the production site
-- `server/` contains the Express App
-
-This code is also heavily commented. We recommend reading through the comments, getting a lay of the land, and becoming comfortable with how the code works before you start making too many changes. If you're wondering where to start, consider reading through component file comments in the following order:
-
-- src/components
-  - App/App
-  - Footer/Footer
-  - Nav/Nav
-  - AboutPage/AboutPage
-  - InfoPage/InfoPage
-  - UserPage/UserPage
-  - LoginPage/LoginPage
-  - RegisterPage/RegisterPage
-  - LogOutButton/LogOutButton
-  - ProtectedRoute/ProtectedRoute
-
-## Deployment
-
-1. Create a new Heroku project
-1. Link the Heroku project to the project GitHub Repo
-1. Create an Heroku Postgres database
-1. Connect to the Heroku Postgres database from Postico
-1. Create the necessary tables
-1. Add an environment variable for `SERVER_SESSION_SECRET` with a nice random string for security
-1. In the deploy section, select manual deploy
-
-## Update Documentation
-
-Customize this ReadMe and the code comments in this project to read less like a starter repo and more like a project. Here is an example: https://gist.github.com/PurpleBooth/109311bb0361f32d87a2
+## Support
+If you have suggestions or issues, please email me at [dustymeyerssculpture@gmail.com](dustymeyerssculpture@gmail.com)
