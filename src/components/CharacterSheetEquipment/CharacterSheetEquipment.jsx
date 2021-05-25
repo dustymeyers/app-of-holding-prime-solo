@@ -1,6 +1,6 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useHistory, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 
 // Material-UI Components
 import {
@@ -278,7 +278,6 @@ function CharacterSheetEquipment() {
         </IconButton>
       </Grid>
 
-
       {/* Character's Equipment library */}
       <Grid item xs={12}>
         <TableContainer component={Paper}>
@@ -307,9 +306,11 @@ function CharacterSheetEquipment() {
                         <EditIcon color="action" />
                       </IconButton>
                     </TableCell>
+
                     <TableCell align="justify">
                       {item.equipment_name}
                     </TableCell>
+
                     <TableCell>
                       <IconButton onClick={() => itemInformation(item.api_index)}>
                         <InfoIcon color="action" />
@@ -357,12 +358,16 @@ function CharacterSheetEquipment() {
         scroll="paper"
       >
         <DialogTitle>{equipmentInfo.name}</DialogTitle>
+
         <DialogContent>
           {equipmentInfo.armor_category ? <DialogContentText>Armor Category: {equipmentInfo.armor_category}</DialogContentText> : <></>}
           {equipmentInfo.armor_class ? <DialogContentText>Armor Class: {equipmentInfo.armor_class.base}</DialogContentText> : <></>}
           {equipmentInfo.weapon_category ? <DialogContentText>Weapon Category: {equipmentInfo.weapon_category}</DialogContentText> : <></>}
           {equipmentInfo.weapon_range ? <DialogContentText>Range: {equipmentInfo.weapon_range}</DialogContentText> : <></>}
           {equipmentInfo.damage ? <DialogContentText>Damage: {equipmentInfo.damage.damage_dice} {equipmentInfo.damage.damage_type.name}</DialogContentText> : <></>}
+          {equipmentInfo.vehicle_category ? <DialogContentText>Vehicle Category: {equipmentInfo.vehicle_category}</DialogContentText> : <></>}
+          {equipmentInfo.speed ? <DialogContentText>Speed: {equipmentInfo.speed.quantity} {equipmentInfo.speed.unit}</DialogContentText> : <></>}
+          {equipmentInfo.capacity ? <DialogContentText>Capacity: {equipmentInfo.capacity}</DialogContentText> : <></>}
           {equipmentInfo.desc ? 
             <DialogContentText>
               {equipmentInfo.desc.map(description => description)}
@@ -371,7 +376,7 @@ function CharacterSheetEquipment() {
           }
           {equipmentInfo.special ? <DialogContentText>{equipmentInfo.special.map(description => description)}</DialogContentText> : <></>}
           <DialogContentText>Cost: {equipmentInfo.cost.quantity} {equipmentInfo.cost.unit} </DialogContentText>
-          <DialogContentText>Weight: {equipmentInfo.weight} lbs</DialogContentText>
+          {equipmentInfo.weight ? <DialogContentText>Weight: {equipmentInfo.weight} lbs</DialogContentText> : <></>}
         </DialogContent>
       </Dialog> {/* end dialog for item information */}
 

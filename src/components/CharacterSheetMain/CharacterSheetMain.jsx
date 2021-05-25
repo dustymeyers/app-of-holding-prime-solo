@@ -1,10 +1,9 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useHistory, useParams } from 'react-router-dom';
+
 
 // Material-UI Components
 import {
-  Box,
   Button,
   ButtonGroup,
   FormControl,
@@ -12,7 +11,6 @@ import {
   List,
   ListItem,
   ListItemText,
-  Paper,
   TextField,
   Typography
 } from '@material-ui/core';
@@ -24,7 +22,6 @@ function CharacterSheetMain({ }) {
   const character = useSelector(store => store.characters.characterDetails);
   const skillsAndSavingThrows = useSelector(store => store.characterSheetComponents.skillsAndSavingThrowsList);
   const dispatch = useDispatch();
-  const paramsObject = useParams();
 
   // base ability score stats.
   const baseStrength = character.baseInformation.str_score;

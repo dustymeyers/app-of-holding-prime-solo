@@ -1,30 +1,20 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useHistory, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 
 // Material-UI Components
 import {
   Button,
-  ButtonGroup,
   Dialog,
   DialogActions,
   DialogContent,
   DialogContentText,
   DialogTitle,
-  FormControl,
   Grid,
   List,
   ListItem,
   ListItemIcon,
   ListItemText,
-  Paper,
-  Table,          // replaces <table>
-  TableBody,      // replaces <tbody>
-  TableCell,      // replaces <td>
-  TableContainer, // acts as a <div> for the table
-  TableHead,      // replaces <thead>
-  TableRow, 
-  TextField,
   Typography
 } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
@@ -121,13 +111,16 @@ function CharacterSheetSpells() {
   return(
     <Grid container justify="center">
 
+      {/* Page Title */}
       <Grid item container justify="center" xs={12}>
         <Typography variant="h2">Spells and Spellcasting</Typography>
       </Grid>
 
+      {/* Helper text */}
       <Grid item xs={12}>
         <Typography variant="body1" paragraph>The spells you have for this character will be available in the lists below. Refer to the Player's Handbook or your dungeon master to find out what spells you can add at first level. Feel free to add more spells with the plus button. The info button provides information for each item using the dnd5eapi. To learn more about this technology, click <a href="http://www.dnd5eapi.co/">here</a>.</Typography>
       </Grid>
+
       <Grid item xs={12} container direction="row" spacing={1} justify="space-between" alignItems="center">
         <Grid item>
           <Typography variant="h4">Spell Casting Ability: {character.baseInformation.spellcasting_ability}</Typography>
@@ -141,7 +134,7 @@ function CharacterSheetSpells() {
           <Typography variant="h4">Spell Attack Modifier: {spellcastingModifier()}</Typography>
         </Grid>
 
-        {/* Add equipment, opens dialog box that allows user to search through available equipment */}
+        {/* Add spells, opens dialog box that allows user to search through available spells */}
         <Grid item>
           <IconButton onClick={() => setOpen({...open, addSpells: true})} >
             <LibraryAddIcon fontSize="large" color="action" /> 
