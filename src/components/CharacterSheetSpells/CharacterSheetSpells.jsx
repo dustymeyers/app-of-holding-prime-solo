@@ -270,7 +270,7 @@ function CharacterSheetSpells() {
             {spellInfo.desc.map(description => {
               <DialogContentText>{description}</DialogContentText>
             })}
-            {spellInfo.higher_level.map((description, index) => <DialogContentText key={index}>{description}</DialogContentText>)}
+            {spellInfo.higherlevel ? spellInfo.higher_level.map((description, index) => <DialogContentText key={index}>{description}</DialogContentText>) : <></>}
             <DialogContentText>
               Classes: {spellInfo.classes.map((className, index) => {
                 if (spellInfo.classes.length - 1 === index) {
